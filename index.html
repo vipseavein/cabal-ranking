@@ -1,51 +1,354 @@
+```html id="cabal-full-index"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- SERVER TIME -->
-<div class="server-time" id="gmtTime">🕒 GMT+8</div>
+<title>CABAL Ultimate Combo Ranking</title>
 
-<script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
 
-/* REALTIME GMT+8 CLOCK */
+<style>
 
-function updateGMT8(){
-
-    const now = new Date();
-
-    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-
-    const gmt8 = new Date(utc + (3600000 * 8));
-
-    const hours = String(gmt8.getHours()).padStart(2,'0');
-    const minutes = String(gmt8.getMinutes()).padStart(2,'0');
-    const seconds = String(gmt8.getSeconds()).padStart(2,'0');
-
-    document.getElementById('gmtTime').innerHTML =
-        `🕒 GMT+8 ${hours}:${minutes}:${seconds}`;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-setInterval(updateGMT8,1000);
-updateGMT8();
-
-/* TAB SYSTEM */
-
-function showTab(tabId){
-
-    let contents=document.querySelectorAll('.tab-content');
-    let buttons=document.querySelectorAll('.tab-btn');
-
-    contents.forEach(content=>{
-        content.classList.remove('active');
-    });
-
-    buttons.forEach(btn=>{
-        btn.classList.remove('active');
-    });
-
-    document.getElementById(tabId).classList.add('active');
-
-    event.target.classList.add('active');
+body{
+    font-family:'Orbitron',sans-serif;
+    background:#050505;
+    color:white;
+    overflow-x:hidden;
+    background-image:
+    radial-gradient(circle at top,#0d1b2a 0%,#050505 60%);
 }
 
-</script>
+/* SCROLL */
+
+::-webkit-scrollbar{
+    width:10px;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#00d9ff;
+    border-radius:10px;
+}
+
+/* HEADER */
+
+header{
+    width:100%;
+    padding:25px 40px;
+    border-bottom:2px solid #00d9ff55;
+    background:rgba(0,0,0,0.85);
+    backdrop-filter:blur(10px);
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+
+    position:sticky;
+    top:0;
+    z-index:999;
+}
+
+.logo h1{
+    font-size:32px;
+    color:#00d9ff;
+    text-shadow:0 0 15px #00d9ff;
+}
+
+.logo p{
+    margin-top:5px;
+    color:#aaa;
+    font-size:13px;
+}
+
+.server-info{
+    text-align:right;
+}
+
+.server-status{
+    color:#00ff88;
+    font-size:15px;
+    margin-bottom:5px;
+}
+
+.server-time{
+    color:#ffd000;
+    font-size:14px;
+}
+
+/* TABS */
+
+.tabs{
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    padding:25px;
+    flex-wrap:wrap;
+}
+
+.tab-btn{
+    background:#101010;
+    border:2px solid #00d9ff55;
+    color:white;
+    padding:14px 28px;
+    cursor:pointer;
+    border-radius:12px;
+    transition:0.3s;
+    font-size:15px;
+    font-weight:bold;
+}
+
+.tab-btn:hover,
+.tab-btn.active{
+    background:#00d9ff;
+    color:black;
+    box-shadow:0 0 20px #00d9ff;
+}
+
+/* CONTENT */
+
+.content{
+    width:95%;
+    max-width:1450px;
+    margin:auto;
+    padding-bottom:60px;
+}
+
+.tab-content{
+    display:none;
+    animation:fade 0.4s ease;
+}
+
+.tab-content.active{
+    display:block;
+}
+
+@keyframes fade{
+    from{
+        opacity:0;
+        transform:translateY(15px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* SECTION */
+
+.section{
+    margin-bottom:50px;
+}
+
+.section-title{
+    font-size:28px;
+    margin-bottom:20px;
+    color:#00d9ff;
+    text-shadow:0 0 12px #00d9ff;
+}
+
+/* TABLE */
+
+.table-box{
+    overflow-x:auto;
+    border:1px solid #00d9ff33;
+    border-radius:16px;
+    background:rgba(15,15,15,0.95);
+    box-shadow:0 0 20px #000;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#00d9ff22;
+    color:#00d9ff;
+    padding:16px;
+    font-size:14px;
+}
+
+td{
+    padding:14px;
+    text-align:center;
+    border-top:1px solid #ffffff11;
+}
+
+tr:hover{
+    background:#00d9ff11;
+}
+
+/* WAR STATUS */
+
+.war-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+}
+
+.nation-card{
+    background:rgba(15,15,15,0.95);
+    border:2px solid #00d9ff33;
+    border-radius:18px;
+    padding:25px;
+}
+
+.nation-title{
+    font-size:24px;
+    margin-bottom:20px;
+    text-align:center;
+}
+
+.capella{
+    color:#00d9ff;
+}
+
+.procyon{
+    color:#ff3c3c;
+}
+
+.bringer-card{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    margin-bottom:18px;
+    padding:14px;
+    border-radius:12px;
+    background:#111;
+    transition:0.3s;
+}
+
+.bringer-card:hover{
+    transform:scale(1.02);
+    box-shadow:0 0 15px #00d9ff44;
+}
+
+.class-icon{
+    width:60px;
+    height:60px;
+    border-radius:14px;
+    background:linear-gradient(145deg,#00d9ff,#004cff);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:11px;
+    font-weight:bold;
+    text-align:center;
+    padding:5px;
+}
+
+/* SAINTS */
+
+.saints-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:20px;
+}
+
+.saint-card{
+    background:rgba(15,15,15,0.95);
+    border:2px solid #ffd00044;
+    border-radius:18px;
+    padding:20px;
+    text-align:center;
+    transition:0.3s;
+}
+
+.saint-card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 0 20px #ffd00066;
+}
+
+.saint-icon{
+    width:90px;
+    height:90px;
+    margin:auto;
+    border-radius:18px;
+    background:linear-gradient(145deg,#ffd000,#ff8800);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin-bottom:15px;
+    font-size:13px;
+    font-weight:bold;
+    text-align:center;
+    padding:10px;
+}
+
+/* FOOTER */
+
+footer{
+    margin-top:60px;
+    text-align:center;
+    padding:25px;
+    color:#888;
+    border-top:1px solid #ffffff11;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+    .war-grid{
+        grid-template-columns:1fr;
+    }
+
+    header{
+        gap:20px;
+    }
+
+    .logo h1{
+        font-size:24px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        <h1>CABAL Ultimate Combo Ranking</h1>
+        <p>Ultimate Gamer Ranking Interface</p>
+    </div>
+
+    <div class="server-info">
+        <div class="server-status">🟢 Server Open</div>
+        <div class="server-time" id="gmtTime">🕒 GMT+8</div>
+    </div>
+
+</header>
+
+<!-- TABS -->
+
+<div class="tabs">
+
+    <button class="tab-btn active" onclick="showTab('topplayer')">
+        Top Player
+    </button>
+
+    <button class="tab-btn" onclick="showTab('warstatus')">
+        War Status
+    </button>
+
+    <button class="tab-btn" onclick="showTab('saints')">
+        Saints' Owner
+    </button>
+
+</div>
+
+<div class="content">
 
 <!-- ======================================================= -->
 <!-- TOP PLAYER -->
@@ -233,7 +536,7 @@ function showTab(tabId){
 
     <div class="war-grid">
 
-        <!-- CAPELLA GUARDIAN -->
+        <!-- CAPELLA -->
 
         <div class="nation-card">
 
@@ -266,7 +569,7 @@ function showTab(tabId){
 
         </div>
 
-        <!-- PROCYON GUARDIAN -->
+        <!-- PROCYON -->
 
         <div class="nation-card">
 
@@ -336,4 +639,58 @@ function showTab(tabId){
     </div>
 
 </div>
+
+</div>
+
+<footer>
+    CABAL Ultimate Combo Ranking © 2026
+</footer>
+
+<script>
+
+/* REALTIME GMT+8 */
+
+function updateGMT8(){
+
+    const now = new Date();
+
+    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+
+    const gmt8 = new Date(utc + (3600000 * 8));
+
+    const hours = String(gmt8.getHours()).padStart(2,'0');
+    const minutes = String(gmt8.getMinutes()).padStart(2,'0');
+    const seconds = String(gmt8.getSeconds()).padStart(2,'0');
+
+    document.getElementById('gmtTime').innerHTML =
+        `🕒 GMT+8 ${hours}:${minutes}:${seconds}`;
+}
+
+setInterval(updateGMT8,1000);
+updateGMT8();
+
+/* TAB SYSTEM */
+
+function showTab(tabId){
+
+    let contents=document.querySelectorAll('.tab-content');
+    let buttons=document.querySelectorAll('.tab-btn');
+
+    contents.forEach(content=>{
+        content.classList.remove('active');
+    });
+
+    buttons.forEach(btn=>{
+        btn.classList.remove('active');
+    });
+
+    document.getElementById(tabId).classList.add('active');
+
+    event.target.classList.add('active');
+}
+
+</script>
+
+</body>
+</html>
 ```
