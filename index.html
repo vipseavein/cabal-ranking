@@ -1,570 +1,33 @@
 ```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CABAL Ultimate Combo Ranking</title>
+<!-- REPLACE THIS INSIDE YOUR CURRENT HTML -->
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
-
-<style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    font-family:'Orbitron',sans-serif;
-    background:#050505;
-    color:white;
-    overflow-x:hidden;
-    background-image:
-    radial-gradient(circle at top,#0d1b2a 0%,#050505 60%);
-}
-
-/* SCROLL */
-
-::-webkit-scrollbar{
-    width:10px;
-}
-
-::-webkit-scrollbar-thumb{
-    background:#00d9ff;
-    border-radius:10px;
-}
-
-/* HEADER */
-
-header{
-    width:100%;
-    padding:25px 40px;
-    border-bottom:2px solid #00d9ff55;
-    background:rgba(0,0,0,0.8);
-    backdrop-filter:blur(10px);
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-
-    position:sticky;
-    top:0;
-    z-index:999;
-}
-
-.logo h1{
-    font-size:32px;
-    color:#00d9ff;
-    text-shadow:0 0 15px #00d9ff;
-}
-
-.logo p{
-    margin-top:5px;
-    color:#aaa;
-    font-size:13px;
-}
-
-.server-info{
-    text-align:right;
-}
-
-.server-status{
-    color:#00ff88;
-    font-size:15px;
-    margin-bottom:5px;
-}
-
-.server-time{
-    color:#ffd000;
-    font-size:14px;
-}
-
-/* TABS */
-
-.tabs{
-    display:flex;
-    justify-content:center;
-    gap:20px;
-    padding:25px;
-    flex-wrap:wrap;
-}
-
-.tab-btn{
-    background:#101010;
-    border:2px solid #00d9ff55;
-    color:white;
-    padding:14px 28px;
-    cursor:pointer;
-    border-radius:12px;
-    transition:0.3s;
-    font-size:15px;
-    font-weight:bold;
-}
-
-.tab-btn:hover,
-.tab-btn.active{
-    background:#00d9ff;
-    color:black;
-    box-shadow:0 0 20px #00d9ff;
-}
-
-/* CONTENT */
-
-.content{
-    width:95%;
-    max-width:1400px;
-    margin:auto;
-    padding-bottom:60px;
-}
-
-.tab-content{
-    display:none;
-    animation:fade 0.4s ease;
-}
-
-.tab-content.active{
-    display:block;
-}
-
-@keyframes fade{
-    from{
-        opacity:0;
-        transform:translateY(15px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-/* SECTION */
-
-.section{
-    margin-bottom:50px;
-}
-
-.section-title{
-    font-size:28px;
-    margin-bottom:20px;
-    color:#00d9ff;
-    text-shadow:0 0 12px #00d9ff;
-}
-
-/* TABLE */
-
-.table-box{
-    overflow-x:auto;
-    border:1px solid #00d9ff33;
-    border-radius:16px;
-    background:rgba(15,15,15,0.95);
-    box-shadow:0 0 20px #000;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-}
-
-th{
-    background:#00d9ff22;
-    color:#00d9ff;
-    padding:16px;
-    font-size:14px;
-}
-
-td{
-    padding:14px;
-    text-align:center;
-    border-top:1px solid #ffffff11;
-}
-
-tr:hover{
-    background:#00d9ff11;
-}
-
-/* WAR STATUS */
-
-.war-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:30px;
-}
-
-.nation-card{
-    background:rgba(15,15,15,0.95);
-    border:2px solid #00d9ff33;
-    border-radius:18px;
-    padding:25px;
-}
-
-.nation-title{
-    font-size:24px;
-    margin-bottom:20px;
-    text-align:center;
-}
-
-.capella{
-    color:#00d9ff;
-}
-
-.procyon{
-    color:#ff3c3c;
-}
-
-.bringer-card{
-    display:flex;
-    align-items:center;
-    gap:15px;
-    margin-bottom:18px;
-    padding:14px;
-    border-radius:12px;
-    background:#111;
-    transition:0.3s;
-}
-
-.bringer-card:hover{
-    transform:scale(1.02);
-    box-shadow:0 0 15px #00d9ff44;
-}
-
-.class-icon{
-    width:60px;
-    height:60px;
-    border-radius:14px;
-    background:linear-gradient(145deg,#00d9ff,#004cff);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:12px;
-    font-weight:bold;
-    text-align:center;
-    padding:5px;
-}
-
-/* SAINTS */
-
-.saints-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-    gap:20px;
-}
-
-.saint-card{
-    background:rgba(15,15,15,0.95);
-    border:2px solid #ffd00044;
-    border-radius:18px;
-    padding:20px;
-    text-align:center;
-    transition:0.3s;
-}
-
-.saint-card:hover{
-    transform:translateY(-6px);
-    box-shadow:0 0 20px #ffd00066;
-}
-
-.saint-icon{
-    width:90px;
-    height:90px;
-    margin:auto;
-    border-radius:18px;
-    background:linear-gradient(145deg,#ffd000,#ff8800);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    margin-bottom:15px;
-    font-size:13px;
-    font-weight:bold;
-}
-
-/* FOOTER */
-
-footer{
-    margin-top:60px;
-    text-align:center;
-    padding:25px;
-    color:#888;
-    border-top:1px solid #ffffff11;
-}
-
-/* MOBILE */
-
-@media(max-width:900px){
-
-    .war-grid{
-        grid-template-columns:1fr;
-    }
-
-    header{
-        gap:20px;
-    }
-
-    .logo h1{
-        font-size:24px;
-    }
-
-}
-
-</style>
-</head>
-
-<body>
-
-<header>
-
-    <div class="logo">
-        <h1>CABAL Ultimate Combo Ranking</h1>
-        <p>Ultimate Gamer Ranking Interface</p>
-    </div>
-
-    <div class="server-info">
-        <div class="server-status">🟢 Server Open</div>
-        <div class="server-time">🕒 GMT+8</div>
-    </div>
-
-</header>
-
-<div class="tabs">
-
-    <button class="tab-btn active" onclick="showTab('topplayer')">
-        Top Player
-    </button>
-
-    <button class="tab-btn" onclick="showTab('warstatus')">
-        War Status
-    </button>
-
-    <button class="tab-btn" onclick="showTab('saints')">
-        Saints' Owner
-    </button>
-
-</div>
-
-<div class="content">
-
-    <!-- TOP PLAYER -->
-
-    <div id="topplayer" class="tab-content active">
-
-        <div class="section">
-            <div class="section-title">
-                Combat Power Ranking
-            </div>
-
-            <div class="table-box">
-                <table>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Character</th>
-                        <th>Class</th>
-                        <th>Guild</th>
-                        <th>Combat Power</th>
-                    </tr>
-
-                    <tr>
-                        <td>1</td>
-                        <td>Azura</td>
-                        <td>Warrior</td>
-                        <td>Eternal</td>
-                        <td>9,999,999</td>
-                    </tr>
-
-                    <tr>
-                        <td>2</td>
-                        <td>NightFox</td>
-                        <td>Blader</td>
-                        <td>Eclipse</td>
-                        <td>9,850,000</td>
-                    </tr>
-
-                    <tr>
-                        <td>3</td>
-                        <td>Lunatic</td>
-                        <td>Wizard</td>
-                        <td>Nova</td>
-                        <td>9,700,000</td>
-                    </tr>
-
-                </table>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-title">
-                Myth Level Ranking
-            </div>
-
-            <div class="table-box">
-                <table>
-
-                    <tr>
-                        <th>Rank</th>
-                        <th>Character</th>
-                        <th>Class</th>
-                        <th>Guild</th>
-                        <th>Myth Level</th>
-                    </tr>
-
-                    <tr>
-                        <td>1</td>
-                        <td>Lunatic</td>
-                        <td>Wizard</td>
-                        <td>Nova</td>
-                        <td>500</td>
-                    </tr>
-
-                    <tr>
-                        <td>2</td>
-                        <td>Azura</td>
-                        <td>Warrior</td>
-                        <td>Eternal</td>
-                        <td>495</td>
-                    </tr>
-
-                </table>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- WAR STATUS -->
-
-    <div id="warstatus" class="tab-content">
-
-        <div class="section-title">
-            Bringer War Status
-        </div>
-
-        <div class="war-grid">
-
-            <div class="nation-card">
-
-                <div class="nation-title capella">
-                    CAPELLA
-                </div>
-
-                <div class="bringer-card">
-                    <div class="class-icon">
-                        Warrior
-                    </div>
-
-                    <div>
-                        <h3>Azura</h3>
-                        <p>Eternal</p>
-                        <small>Lv.52~79</small>
-                    </div>
-                </div>
-
-                <div class="bringer-card">
-                    <div class="class-icon">
-                        Wizard
-                    </div>
-
-                    <div>
-                        <h3>Lunatic</h3>
-                        <p>Nova</p>
-                        <small>Lv.110~139</small>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="nation-card">
-
-                <div class="nation-title procyon">
-                    PROCYON
-                </div>
-
-                <div class="bringer-card">
-                    <div class="class-icon">
-                        Gladiator
-                    </div>
-
-                    <div>
-                        <h3>Ragnar</h3>
-                        <p>BloodMoon</p>
-                        <small>Lv.52~79</small>
-                    </div>
-                </div>
-
-                <div class="bringer-card">
-                    <div class="class-icon">
-                        Dark Mage
-                    </div>
-
-                    <div>
-                        <h3>Abyss</h3>
-                        <p>Shadow</p>
-                        <small>Lv.110~139</small>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- SAINTS -->
-
-    <div id="saints" class="tab-content">
-
-        <div class="section-title">
-            Saints' Forcecalibur Owner
-        </div>
-
-        <div class="saints-grid">
-
-            <div class="saint-card">
-
-                <div class="saint-icon">
-                    Warrior
-                </div>
-
-                <h2>Azura</h2>
-                <p>Eternal</p>
-                <small>Level 200</small>
-
-            </div>
-
-            <div class="saint-card">
-
-                <div class="saint-icon">
-                    Blader
-                </div>
-
-                <h2>NightFox</h2>
-                <p>Eclipse</p>
-                <small>Level 200</small>
-
-            </div>
-
-            <div class="saint-card">
-
-                <div class="saint-icon">
-                    Wizard
-                </div>
-
-                <h2>Lunatic</h2>
-                <p>Nova</p>
-                <small>Level 200</small>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-<footer>
-    CABAL Ultimate Combo Ranking © 2026
-</footer>
+<!-- SERVER TIME -->
+<div class="server-time" id="gmtTime">🕒 GMT+8</div>
 
 <script>
+
+/* REALTIME GMT+8 CLOCK */
+
+function updateGMT8(){
+
+    const now = new Date();
+
+    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+
+    const gmt8 = new Date(utc + (3600000 * 8));
+
+    const hours = String(gmt8.getHours()).padStart(2,'0');
+    const minutes = String(gmt8.getMinutes()).padStart(2,'0');
+    const seconds = String(gmt8.getSeconds()).padStart(2,'0');
+
+    document.getElementById('gmtTime').innerHTML =
+        `🕒 GMT+8 ${hours}:${minutes}:${seconds}`;
+}
+
+setInterval(updateGMT8,1000);
+updateGMT8();
+
+/* TAB SYSTEM */
 
 function showTab(tabId){
 
@@ -586,6 +49,293 @@ function showTab(tabId){
 
 </script>
 
-</body>
-</html>
+<!-- ======================================================= -->
+<!-- TOP PLAYER -->
+<!-- ======================================================= -->
+
+<div id="topplayer" class="tab-content active">
+
+    <!-- COMBAT POWER -->
+
+    <div class="section">
+
+        <div class="section-title">
+            Combat Power Ranking
+        </div>
+
+        <div class="table-box">
+
+            <table>
+
+                <tr>
+                    <th>Rank</th>
+                    <th>Character</th>
+                    <th>Class</th>
+                    <th>Guild</th>
+                    <th>Combat Power</th>
+                </tr>
+
+                <tr><td>1</td><td>Azura</td><td>Warrior</td><td>Eternal</td><td>9,999,999</td></tr>
+                <tr><td>2</td><td>NightFox</td><td>Blader</td><td>Eclipse</td><td>9,850,000</td></tr>
+                <tr><td>3</td><td>Lunatic</td><td>Wizard</td><td>Nova</td><td>9,700,000</td></tr>
+                <tr><td>4</td><td>Artemis</td><td>Force Archer</td><td>Valkyrie</td><td>9,550,000</td></tr>
+                <tr><td>5</td><td>Titan</td><td>Force Shielder</td><td>Guardians</td><td>9,300,000</td></tr>
+                <tr><td>6</td><td>Reaper</td><td>Force Blader</td><td>HellCore</td><td>9,100,000</td></tr>
+                <tr><td>7</td><td>Ragnar</td><td>Gladiator</td><td>BloodMoon</td><td>8,950,000</td></tr>
+                <tr><td>8</td><td>Trigger</td><td>Force Gunner</td><td>OverDrive</td><td>8,700,000</td></tr>
+                <tr><td>9</td><td>Abyss</td><td>Dark Mage</td><td>Shadow</td><td>8,500,000</td></tr>
+                <tr><td>10</td><td>Leon</td><td>Warrior</td><td>Empire</td><td>8,300,000</td></tr>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <!-- ACHIEVEMENT -->
+
+    <div class="section">
+
+        <div class="section-title">
+            Achievement Ranking
+        </div>
+
+        <div class="table-box">
+
+            <table>
+
+                <tr>
+                    <th>Rank</th>
+                    <th>Character</th>
+                    <th>Class</th>
+                    <th>Guild</th>
+                    <th>Achievement</th>
+                </tr>
+
+                <tr><td>1</td><td>Trigger</td><td>Force Gunner</td><td>OverDrive</td><td>12,000</td></tr>
+                <tr><td>2</td><td>Titan</td><td>Force Shielder</td><td>Guardians</td><td>11,850</td></tr>
+                <tr><td>3</td><td>Reaper</td><td>Force Blader</td><td>HellCore</td><td>11,500</td></tr>
+                <tr><td>4</td><td>Ragnar</td><td>Gladiator</td><td>BloodMoon</td><td>11,200</td></tr>
+                <tr><td>5</td><td>Azura</td><td>Warrior</td><td>Eternal</td><td>11,000</td></tr>
+                <tr><td>6</td><td>NightFox</td><td>Blader</td><td>Eclipse</td><td>10,850</td></tr>
+                <tr><td>7</td><td>Lunatic</td><td>Wizard</td><td>Nova</td><td>10,700</td></tr>
+                <tr><td>8</td><td>Artemis</td><td>Force Archer</td><td>Valkyrie</td><td>10,500</td></tr>
+                <tr><td>9</td><td>Abyss</td><td>Dark Mage</td><td>Shadow</td><td>10,200</td></tr>
+                <tr><td>10</td><td>Leon</td><td>Warrior</td><td>Empire</td><td>10,000</td></tr>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ======================================================= -->
+<!-- WAR STATUS -->
+<!-- ======================================================= -->
+
+<div id="warstatus" class="tab-content">
+
+    <!-- BRINGER -->
+
+    <div class="section-title">
+        Bringer War Status
+    </div>
+
+    <div class="war-grid">
+
+        <!-- CAPELLA -->
+
+        <div class="nation-card">
+
+            <div class="nation-title capella">
+                CAPELLA
+            </div>
+
+            <div class="bringer-card">
+                <div class="class-icon">Warrior</div>
+                <div><h3>Azura</h3><p>Eternal</p><small>Lv.52~79</small></div>
+            </div>
+
+            <div class="bringer-card">
+                <div class="class-icon">Blader</div>
+                <div><h3>NightFox</h3><p>Eclipse</p><small>Lv.80~109</small></div>
+            </div>
+
+            <div class="bringer-card">
+                <div class="class-icon">Wizard</div>
+                <div><h3>Lunatic</h3><p>Nova</p><small>Lv.110~139</small></div>
+            </div>
+
+            <div class="bringer-card">
+                <div class="class-icon">Force Archer</div>
+                <div><h3>Artemis</h3><p>Valkyrie</p><small>Lv.140~169</small></div>
+            </div>
+
+            <div class="bringer-card">
+                <div class="class-icon">Force Shielder</div>
+                <div><h3>Titan</h3><p>Guardians</p><small>Lv.170~199</small></div>
+            </div>
+
+            <div class="bringer-card">
+                <div class="class-icon">Force Blader</div>
+                <div><h3>Reaper</h3><p>HellCore</p><small>Lv.200</small></div>
+            </div>
+
+        </div>
+
+        <!-- PROCYON -->
+
+        <div class="nation-card">
+
+            <div class="nation-title procyon">
+                PROCYON
+            </div>
+
+            <div class="bringer-card">
+                <div class="class-icon">Gladiator</div>
+                <div><h3>Ragnar</h3><p>BloodMoon</p><small>Lv.52~79</small></div>
+            </div>
+
+            <div class="bringer-card">
+                <div class="class-icon">Force Gunner</div>
+                <div><h3>Trigger</h3><p>OverDrive</p><small>Lv.80~109</small></div>
+            </div>
+
+            <div class="bringer-card">
+                <div class="class-icon">Dark Mage</div>
+                <div><h3>Abyss</h3><p>Shadow</p><small>Lv.110~139</small></div>
+            </div>
+
+            <div class="bringer-card">
+                <div class="class-icon">Warrior</div>
+                <div><h3>Leon</h3><p>Empire</p><small>Lv.140~169</small></div>
+            </div>
+
+            <div class="bringer-card">
+                <div class="class-icon">Blader</div>
+                <div><h3>Shade</h3><p>Inferno</p><small>Lv.170~199</small></div>
+            </div>
+
+            <div class="bringer-card">
+                <div class="class-icon">Wizard</div>
+                <div><h3>Mystic</h3><p>Celestial</p><small>Lv.200</small></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- GUARDIAN -->
+
+    <div class="section-title" style="margin-top:50px;">
+        Guardian
+    </div>
+
+    <div class="war-grid">
+
+        <!-- CAPELLA GUARDIAN -->
+
+        <div class="nation-card">
+
+            <div class="nation-title capella">
+                CAPELLA GUARDIANS
+            </div>
+
+            <div class="table-box">
+
+                <table>
+
+                    <tr>
+                        <th>Class</th>
+                        <th>Character</th>
+                    </tr>
+
+                    <tr><td>Warrior</td><td>Azura</td></tr>
+                    <tr><td>Blader</td><td>NightFox</td></tr>
+                    <tr><td>Wizard</td><td>Lunatic</td></tr>
+                    <tr><td>Force Archer</td><td>Artemis</td></tr>
+                    <tr><td>Force Shielder</td><td>Titan</td></tr>
+                    <tr><td>Force Blader</td><td>Reaper</td></tr>
+                    <tr><td>Gladiator</td><td>Ragnar</td></tr>
+                    <tr><td>Force Gunner</td><td>Trigger</td></tr>
+                    <tr><td>Dark Mage</td><td>Abyss</td></tr>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- PROCYON GUARDIAN -->
+
+        <div class="nation-card">
+
+            <div class="nation-title procyon">
+                PROCYON GUARDIANS
+            </div>
+
+            <div class="table-box">
+
+                <table>
+
+                    <tr>
+                        <th>Class</th>
+                        <th>Character</th>
+                    </tr>
+
+                    <tr><td>Warrior</td><td>Leon</td></tr>
+                    <tr><td>Blader</td><td>Shade</td></tr>
+                    <tr><td>Wizard</td><td>Mystic</td></tr>
+                    <tr><td>Force Archer</td><td>Stella</td></tr>
+                    <tr><td>Force Shielder</td><td>Atlas</td></tr>
+                    <tr><td>Force Blader</td><td>Phantom</td></tr>
+                    <tr><td>Gladiator</td><td>Doom</td></tr>
+                    <tr><td>Force Gunner</td><td>Volt</td></tr>
+                    <tr><td>Dark Mage</td><td>Hades</td></tr>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ======================================================= -->
+<!-- SAINTS -->
+<!-- ======================================================= -->
+
+<div id="saints" class="tab-content">
+
+    <div class="section-title">
+        Saints' Forcecalibur Owner
+    </div>
+
+    <div class="saints-grid">
+
+        <div class="saint-card"><div class="saint-icon">Warrior</div><h2>Azura</h2><p>Eternal</p><small>Level 200</small></div>
+
+        <div class="saint-card"><div class="saint-icon">Blader</div><h2>NightFox</h2><p>Eclipse</p><small>Level 200</small></div>
+
+        <div class="saint-card"><div class="saint-icon">Wizard</div><h2>Lunatic</h2><p>Nova</p><small>Level 200</small></div>
+
+        <div class="saint-card"><div class="saint-icon">Force Archer</div><h2>Artemis</h2><p>Valkyrie</p><small>Level 200</small></div>
+
+        <div class="saint-card"><div class="saint-icon">Force Shielder</div><h2>Titan</h2><p>Guardians</p><small>Level 200</small></div>
+
+        <div class="saint-card"><div class="saint-icon">Force Blader</div><h2>Reaper</h2><p>HellCore</p><small>Level 200</small></div>
+
+        <div class="saint-card"><div class="saint-icon">Gladiator</div><h2>Ragnar</h2><p>BloodMoon</p><small>Level 200</small></div>
+
+        <div class="saint-card"><div class="saint-icon">Force Gunner</div><h2>Trigger</h2><p>OverDrive</p><small>Level 200</small></div>
+
+        <div class="saint-card"><div class="saint-icon">Dark Mage</div><h2>Abyss</h2><p>Shadow</p><small>Level 200</small></div>
+
+    </div>
+
+</div>
 ```
