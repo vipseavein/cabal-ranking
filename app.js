@@ -1,170 +1,341 @@
-body {
-  margin: 0;
-  font-family: Arial;
-  background: #070b14;
-  color: white;
+```html
+<!-- REPLACE THIS INSIDE YOUR CURRENT HTML -->
+
+<!-- SERVER TIME -->
+<div class="server-time" id="gmtTime">🕒 GMT+8</div>
+
+<script>
+
+/* REALTIME GMT+8 CLOCK */
+
+function updateGMT8(){
+
+    const now = new Date();
+
+    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+
+    const gmt8 = new Date(utc + (3600000 * 8));
+
+    const hours = String(gmt8.getHours()).padStart(2,'0');
+    const minutes = String(gmt8.getMinutes()).padStart(2,'0');
+    const seconds = String(gmt8.getSeconds()).padStart(2,'0');
+
+    document.getElementById('gmtTime').innerHTML =
+        `🕒 GMT+8 ${hours}:${minutes}:${seconds}`;
 }
 
-.container {
-  width: 95%;
-  margin: auto;
-  padding: 20px;
+setInterval(updateGMT8,1000);
+updateGMT8();
+
+/* TAB SYSTEM */
+
+function showTab(tabId){
+
+    let contents=document.querySelectorAll('.tab-content');
+    let buttons=document.querySelectorAll('.tab-btn');
+
+    contents.forEach(content=>{
+        content.classList.remove('active');
+    });
+
+    buttons.forEach(btn=>{
+        btn.classList.remove('active');
+    });
+
+    document.getElementById(tabId).classList.add('active');
+
+    event.target.classList.add('active');
 }
 
-.header {
-  text-align: center;
-  margin-bottom: 30px;
-}
+</script>
 
-.header h1 {
-  color: #2d7dff;
-}
+<!-- ======================================================= -->
+<!-- TOP PLAYER -->
+<!-- ======================================================= -->
 
-.server-status {
-  margin-top: 10px;
-}
+<div id="topplayer" class="tab-content active">
 
-.tabs {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
+    <!-- COMBAT POWER -->
 
-.tabs button {
-  background: #111827;
-  border: 1px solid #2d7dff;
-  color: white;
-  padding: 10px 20px;
-  cursor: pointer;
-}
+    <div class="section">
 
-.tabs button:hover {
-  background: #2d7dff;
-}
+        <div class="section-title">
+            Combat Power Ranking
+        </div>
 
-.tab-content {
-  display: none;
-}
+        <div class="table-box">
 
-.tab-content.active {
-  display: block;
-}
-let excelData = {}
-    <tr>
-      <th>Rank</th>
-      <th>Character</th>
-      <th>Class</th>
-      <th>Guild</th>
-      <th>Score</th>
-    </tr>
-  `
+            <table>
 
-  data.forEach((player) => {
-    html += `
-      <tr>
-        <td>${player.rank}</td>
-        <td>${player.character}</td>
-        <td>${player.class}</td>
-        <td>${player.guild}</td>
-        <td>${player.score}</td>
-      </tr>
-    `
-  })
+                <tr>
+                    <th>Rank</th>
+                    <th>Character</th>
+                    <th>Class</th>
+                    <th>Guild</th>
+                    <th>Combat Power</th>
+                </tr>
 
-  table.innerHTML = html
-}
+                <tr><td>1</td><td>Azura</td><td>Warrior</td><td>Eternal</td><td>9,999,999</td></tr>
+                <tr><td>2</td><td>NightFox</td><td>Blader</td><td>Eclipse</td><td>9,850,000</td></tr>
+                <tr><td>3</td><td>Lunatic</td><td>Wizard</td><td>Nova</td><td>9,700,000</td></tr>
+                <tr><td>4</td><td>Artemis</td><td>Force Archer</td><td>Valkyrie</td><td>9,550,000</td></tr>
+                <tr><td>5</td><td>Titan</td><td>Force Shielder</td><td>Guardians</td><td>9,300,000</td></tr>
+                <tr><td>6</td><td>Reaper</td><td>Force Blader</td><td>HellCore</td><td>9,100,000</td></tr>
+                <tr><td>7</td><td>Ragnar</td><td>Gladiator</td><td>BloodMoon</td><td>8,950,000</td></tr>
+                <tr><td>8</td><td>Trigger</td><td>Force Gunner</td><td>OverDrive</td><td>8,700,000</td></tr>
+                <tr><td>9</td><td>Abyss</td><td>Dark Mage</td><td>Shadow</td><td>8,500,000</td></tr>
+                <tr><td>10</td><td>Leon</td><td>Warrior</td><td>Empire</td><td>8,300,000</td></tr>
 
-function renderGuildRanking() {
-  const table = document.getElementById('guildTable')
+            </table>
 
-  const data = excelData.guild_ranking || []
+        </div>
 
-  let html = `
-    <tr>
-      <th>Rank</th>
-      <th>Guild</th>
-      <th>Leader</th>
-      <th>Members</th>
-      <th>Score</th>
-      <th>Nation</th>
-    </tr>
-  `
+    </div>
 
-  data.forEach((guild) => {
-    html += `
-      <tr>
-        <td>${guild.rank}</td>
-        <td>${guild.guild}</td>
-        <td>${guild.leader}</td>
-        <td>${guild.members}</td>
-        <td>${guild.score}</td>
-        <td>${guild.nation}</td>
-      </tr>
-    `
-  })
+    <!-- ACHIEVEMENT -->
 
-  table.innerHTML = html
-}
+    <div class="section">
 
-function renderWarStatus() {
-  const container = document.getElementById('warContent')
+        <div class="section-title">
+            Achievement Ranking
+        </div>
 
-  const data = excelData.bringer || []
+        <div class="table-box">
 
-  let html = ''
+            <table>
 
-  data.forEach((player) => {
-    html += `
-      <div style="margin-bottom:20px;padding:15px;background:#111827;">
-        <h3>${player.character}</h3>
-        <p>${player.class}</p>
-        <p>${player.nation}</p>
-        <p>${player.war_level}</p>
-      </div>
-    `
-  })
+                <tr>
+                    <th>Rank</th>
+                    <th>Character</th>
+                    <th>Class</th>
+                    <th>Guild</th>
+                    <th>Achievement</th>
+                </tr>
 
-  container.innerHTML = html
-}
+                <tr><td>1</td><td>Trigger</td><td>Force Gunner</td><td>OverDrive</td><td>12,000</td></tr>
+                <tr><td>2</td><td>Titan</td><td>Force Shielder</td><td>Guardians</td><td>11,850</td></tr>
+                <tr><td>3</td><td>Reaper</td><td>Force Blader</td><td>HellCore</td><td>11,500</td></tr>
+                <tr><td>4</td><td>Ragnar</td><td>Gladiator</td><td>BloodMoon</td><td>11,200</td></tr>
+                <tr><td>5</td><td>Azura</td><td>Warrior</td><td>Eternal</td><td>11,000</td></tr>
+                <tr><td>6</td><td>NightFox</td><td>Blader</td><td>Eclipse</td><td>10,850</td></tr>
+                <tr><td>7</td><td>Lunatic</td><td>Wizard</td><td>Nova</td><td>10,700</td></tr>
+                <tr><td>8</td><td>Artemis</td><td>Force Archer</td><td>Valkyrie</td><td>10,500</td></tr>
+                <tr><td>9</td><td>Abyss</td><td>Dark Mage</td><td>Shadow</td><td>10,200</td></tr>
+                <tr><td>10</td><td>Leon</td><td>Warrior</td><td>Empire</td><td>10,000</td></tr>
 
-function renderSaintsOwner() {
-  const container = document.getElementById('saintsContent')
+            </table>
 
-  const data = excelData.saints_owner || []
+        </div>
 
-  let html = ''
+    </div>
 
-  data.forEach((player) => {
-    html += `
-      <div style="margin-bottom:20px;padding:15px;background:#111827;">
-        <h3>${player.character}</h3>
-        <p>${player.class}</p>
-        <p>${player.guild}</p>
-        <p>Level ${player.level}</p>
-      </div>
-    `
-  })
+</div>
 
-  container.innerHTML = html
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: rgba(255,255,255,0.05);
-}
+<!-- ======================================================= -->
+<!-- WAR STATUS -->
+<!-- ======================================================= -->
 
-th,
-td {
-  border: 1px solid rgba(255,255,255,0.1);
-  padding: 12px;
-  text-align: left;
-}
+<div id="warstatus" class="tab-content">
 
-th {
-  background: #1f2937;
-}
+    <!-- BRINGER -->
 
-.upload-box {
-  margin-bottom: 20px;
-}
+    <div class="section-title">
+        Bringer War Status
+    </div>
+
+    <div class="war-grid">
+
+        <!-- CAPELLA -->
+
+        <div class="nation-card">
+
+            <div class="nation-title capella">
+                CAPELLA
+            </div>
+
+            <div class="bringer-card">
+                <div class="class-icon">Warrior</div>
+                <div><h3>Azura</h3><p>Eternal</p><small>Lv.52~79</small></div>
+            </div>
+
+            <div class="bringer-card">
+                <div class="class-icon">Blader</div>
+                <div><h3>NightFox</h3><p>Eclipse</p><small>Lv.80~109</small></div>
+            </div>
+
+            <div class="bringer-card">
+                <div class="class-icon">Wizard</div>
+                <div><h3>Lunatic</h3><p>Nova</p><small>Lv.110~139</small></div>
+            </div>
+
+            <div class="bringer-card">
+                <div class="class-icon">Force Archer</div>
+                <div><h3>Artemis</h3><p>Valkyrie</p><small>Lv.140~169</small></div>
+            </div>
+
+            <div class="bringer-card">
+                <div class="class-icon">Force Shielder</div>
+                <div><h3>Titan</h3><p>Guardians</p><small>Lv.170~199</small></div>
+            </div>
+
+            <div class="bringer-card">
+                <div class="class-icon">Force Blader</div>
+                <div><h3>Reaper</h3><p>HellCore</p><small>Lv.200</small></div>
+            </div>
+
+        </div>
+
+        <!-- PROCYON -->
+
+        <div class="nation-card">
+
+            <div class="nation-title procyon">
+                PROCYON
+            </div>
+
+            <div class="bringer-card">
+                <div class="class-icon">Gladiator</div>
+                <div><h3>Ragnar</h3><p>BloodMoon</p><small>Lv.52~79</small></div>
+            </div>
+
+            <div class="bringer-card">
+                <div class="class-icon">Force Gunner</div>
+                <div><h3>Trigger</h3><p>OverDrive</p><small>Lv.80~109</small></div>
+            </div>
+
+            <div class="bringer-card">
+                <div class="class-icon">Dark Mage</div>
+                <div><h3>Abyss</h3><p>Shadow</p><small>Lv.110~139</small></div>
+            </div>
+
+            <div class="bringer-card">
+                <div class="class-icon">Warrior</div>
+                <div><h3>Leon</h3><p>Empire</p><small>Lv.140~169</small></div>
+            </div>
+
+            <div class="bringer-card">
+                <div class="class-icon">Blader</div>
+                <div><h3>Shade</h3><p>Inferno</p><small>Lv.170~199</small></div>
+            </div>
+
+            <div class="bringer-card">
+                <div class="class-icon">Wizard</div>
+                <div><h3>Mystic</h3><p>Celestial</p><small>Lv.200</small></div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- GUARDIAN -->
+
+    <div class="section-title" style="margin-top:50px;">
+        Guardian
+    </div>
+
+    <div class="war-grid">
+
+        <!-- CAPELLA GUARDIAN -->
+
+        <div class="nation-card">
+
+            <div class="nation-title capella">
+                CAPELLA GUARDIANS
+            </div>
+
+            <div class="table-box">
+
+                <table>
+
+                    <tr>
+                        <th>Class</th>
+                        <th>Character</th>
+                    </tr>
+
+                    <tr><td>Warrior</td><td>Azura</td></tr>
+                    <tr><td>Blader</td><td>NightFox</td></tr>
+                    <tr><td>Wizard</td><td>Lunatic</td></tr>
+                    <tr><td>Force Archer</td><td>Artemis</td></tr>
+                    <tr><td>Force Shielder</td><td>Titan</td></tr>
+                    <tr><td>Force Blader</td><td>Reaper</td></tr>
+                    <tr><td>Gladiator</td><td>Ragnar</td></tr>
+                    <tr><td>Force Gunner</td><td>Trigger</td></tr>
+                    <tr><td>Dark Mage</td><td>Abyss</td></tr>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- PROCYON GUARDIAN -->
+
+        <div class="nation-card">
+
+            <div class="nation-title procyon">
+                PROCYON GUARDIANS
+            </div>
+
+            <div class="table-box">
+
+                <table>
+
+                    <tr>
+                        <th>Class</th>
+                        <th>Character</th>
+                    </tr>
+
+                    <tr><td>Warrior</td><td>Leon</td></tr>
+                    <tr><td>Blader</td><td>Shade</td></tr>
+                    <tr><td>Wizard</td><td>Mystic</td></tr>
+                    <tr><td>Force Archer</td><td>Stella</td></tr>
+                    <tr><td>Force Shielder</td><td>Atlas</td></tr>
+                    <tr><td>Force Blader</td><td>Phantom</td></tr>
+                    <tr><td>Gladiator</td><td>Doom</td></tr>
+                    <tr><td>Force Gunner</td><td>Volt</td></tr>
+                    <tr><td>Dark Mage</td><td>Hades</td></tr>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ======================================================= -->
+<!-- SAINTS -->
+<!-- ======================================================= -->
+
+<div id="saints" class="tab-content">
+
+    <div class="section-title">
+        Saints' Forcecalibur Owner
+    </div>
+
+    <div class="saints-grid">
+
+        <div class="saint-card"><div class="saint-icon">Warrior</div><h2>Azura</h2><p>Eternal</p><small>Level 200</small></div>
+
+        <div class="saint-card"><div class="saint-icon">Blader</div><h2>NightFox</h2><p>Eclipse</p><small>Level 200</small></div>
+
+        <div class="saint-card"><div class="saint-icon">Wizard</div><h2>Lunatic</h2><p>Nova</p><small>Level 200</small></div>
+
+        <div class="saint-card"><div class="saint-icon">Force Archer</div><h2>Artemis</h2><p>Valkyrie</p><small>Level 200</small></div>
+
+        <div class="saint-card"><div class="saint-icon">Force Shielder</div><h2>Titan</h2><p>Guardians</p><small>Level 200</small></div>
+
+        <div class="saint-card"><div class="saint-icon">Force Blader</div><h2>Reaper</h2><p>HellCore</p><small>Level 200</small></div>
+
+        <div class="saint-card"><div class="saint-icon">Gladiator</div><h2>Ragnar</h2><p>BloodMoon</p><small>Level 200</small></div>
+
+        <div class="saint-card"><div class="saint-icon">Force Gunner</div><h2>Trigger</h2><p>OverDrive</p><small>Level 200</small></div>
+
+        <div class="saint-card"><div class="saint-icon">Dark Mage</div><h2>Abyss</h2><p>Shadow</p><small>Level 200</small></div>
+
+    </div>
+
+</div>
+```
