@@ -31,17 +31,29 @@ body{
 /* GUARDIAN LAYOUT */
 /* ======================================================= */
 
+    .guardian-left,
+.guardian-right{
+
+    width:420px;
+}
+    .guardian-left .table-box,
+.guardian-right .table-box{
+
+    overflow:hidden;
+}
 .guardian-wrapper{
 
-    display:grid;
-
-    grid-template-columns:1fr 220px 1fr;
+    display:flex;
 
     align-items:center;
 
-    gap:40px;
+    justify-content:center;
+
+    gap:30px;
 
     margin-top:30px;
+
+    flex-wrap:nowrap;
 }
 
 .guardian-left{
@@ -728,7 +740,6 @@ footer{
 
     <!-- GUARDIAN -->
 
-   ```html
 <div class="section-title" style="margin-top:50px;">
     Guardian
 </div>
