@@ -307,13 +307,17 @@ tr:hover{
 
     display:flex;
 
-    justify-content:center;
+    justify-content:space-between;
 
     align-items:flex-start;
 
-    gap:40px;
+    gap:80px;
 
     width:100%;
+
+    max-width:1700px;
+
+    margin:0 auto;
 
     flex-wrap:nowrap;
 }
@@ -328,9 +332,9 @@ tr:hover{
 
     padding:25px;
 
-    width:760px;
+    width:820px;
 
-    overflow:hidden;
+    overflow:visible;
 }
 
 .nation-title{
@@ -368,9 +372,9 @@ tr:hover{
 
     display:grid;
 
-    grid-template-columns:repeat(6,1fr);
+    grid-template-columns:repeat(6,minmax(120px,1fr));
 
-    gap:12px;
+    gap:14px;
 
     width:100%;
 }
@@ -378,7 +382,8 @@ tr:hover{
 /* VERTICAL CARD */
 
 .bringer-card.vertical{
-
+    
+    min-width:120px;
     display:flex;
     flex-direction:column;
 
