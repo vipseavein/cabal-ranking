@@ -26,7 +26,107 @@ body{
     radial-gradient(circle at top,#0d1b2a 0%,#050505 60%);
 }
 
+```css
+/* ======================================================= */
+/* GUARDIAN LAYOUT */
+/* ======================================================= */
 
+.guardian-wrapper{
+
+    display:grid;
+
+    grid-template-columns:1fr 220px 1fr;
+
+    align-items:center;
+
+    gap:40px;
+
+    margin-top:30px;
+}
+
+.guardian-left{
+
+    justify-self:start;
+}
+
+.guardian-right{
+
+    justify-self:end;
+}
+
+/* ======================================================= */
+/* WINNING FLAG */
+/* ======================================================= */
+
+.winning-flag{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+}
+
+.flag-image{
+
+    width:155px;
+    height:341px;
+
+    background-image:url('nation.png');
+
+    background-size:155px 682px;
+
+    background-position:top center;
+
+    background-repeat:no-repeat;
+
+    border-radius:16px;
+
+    box-shadow:0 0 25px #00d9ff55;
+}
+
+.flag-text{
+
+    margin-top:15px;
+
+    font-size:18px;
+
+    color:#ffd000;
+
+    text-shadow:0 0 10px #ffd000;
+}
+
+
+.flag-image{
+
+    width:155px;
+    height:341px;
+
+    background-image:url('nation.png');
+
+    background-size:155px 682px;
+
+    background-position:top center;
+
+    background-repeat:no-repeat;
+
+    border-radius:14px;
+
+    box-shadow:0 0 20px #00d9ff55;
+}
+
+.flag-text{
+
+    margin-top:14px;
+
+    font-size:18px;
+
+    color:#ffd000;
+
+    text-shadow:0 0 10px #ffd000;
+}
 /* GUARDIAN SMALL ICON */
 
 .guardian-icon{
@@ -628,13 +728,18 @@ footer{
 
     <!-- GUARDIAN -->
 
-    <div class="section-title" style="margin-top:50px;">
-        Guardian
-    </div>
+   ```html
+<div class="section-title" style="margin-top:50px;">
+    Guardian
+</div>
 
-    <div class="war-grid">
+<!-- GUARDIAN WRAPPER -->
 
-        <!-- CAPELLA -->
+<div class="guardian-wrapper">
+
+    <!-- LEFT : CAPELLA -->
+
+    <div class="guardian-left">
 
         <div class="nation-card">
 
@@ -646,108 +751,124 @@ footer{
 
                 <table>
 
-<tr>
-<th>Class</th>
-<th>Character</th>
-</tr>
+                    <tr>
+                        <th>Class</th>
+                        <th>Character</th>
+                    </tr>
 
-<tr>
-<td>
-<div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-<div class="guardian-icon icon-warrior-capella"></div>
-<span>Warrior</span>
-</div>
-</td>
-<td>Azura</td>
-</tr>
+                    <tr>
+                        <td>
+                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
+                                <div class="guardian-icon icon-warrior-capella"></div>
+                                <span>Warrior</span>
+                            </div>
+                        </td>
+                        <td>Azura</td>
+                    </tr>
 
-<tr>
-<td>
-<div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-<div class="guardian-icon icon-blader-capella"></div>
-<span>Blader</span>
-</div>
-</td>
-<td>NightFox</td>
-</tr>
+                    <tr>
+                        <td>
+                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
+                                <div class="guardian-icon icon-blader-capella"></div>
+                                <span>Blader</span>
+                            </div>
+                        </td>
+                        <td>NightFox</td>
+                    </tr>
 
-<tr>
-<td>
-<div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-<div class="guardian-icon icon-wizard-capella"></div>
-<span>Wizard</span>
-</div>
-</td>
-<td>Lunatic</td>
-</tr>
+                    <tr>
+                        <td>
+                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
+                                <div class="guardian-icon icon-wizard-capella"></div>
+                                <span>Wizard</span>
+                            </div>
+                        </td>
+                        <td>Lunatic</td>
+                    </tr>
 
-<tr>
-<td>
-<div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-<div class="guardian-icon icon-forcearcher-capella"></div>
-<span>Force Archer</span>
-</div>
-</td>
-<td>Artemis</td>
-</tr>
+                    <tr>
+                        <td>
+                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
+                                <div class="guardian-icon icon-forcearcher-capella"></div>
+                                <span>Force Archer</span>
+                            </div>
+                        </td>
+                        <td>Artemis</td>
+                    </tr>
 
-<tr>
-<td>
-<div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-<div class="guardian-icon icon-forceshielder-capella"></div>
-<span>Force Shielder</span>
-</div>
-</td>
-<td>Titan</td>
-</tr>
+                    <tr>
+                        <td>
+                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
+                                <div class="guardian-icon icon-forceshielder-capella"></div>
+                                <span>Force Shielder</span>
+                            </div>
+                        </td>
+                        <td>Titan</td>
+                    </tr>
 
-<tr>
-<td>
-<div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-<div class="guardian-icon icon-forceblader-capella"></div>
-<span>Force Blader</span>
-</div>
-</td>
-<td>Reaper</td>
-</tr>
+                    <tr>
+                        <td>
+                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
+                                <div class="guardian-icon icon-forceblader-capella"></div>
+                                <span>Force Blader</span>
+                            </div>
+                        </td>
+                        <td>Reaper</td>
+                    </tr>
 
-<tr>
-<td>
-<div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-<div class="guardian-icon icon-gladiator-capella"></div>
-<span>Gladiator</span>
-</div>
-</td>
-<td>Ragnar</td>
-</tr>
+                    <tr>
+                        <td>
+                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
+                                <div class="guardian-icon icon-gladiator-capella"></div>
+                                <span>Gladiator</span>
+                            </div>
+                        </td>
+                        <td>Ragnar</td>
+                    </tr>
 
-<tr>
-<td>
-<div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-<div class="guardian-icon icon-forcegunner-capella"></div>
-<span>Force Gunner</span>
-</div>
-</td>
-<td>Trigger</td>
-</tr>
+                    <tr>
+                        <td>
+                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
+                                <div class="guardian-icon icon-forcegunner-capella"></div>
+                                <span>Force Gunner</span>
+                            </div>
+                        </td>
+                        <td>Trigger</td>
+                    </tr>
 
-<tr>
-<td>
-<div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-<div class="guardian-icon icon-darkmage-capella"></div>
-<span>Dark Mage</span>
-</div>
-</td>
-<td>Abyss</td>
-</tr>
+                    <tr>
+                        <td>
+                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
+                                <div class="guardian-icon icon-darkmage-capella"></div>
+                                <span>Dark Mage</span>
+                            </div>
+                        </td>
+                        <td>Abyss</td>
+                    </tr>
 
-</table>
+                </table>
 
             </div>
 
         </div>
 
-        <!-- PROCYON -->
+    </div>
+
+    <!-- CENTER FLAG -->
+
+    <div class="winning-flag">
+
+        <div class="flag-image"></div>
+
+        <div class="flag-text">
+            Winning Flag
+        </div>
+
+    </div>
+
+    <!-- RIGHT : PROCYON -->
+
+    <div class="guardian-right">
 
         <div class="nation-card">
 
@@ -759,102 +880,102 @@ footer{
 
                 <table>
 
-<tr>
-<th>Class</th>
-<th>Character</th>
-</tr>
+                    <tr>
+                        <th>Class</th>
+                        <th>Character</th>
+                    </tr>
 
-<tr>
-<td>
-<div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-<div class="guardian-icon icon-warrior-procyon"></div>
-<span>Warrior</span>
-</div>
-</td>
-<td>Leon</td>
-</tr>
+                    <tr>
+                        <td>
+                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
+                                <div class="guardian-icon icon-warrior-procyon"></div>
+                                <span>Warrior</span>
+                            </div>
+                        </td>
+                        <td>Leon</td>
+                    </tr>
 
-<tr>
-<td>
-<div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-<div class="guardian-icon icon-blader-procyon"></div>
-<span>Blader</span>
-</div>
-</td>
-<td>Shade</td>
-</tr>
+                    <tr>
+                        <td>
+                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
+                                <div class="guardian-icon icon-blader-procyon"></div>
+                                <span>Blader</span>
+                            </div>
+                        </td>
+                        <td>Shade</td>
+                    </tr>
 
-<tr>
-<td>
-<div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-<div class="guardian-icon icon-wizard-procyon"></div>
-<span>Wizard</span>
-</div>
-</td>
-<td>Mystic</td>
-</tr>
+                    <tr>
+                        <td>
+                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
+                                <div class="guardian-icon icon-wizard-procyon"></div>
+                                <span>Wizard</span>
+                            </div>
+                        </td>
+                        <td>Mystic</td>
+                    </tr>
 
-<tr>
-<td>
-<div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-<div class="guardian-icon icon-forcearcher-procyon"></div>
-<span>Force Archer</span>
-</div>
-</td>
-<td>Stella</td>
-</tr>
+                    <tr>
+                        <td>
+                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
+                                <div class="guardian-icon icon-forcearcher-procyon"></div>
+                                <span>Force Archer</span>
+                            </div>
+                        </td>
+                        <td>Stella</td>
+                    </tr>
 
-<tr>
-<td>
-<div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-<div class="guardian-icon icon-forceshielder-procyon"></div>
-<span>Force Shielder</span>
-</div>
-</td>
-<td>Atlas</td>
-</tr>
+                    <tr>
+                        <td>
+                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
+                                <div class="guardian-icon icon-forceshielder-procyon"></div>
+                                <span>Force Shielder</span>
+                            </div>
+                        </td>
+                        <td>Atlas</td>
+                    </tr>
 
-<tr>
-<td>
-<div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-<div class="guardian-icon icon-forceblader-procyon"></div>
-<span>Force Blader</span>
-</div>
-</td>
-<td>Phantom</td>
-</tr>
+                    <tr>
+                        <td>
+                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
+                                <div class="guardian-icon icon-forceblader-procyon"></div>
+                                <span>Force Blader</span>
+                            </div>
+                        </td>
+                        <td>Phantom</td>
+                    </tr>
 
-<tr>
-<td>
-<div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-<div class="guardian-icon icon-gladiator-procyon"></div>
-<span>Gladiator</span>
-</div>
-</td>
-<td>Doom</td>
-</tr>
+                    <tr>
+                        <td>
+                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
+                                <div class="guardian-icon icon-gladiator-procyon"></div>
+                                <span>Gladiator</span>
+                            </div>
+                        </td>
+                        <td>Doom</td>
+                    </tr>
 
-<tr>
-<td>
-<div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-<div class="guardian-icon icon-forcegunner-procyon"></div>
-<span>Force Gunner</span>
-</div>
-</td>
-<td>Volt</td>
-</tr>
+                    <tr>
+                        <td>
+                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
+                                <div class="guardian-icon icon-forcegunner-procyon"></div>
+                                <span>Force Gunner</span>
+                            </div>
+                        </td>
+                        <td>Volt</td>
+                    </tr>
 
-<tr>
-<td>
-<div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-<div class="guardian-icon icon-darkmage-procyon"></div>
-<span>Dark Mage</span>
-</div>
-</td>
-<td>Hades</td>
-</tr>
+                    <tr>
+                        <td>
+                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
+                                <div class="guardian-icon icon-darkmage-procyon"></div>
+                                <span>Dark Mage</span>
+                            </div>
+                        </td>
+                        <td>Hades</td>
+                    </tr>
 
-</table>
+                </table>
 
             </div>
 
@@ -863,6 +984,8 @@ footer{
     </div>
 
 </div>
+```
+
 
 <!-- ======================================================= -->
 <!-- SAINTS -->
