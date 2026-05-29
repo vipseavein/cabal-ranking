@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cabal Ultimate Combo</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>TOP RANKING CABAL ULTIMATE COMBO</h1>
+
+    <div class="server-status">
+      🟢 SERVER OPEN | GMT+8
+    </div>
+  </div>
+
+  <div class="upload-box">
+    <input type="file" id="excelFile" accept=".xlsx" />
+  </div>
+
+  <div class="tabs">
+    <button onclick="showTab('topplayer')">Top Player</button>
+    <button onclick="showTab('warstatus')">War Status</button>
+    <button onclick="showTab('saints')">Saints Owner</button>
+    <button onclick="showTab('guild')">Guild Ranking</button>
+  </div>
+
+  <div id="topplayer" class="tab-content active">
+    <h2>Combat Power</h2>
+    <table id="combatTable"></table>
+  </div>
+
+  <div id="warstatus" class="tab-content">
+    <h2>War Status</h2>
+    <div id="warContent"></div>
+  </div>
+
+  <div id="saints" class="tab-content">
+    <h2>Saints' Forcecalibur Owner</h2>
+    <div id="saintsContent"></div>
+  </div>
+
+  <div id="guild" class="tab-content">
+    <h2>Guild Ranking</h2>
+    <table id="guildTable"></table>
+  </div>
+
+</div>
+
+<script src="xlsx.full.min.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>

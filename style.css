@@ -1,0 +1,73 @@
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #070b14;
+  color: white;
+}
+
+.container {
+  width: 95%;
+  margin: auto;
+  padding: 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  color: #2d7dff;
+}
+
+.server-status {
+  margin-top: 10px;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.tabs button {
+  background: #111827;
+  border: 1px solid #2d7dff;
+  color: white;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.tabs button:hover {
+  background: #2d7dff;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(255,255,255,0.05);
+}
+
+th,
+td {
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  background: #1f2937;
+}
+
+.upload-box {
+  margin-bottom: 20px;
+}
