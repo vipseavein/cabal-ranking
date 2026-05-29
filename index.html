@@ -231,19 +231,45 @@ tr:hover{
     box-shadow:0 0 15px #00d9ff44;
 }
 
+/* ======================================================= */
+/* CLASS ICON SPRITE */
+/* ======================================================= */
+
 .class-icon{
-    width:60px;
-    height:60px;
-    border-radius:14px;
-    background:linear-gradient(145deg,#00d9ff,#004cff);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:11px;
-    font-weight:bold;
-    text-align:center;
-    padding:5px;
+
+    width:46px;
+    height:105px;
+
+    background-image:url('class.png');
+    background-repeat:no-repeat;
+    background-size:46px 2100px;
+
+    flex-shrink:0;
 }
+
+/* CAPELLA */
+
+.icon-warrior-capella{background-position:0 0;}
+.icon-blader-capella{background-position:0 -105px;}
+.icon-wizard-capella{background-position:0 -210px;}
+.icon-forcearcher-capella{background-position:0 -315px;}
+.icon-forceshielder-capella{background-position:0 -420px;}
+.icon-forceblader-capella{background-position:0 -1050px;}
+.icon-gladiator-capella{background-position:0 -1155px;}
+.icon-forcegunner-capella{background-position:0 -1680px;}
+.icon-darkmage-capella{background-position:0 -1890px;}
+
+/* PROCYON */
+
+.icon-warrior-procyon{background-position:0 -525px;}
+.icon-blader-procyon{background-position:0 -630px;}
+.icon-wizard-procyon{background-position:0 -735px;}
+.icon-forcearcher-procyon{background-position:0 -840px;}
+.icon-forceshielder-procyon{background-position:0 -945px;}
+.icon-forceblader-procyon{background-position:0 -1260px;}
+.icon-gladiator-procyon{background-position:0 -1365px;}
+.icon-forcegunner-procyon{background-position:0 -1785px;}
+.icon-darkmage-procyon{background-position:0 -1995px;}
 
 /* SAINTS */
 
@@ -455,32 +481,32 @@ footer{
             </div>
 
             <div class="bringer-card">
-                <div class="class-icon">Warrior</div>
+                <div class="class-icon icon-warrior-capella"></div>
                 <div><h3>Azura</h3><p>Eternal</p><small>Lv.52~79</small></div>
             </div>
 
             <div class="bringer-card">
-                <div class="class-icon">Blader</div>
+                <div class="class-icon icon-blader-capella"></div>
                 <div><h3>NightFox</h3><p>Eclipse</p><small>Lv.80~109</small></div>
             </div>
 
             <div class="bringer-card">
-                <div class="class-icon">Wizard</div>
+                <div class="class-icon icon-wizard-capella"></div>
                 <div><h3>Lunatic</h3><p>Nova</p><small>Lv.110~139</small></div>
             </div>
 
             <div class="bringer-card">
-                <div class="class-icon">Force Archer</div>
+                <div class="class-icon icon-forcearcher-capella"></div>
                 <div><h3>Artemis</h3><p>Valkyrie</p><small>Lv.140~169</small></div>
             </div>
 
             <div class="bringer-card">
-                <div class="class-icon">Force Shielder</div>
+                <div class="class-icon icon-forceshielder-capella"></div>
                 <div><h3>Titan</h3><p>Guardians</p><small>Lv.170~199</small></div>
             </div>
 
             <div class="bringer-card">
-                <div class="class-icon">Force Blader</div>
+                <div class="class-icon icon-forceblader-capella"></div>
                 <div><h3>Reaper</h3><p>HellCore</p><small>Lv.200</small></div>
             </div>
 
@@ -495,32 +521,32 @@ footer{
             </div>
 
             <div class="bringer-card">
-                <div class="class-icon">Gladiator</div>
+                <div class="class-icon icon-warrior-procyon"></div>
                 <div><h3>Ragnar</h3><p>BloodMoon</p><small>Lv.52~79</small></div>
             </div>
 
             <div class="bringer-card">
-                <div class="class-icon">Force Gunner</div>
+                <div class="class-icon icon-blader-procyon"></div>
                 <div><h3>Trigger</h3><p>OverDrive</p><small>Lv.80~109</small></div>
             </div>
 
-            <div class="bringer-card">
-                <div class="class-icon">Dark Mage</div>
+            <div class="bringer-card">          
+                <div class="class-icon icon-darkmage-procyon"></div>
                 <div><h3>Abyss</h3><p>Shadow</p><small>Lv.110~139</small></div>
             </div>
 
             <div class="bringer-card">
-                <div class="class-icon">Warrior</div>
+                <div class="class-icon icon-warrior-procyon"></div>
                 <div><h3>Leon</h3><p>Empire</p><small>Lv.140~169</small></div>
             </div>
 
             <div class="bringer-card">
-                <div class="class-icon">Blader</div>
+                <div class="class-icon icon-blader-procyon"></div>
                 <div><h3>Shade</h3><p>Inferno</p><small>Lv.170~199</small></div>
             </div>
 
             <div class="bringer-card">
-                <div class="class-icon">Wizard</div>
+                <div class="class-icon icon-wizard-procyon"></div>
                 <div><h3>Mystic</h3><p>Celestial</p><small>Lv.200</small></div>
             </div>
 
@@ -618,7 +644,7 @@ footer{
 
     <div class="saints-grid">
 
-        <div class="saint-card"><div class="saint-icon">Warrior</div><h2>Azura</h2><p>Eternal</p><small>Level 200</small></div>
+        <div class="saint-card"><div class="class-icon icon-warrior-capella" style="margin:auto;"></div><h2>Azura</h2><p>Eternal</p><small>Level 200</small></div>
 
         <div class="saint-card"><div class="saint-icon">Blader</div><h2>NightFox</h2><p>Eclipse</p><small>Level 200</small></div>
 
