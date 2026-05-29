@@ -305,20 +305,32 @@ tr:hover{
 
 .war-grid{
 
-    display:grid;
-
-    grid-template-columns:minmax(0,650px) minmax(0,650px);
+    display:flex;
 
     justify-content:center;
 
-    gap:30px;
+    align-items:flex-start;
+
+    gap:40px;
+
+    width:100%;
+
+    flex-wrap:wrap;
 }
 
 .nation-card{
+
     background:rgba(15,15,15,0.95);
+
     border:2px solid #00d9ff33;
+
     border-radius:18px;
+
     padding:25px;
+
+    width:760px;
+
+    overflow:hidden;
 }
 
 .nation-title{
@@ -358,7 +370,9 @@ tr:hover{
 
     grid-template-columns:repeat(6,1fr);
 
-    gap:14px;
+    gap:12px;
+
+    width:100%;
 }
 
 /* VERTICAL CARD */
@@ -405,11 +419,13 @@ tr:hover{
 
 .class-icon{
 
-    width:105px;
+    width:92px;
     height:105px;
 
     background-image:url('class.png');
+
     background-repeat:no-repeat;
+
     background-size:92px 2100px;
 
     flex-shrink:0;
