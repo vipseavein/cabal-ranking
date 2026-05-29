@@ -252,7 +252,55 @@ tr:hover{
     transform:scale(1.02);
     box-shadow:0 0 15px #00d9ff44;
 }
+/* BRINGER GRID */
 
+.bringer-list{
+
+    display:grid;
+
+    grid-template-columns:repeat(6,1fr);
+
+    gap:14px;
+}
+
+/* VERTICAL CARD */
+
+.bringer-card.vertical{
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:flex-start;
+
+    text-align:center;
+
+    padding:16px 8px;
+
+    min-height:240px;
+}
+
+.bringer-card.vertical h3{
+
+    font-size:14px;
+    margin-top:10px;
+}
+
+.bringer-card.vertical p{
+
+    font-size:12px;
+    color:#aaa;
+
+    margin-top:6px;
+}
+
+.bringer-card.vertical small{
+
+    font-size:11px;
+    color:#00d9ff;
+
+    margin-top:8px;
+}
 /* ======================================================= */
 /* CLASS ICON SPRITE */
 /* ======================================================= */
@@ -501,37 +549,34 @@ footer{
             <div class="nation-title capella">
                 CAPELLA
             </div>
-
-            <div class="bringer-card">
+            <div class="bringer-list">
+            <div class="bringer-card vertical">
                 <div class="class-icon icon-warrior-capella"></div>
-                <div><h3>Azura</h3><p>Eternal</p><small>Lv.52~79</small></div>
+                <h3>Azura</h3><p>Eternal</p><small>Lv.52~79</small>
             </div>
 
-            <div class="bringer-card">
+            <div class="bringer-card vertical">
                 <div class="class-icon icon-blader-capella"></div>
-                <div><h3>NightFox</h3><p>Eclipse</p><small>Lv.80~109</small></div>
+                <h3>NightFox</h3><p>Eclipse</p><small>Lv.80~109</small>
             </div>
 
-            <div class="bringer-card">
+            <div class="bringer-card vertical">
                 <div class="class-icon icon-wizard-capella"></div>
-                <div><h3>Lunatic</h3><p>Nova</p><small>Lv.110~139</small></div>
-            </div>
+                <h3>Lunatic</h3><p>Nova</p><small>Lv.110~139</small>            </div>
 
-            <div class="bringer-card">
+           <div class="bringer-card vertical">
                 <div class="class-icon icon-forcearcher-capella"></div>
-                <div><h3>Artemis</h3><p>Valkyrie</p><small>Lv.140~169</small></div>
-            </div>
+                <h3>Artemis</h3><p>Valkyrie</p><small>Lv.140~169</small>            </div>
 
-            <div class="bringer-card">
+            <div class="bringer-card vertical">
                 <div class="class-icon icon-forceshielder-capella"></div>
-                <div><h3>Titan</h3><p>Guardians</p><small>Lv.170~199</small></div>
+                <h3>Titan</h3><p>Guardians</p><small>Lv.170~199</small>
             </div>
 
-            <div class="bringer-card">
+            <div class="bringer-card vertical">
                 <div class="class-icon icon-forceblader-capella"></div>
-                <div><h3>Reaper</h3><p>HellCore</p><small>Lv.200</small></div>
+                <h3>Reaper</h3><p>HellCore</p><small>Lv.200</small>            </div>
             </div>
-
         </div>
 
         <!-- PROCYON -->
@@ -541,37 +586,37 @@ footer{
             <div class="nation-title procyon">
                 PROCYON
             </div>
-
-            <div class="bringer-card">
+            <div class="bringer-list">
+            <div class="bringer-card vertical">
                 <div class="class-icon icon-warrior-procyon"></div>
-                <div><h3>Ragnar</h3><p>BloodMoon</p><small>Lv.52~79</small></div>
+                <h3>Ragnar</h3><p>BloodMoon</p><small>Lv.52~79</small>
             </div>
 
-            <div class="bringer-card">
+           <div class="bringer-card vertical">
                 <div class="class-icon icon-blader-procyon"></div>
-                <div><h3>Trigger</h3><p>OverDrive</p><small>Lv.80~109</small></div>
+                <h3>Trigger</h3><p>OverDrive</p><small>Lv.80~109</small>
             </div>
 
-            <div class="bringer-card">          
+            <div class="bringer-card vertical">      
                 <div class="class-icon icon-darkmage-procyon"></div>
-                <div><h3>Abyss</h3><p>Shadow</p><small>Lv.110~139</small></div>
+                <h3>Abyss</h3><p>Shadow</p><small>Lv.110~139</small>
             </div>
 
-            <div class="bringer-card">
+            <div class="bringer-card vertical">
                 <div class="class-icon icon-warrior-procyon"></div>
-                <div><h3>Leon</h3><p>Empire</p><small>Lv.140~169</small></div>
+                <h3>Leon</h3><p>Empire</p><small>Lv.140~169</small>
             </div>
 
-            <div class="bringer-card">
+            <div class="bringer-card vertical">
                 <div class="class-icon icon-blader-procyon"></div>
-                <div><h3>Shade</h3><p>Inferno</p><small>Lv.170~199</small></div>
+                <h3>Shade</h3><p>Inferno</p><small>Lv.170~199</small>
             </div>
 
-            <div class="bringer-card">
+           <div class="bringer-card vertical">
                 <div class="class-icon icon-wizard-procyon"></div>
-                <div><h3>Mystic</h3><p>Celestial</p><small>Lv.200</small></div>
+                <h3>Mystic</h3><p>Celestial</p><small>Lv.200</small>
             </div>
-
+            </div>
         </div>
 
     </div>
