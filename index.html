@@ -1,1095 +1,137 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>CABAL Ultimate Combo Ranking</title>
-<link rel="icon" type="image/x-icon" href="favicon.ico">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CABAL Ranking Hub</title>
 <style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    font-family:'Orbitron',sans-serif;
-    background:#050505;
-    color:white;
-    overflow-x:hidden;
-    background-image:
-    radial-gradient(circle at top,#0d1b2a 0%,#050505 60%);
-}
-
-```css
-/* ======================================================= */
-/* GUARDIAN LAYOUT */
-/* ======================================================= */
-
-    .guardian-left,
-.guardian-right{
-
-    width:420px;
-}
-    .guardian-left .table-box,
-.guardian-right .table-box{
-
-    overflow:hidden;
-}
-.guardian-wrapper{
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    gap:90px;
-
-    margin-top:30px;
-
-    flex-wrap:nowrap;
-}
-
-.guardian-left{
-
-    justify-self:start;
-}
-
-.guardian-right{
-
-    justify-self:end;
-}
-
-/* ======================================================= */
-/* WINNING FLAG */
-/* ======================================================= */
-
-.winning-flag{
-
-    display:flex;
-
-    flex-direction:column;
-
-    align-items:center;
-
-    justify-content:center;
-}
-
-.flag-image{
-
-    width:232px;
-    height:256px;
-
-    background-image:url('nation.png');
-
-    background-size:232px 512px;
-
-    background-position:top center;
-
-    background-repeat:no-repeat;
-
-    overflow:hidden;
-}
-
-.flag-text{
-
-    margin-top:15px;
-
-    font-size:18px;
-
-    color:#ffd000;
-
-    text-shadow:0 0 10px #ffd000;
-}
-
-
-
-.flag-text{
-
-    margin-top:14px;
-
-    font-size:18px;
-
-    color:#ffd000;
-
-    text-shadow:0 0 10px #ffd000;
-}
-/* GUARDIAN SMALL ICON */
-
-.guardian-icon{
-
-    width:46px;
-    height:105px;
-
-    background-image:url('class.png');
-    background-repeat:no-repeat;
-    background-size:46px 2100px;
-
-    transform:scale(0.7,0.33);
-    transform-origin:top left;
-
-    flex-shrink:0;
-
-    margin-right:-24px;
-    margin-bottom:-70px;
-}
-    
-    /* SCROLL */
-    
-
-::-webkit-scrollbar{
-    width:10px;
-}
-
-::-webkit-scrollbar-thumb{
-    background:#00d9ff;
-    border-radius:10px;
-}
-
-/* HEADER */
-
-header{
-    width:100%;
-    padding:25px 40px;
-    border-bottom:2px solid #00d9ff55;
-    background:rgba(0,0,0,0.85);
-    backdrop-filter:blur(10px);
-
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-
-    position:sticky;
-    top:0;
-    z-index:999;
-}
-
-.logo h1{
-    font-size:32px;
-    color:#00d9ff;
-    text-shadow:0 0 15px #00d9ff;
-}
-
-.logo p{
-    margin-top:5px;
-    color:#aaa;
-    font-size:13px;
-}
-
-.server-info{
-    text-align:right;
-}
-
-.server-status{
-    color:#00ff88;
-    font-size:15px;
-    margin-bottom:5px;
-}
-
-.server-time{
-    color:#ffd000;
-    font-size:14px;
-}
-
-/* TABS */
-
-.tabs{
-    display:flex;
-    justify-content:center;
-    gap:20px;
-    padding:25px;
-    flex-wrap:wrap;
-}
-
-.tab-btn{
-    background:#101010;
-    border:2px solid #00d9ff55;
-    color:white;
-    padding:14px 28px;
-    cursor:pointer;
-    border-radius:12px;
-    transition:0.3s;
-    font-size:15px;
-    font-weight:bold;
-}
-
-.tab-btn:hover,
-.tab-btn.active{
-    background:#00d9ff;
-    color:black;
-    box-shadow:0 0 20px #00d9ff;
-}
-
-/* CONTENT */
-
-.content{
-    width:95%;
-    max-width:1450px;
-    margin:auto;
-    padding-bottom:60px;
-}
-
-.tab-content{
-    display:none;
-    animation:fade 0.4s ease;
-}
-
-.tab-content.active{
-    display:block;
-}
-
-@keyframes fade{
-    from{
-        opacity:0;
-        transform:translateY(15px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-/* SECTION */
-
-.section{
-    margin-bottom:50px;
-}
-
-.section-title{
-    font-size:28px;
-    margin-bottom:20px;
-    color:#00d9ff;
-    text-shadow:0 0 12px #00d9ff;
-}
-
-/* TABLE */
-
-.table-box{
-    overflow-x:auto;
-    border:1px solid #00d9ff33;
-    border-radius:16px;
-    background:rgba(15,15,15,0.95);
-    box-shadow:0 0 20px #000;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-}
-
-th{
-    background:#00d9ff22;
-    color:#00d9ff;
-    padding:16px;
-    font-size:14px;
-}
-
-td{
-    padding:14px;
-    text-align:center;
-    border-top:1px solid #ffffff11;
-}
-
-tr:hover{
-    background:#00d9ff11;
-}
-
-/* WAR STATUS */
-
-.war-grid{
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:flex-start;
-
-    gap:80px;
-
-    width:100%;
-
-    max-width:1700px;
-
-    margin:0 auto;
-
-    flex-wrap:nowrap;
-}
-
-.nation-card{
-
-    background:rgba(15,15,15,0.95);
-
-    border:2px solid #00d9ff33;
-
-    border-radius:18px;
-
-    padding:25px;
-
-    width:820px;
-
-    overflow:visible;
-}
-.war-grid .nation-card:first-child{
-
-    margin-left:auto;
-}
-
-.war-grid .nation-card:last-child{
-
-    margin-right:auto;
-}
-.nation-title{
-    font-size:24px;
-    margin-bottom:20px;
-    text-align:center;
-}
-
-.capella{
-    color:#00d9ff;
-}
-
-.procyon{
-    color:#ff3c3c;
-}
-
-.bringer-card{
-    display:flex;
-    align-items:center;
-    gap:15px;
-    margin-bottom:18px;
-    padding:14px;
-    border-radius:12px;
-    background:#111;
-    transition:0.3s;
-}
-
-.bringer-card:hover{
-    transform:scale(1.02);
-    box-shadow:0 0 15px #00d9ff44;
-}
-/* BRINGER GRID */
-
-.bringer-list{
-
-    display:grid;
-
-    grid-template-columns:repeat(6,minmax(120px,1fr));
-
-    gap:14px;
-
-    width:100%;
-}
-
-/* VERTICAL CARD */
-
-.bringer-card.vertical{
-    
-    min-width:120px;
-    display:flex;
-    flex-direction:column;
-
-    align-items:center;
-    justify-content:flex-start;
-
-    text-align:center;
-
-    padding:16px 8px;
-
-    min-height:240px;
-}
-
-.bringer-card.vertical h3{
-
-    font-size:14px;
-    margin-top:10px;
-}
-
-.bringer-card.vertical p{
-
-    font-size:12px;
-    color:#aaa;
-
-    margin-top:6px;
-}
-
-.bringer-card.vertical small{
-
-    font-size:11px;
-    color:#00d9ff;
-
-    margin-top:8px;
-}
-/* ======================================================= */
-/* CLASS ICON SPRITE */
-/* ======================================================= */
-
-.class-icon{
-
-    width:92px;
-    height:105px;
-
-    background-image:url('class.png');
-
-    background-repeat:no-repeat;
-
-    background-size:92px 2100px;
-
-    flex-shrink:0;
-}
-
-/* CAPELLA */
-
-.icon-warrior-capella{background-position:0 0;}
-.icon-blader-capella{background-position:0 -105px;}
-.icon-wizard-capella{background-position:0 -210px;}
-.icon-forcearcher-capella{background-position:0 -315px;}
-.icon-forceshielder-capella{background-position:0 -420px;}
-.icon-forceblader-capella{background-position:0 -1050px;}
-.icon-gladiator-capella{background-position:0 -1155px;}
-.icon-forcegunner-capella{background-position:0 -1680px;}
-.icon-darkmage-capella{background-position:0 -1890px;}
-
-/* PROCYON */
-
-.icon-warrior-procyon{background-position:0 -525px;}
-.icon-blader-procyon{background-position:0 -630px;}
-.icon-wizard-procyon{background-position:0 -735px;}
-.icon-forcearcher-procyon{background-position:0 -840px;}
-.icon-forceshielder-procyon{background-position:0 -945px;}
-.icon-forceblader-procyon{background-position:0 -1260px;}
-.icon-gladiator-procyon{background-position:0 -1365px;}
-.icon-forcegunner-procyon{background-position:0 -1785px;}
-.icon-darkmage-procyon{background-position:0 -1995px;}
-
-/* SAINTS */
-
-.saints-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-    gap:20px;
-}
-
-.saint-card{
-    background:rgba(15,15,15,0.95);
-    border:2px solid #ffd00044;
-    border-radius:18px;
-    padding:20px;
-    text-align:center;
-    transition:0.3s;
-}
-
-.saint-card:hover{
-    transform:translateY(-6px);
-    box-shadow:0 0 20px #ffd00066;
-}
-
-.saint-icon{
-    width:90px;
-    height:90px;
-    margin:auto;
-    border-radius:18px;
-    background:linear-gradient(145deg,#ffd000,#ff8800);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    margin-bottom:15px;
-    font-size:13px;
-    font-weight:bold;
-    text-align:center;
-    padding:10px;
-}
-
-/* FOOTER */
-
-footer{
-    margin-top:60px;
-    text-align:center;
-    padding:25px;
-    color:#888;
-    border-top:1px solid #ffffff11;
-}
-
-/* MOBILE */
-
-@media(max-width:900px){
-
-    .war-grid{
-        grid-template-columns:1fr;
-    }
-
-    header{
-        gap:20px;
-    }
-
-    .logo h1{
-        font-size:24px;
-    }
-
-}
-
+:root{--bg:#050910;--panel:#0c1420;--panel2:#101c2b;--line:#25384c;--cyan:#32d7ff;--cyan2:#0d91b8;--gold:#f8c95f;--text:#ecf7ff;--muted:#7f97aa;--green:#4dd5a4;--red:#ff6772;--bronze:#d8905c;--shadow:0 18px 55px rgba(0,0,0,.46)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--text);font-family:Segoe UI,Arial,sans-serif;min-height:100vh;background:radial-gradient(circle at 24% 0%,#11263b 0,#07111c 34%,#04070c 75%)}
+body:before{content:"";position:fixed;inset:0;background:linear-gradient(rgba(4,8,14,.87),rgba(4,8,14,.96)),url('assets/bg.jpg') center/cover fixed;z-index:-2}body:after{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(50,215,255,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(50,215,255,.028) 1px,transparent 1px);background-size:38px 38px;mask-image:linear-gradient(to bottom,#000,transparent 82%);z-index:-1}
+.wrap{max-width:1480px;margin:auto;padding:18px 22px 36px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:7px 0 16px;border-bottom:1px solid #1d2b3b}.brand{display:flex;align-items:center;gap:15px}.brand img{height:38px;filter:drop-shadow(0 0 12px rgba(50,215,255,.2))}.brand h1{font-size:29px;letter-spacing:2px;margin:0}.brand h1 span{color:var(--cyan)}.sub{font-size:11px;letter-spacing:2.1px;color:#7690a5;font-weight:700}.tools{display:flex;align-items:center;gap:9px}.chip,.tool{border:1px solid var(--line);background:#0b1420;color:#c7dcec;border-radius:7px;padding:8px 11px;font-size:12px;font-weight:700}.chip{font-size:16px;display:flex;align-items:flex-start;justify-content:flex-start;gap:16px;line-height:1.15;padding:10px 16px;min-height:0}.nw-icon-wrap{position:relative;width:64px;height:64px;display:flex;align-items:flex-start;justify-content:center;flex:0 0 64px}.nw-icon{width:64px;height:64px;object-fit:contain;image-rendering:auto;display:block}.nw-copy{display:flex;flex-direction:column;justify-content:flex-start;align-items:flex-start;gap:5px;min-height:0;padding-top:0}.nw-main{display:block;line-height:1.08;white-space:nowrap;margin-top:0}.nw-main .nw-countdown{color:var(--cyan)}.nw-zone{display:block;font-size:11px;line-height:1;color:#7890a4;font-weight:700;letter-spacing:.8px}.nw-live{color:var(--cyan);font-weight:900}.nw-live-count{color:var(--cyan);font-size:12px;font-weight:800;letter-spacing:.5px}.nw-tooltip{position:absolute;right:calc(100% + 12px);top:50%;transform:translateY(-50%) translateX(6px);opacity:0;pointer-events:none;white-space:nowrap;background:#07101a;border:1px solid #30516c;color:#dcecf7;padding:9px 11px;border-radius:7px;font-size:11px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.35);transition:.15s;z-index:20}.nw-tooltip:after{content:'';position:absolute;left:100%;top:50%;transform:translateY(-50%);border:6px solid transparent;border-left-color:#30516c}.nw-icon-wrap:hover .nw-tooltip{opacity:1;transform:translateY(-50%) translateX(0)}.tool{cursor:pointer}.tool:hover{border-color:var(--cyan);color:#fff}
+.hero{display:grid;grid-template-columns:1.4fr .72fr;gap:16px;margin-top:18px}.card,.panel{background:linear-gradient(145deg,rgba(15,27,42,.96),rgba(7,13,21,.96));border:1px solid #26394e;border-radius:13px;box-shadow:var(--shadow)}.hero-main{padding:23px 25px;position:relative;overflow:hidden}.hero-main:after{content:"";position:absolute;width:330px;height:330px;right:-110px;top:-180px;background:radial-gradient(circle,rgba(50,215,255,.19),transparent 66%);pointer-events:none}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--cyan);font-weight:800}.hero h2{font-size:36px;line-height:1.05;margin:7px 0 6px}.hero p{margin:0;max-width:760px;color:#91a6b8;font-size:13px;line-height:1.55}.hero-stats{display:flex;gap:10px;margin-top:17px;flex-wrap:wrap}.stat{min-width:126px;padding:9px 12px;border:1px solid #20364a;border-radius:8px;background:#0a131f}.stat b{display:block;font-size:20px}.stat small{color:#718a9f;text-transform:uppercase;font-size:10px;letter-spacing:.9px}.featured{display:flex;align-items:center;gap:15px;padding:18px}.featured img{width:82px;height:82px;object-fit:contain}.featured h3{font-size:21px;margin:4px 0}.gold{color:var(--gold)}
+.mainnav{display:flex;gap:8px;margin:17px 0 12px;overflow:auto;padding-bottom:2px}.mainnav button,.subnav button,.classbar button{white-space:nowrap;cursor:pointer;border:1px solid #22364b;background:#08111b;color:#8da4b7;border-radius:7px;font-weight:800}.mainnav button{padding:10px 16px;font-size:13px}.mainnav button:hover,.subnav button:hover,.classbar button:hover{border-color:#3c6680;color:#e7faff}.mainnav button.active,.subnav button.active,.classbar button.active{background:linear-gradient(180deg,#139dc2,#087a9a);border-color:#3bdcff;color:#fff;box-shadow:0 0 18px rgba(50,215,255,.14)}
+.panel{padding:15px}.bar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:12px}.title{font-size:18px;font-weight:800;margin-right:auto}.title span{color:var(--cyan)}.search{min-width:240px;flex:0 1 330px}.search input{width:100%;background:#07101a;border:1px solid #253b51;border-radius:7px;color:#fff;padding:9px 11px;outline:none}.search input:focus{border-color:var(--cyan)}.meta{font-size:11px;color:#7890a4}.tablewrap{overflow:auto;border:1px solid #1e3144;border-radius:9px;max-height:650px;background:#071019}.ranktable{width:100%;border-collapse:collapse;min-width:760px}.ranktable thead{position:sticky;top:0;z-index:4;background:#0d1b29}.ranktable th{font-size:11px;text-transform:uppercase;letter-spacing:.9px;color:#89a9bf;text-align:left;padding:11px 12px;border-bottom:1px solid #28445d}.ranktable td{padding:10px 12px;border-bottom:1px solid rgba(33,52,70,.58);font-size:13px}.ranktable tbody tr:hover{background:rgba(43,125,161,.13)}.ranktable tr.p1{background:linear-gradient(90deg,rgba(248,201,95,.12),transparent)}.ranktable tr.p2{background:linear-gradient(90deg,rgba(210,225,236,.07),transparent)}.ranktable tr.p3{background:linear-gradient(90deg,rgba(216,144,92,.08),transparent)}.rank{font-weight:900;font-size:15px}.p1 .rank{color:var(--gold)}.p2 .rank{color:#d9e4eb}.p3 .rank{color:var(--bronze)}.name{font-weight:800}.guild{color:#73d8ff}.score{font-weight:800;font-variant-numeric:tabular-nums}.badge{display:inline-flex;align-items:center;justify-content:center;min-width:33px;padding:3px 7px;border-radius:5px;border:1px solid #30516c;background:#0b1d2b;color:#8ce9ff;font-size:11px;font-weight:900}
+.arena-quickbar{display:grid;grid-template-columns:repeat(9,minmax(78px,1fr));gap:8px;margin:0 0 14px}.arena-quickbar button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:76px;padding:8px 5px;cursor:pointer;border:1px solid #263c52;border-radius:9px;background:linear-gradient(180deg,#0e1a28,#08111b);color:#b9cad8;font-size:10px;font-weight:900;transition:.16s}.arena-quickbar button:hover{border-color:var(--cyan);color:#fff;transform:translateY(-1px);box-shadow:0 0 18px rgba(50,215,255,.12)}.arena-quickbar img{width:38px;height:38px;object-fit:contain;filter:drop-shadow(0 0 7px rgba(50,215,255,.2))}.arena-overview{display:grid;grid-template-columns:repeat(3,minmax(240px,1fr));gap:12px}.classcard{position:relative;overflow:hidden;cursor:pointer;padding:11px 14px;border:1px solid #263c52;border-radius:10px;background:linear-gradient(150deg,#0e1b29,#080f18);min-height:104px;transition:.18s;display:flex;align-items:center}.classcard:hover{transform:translateY(-2px);border-color:#3a8aaa;box-shadow:0 10px 25px rgba(0,0,0,.25)}.classcard:after{content:"";position:absolute;width:140px;height:140px;right:-55px;top:-64px;background:radial-gradient(circle,rgba(50,215,255,.12),transparent 65%)}.classhead{display:flex;justify-content:space-between;gap:14px;align-items:center;width:100%}.classidentity{display:flex;align-items:center;gap:10px;min-width:145px}.classicon{width:44px;height:44px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(50,215,255,.18))}.classcode{font-size:11px;color:var(--cyan);font-weight:900}.classname{font-size:15px;font-weight:900}.championinfo{margin-left:auto;text-align:right;min-width:0;max-width:62%}.championname{font-size:24px;line-height:1.05;font-weight:950;color:#fff;letter-spacing:.2px;text-shadow:0 0 13px rgba(50,215,255,.16);overflow-wrap:anywhere}.championscore{font-size:11px;color:#7e93a5;font-weight:700;margin-top:6px}.championscore:before{content:'Score  ';text-transform:uppercase;letter-spacing:.7px;font-size:9px;color:#5e7588}.nodata{color:#637b8e;font-size:13px;margin-top:18px}.classbar{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}.classbar button{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;font-size:11px}.classbar img{width:22px;height:22px;object-fit:contain}.backline{display:flex;align-items:center;gap:10px;margin-bottom:10px}.backline button{background:none;border:0;color:var(--cyan);cursor:pointer;font-weight:800;padding:4px 0}.backline button:hover{text-decoration:underline}
+.subnav{display:flex;gap:7px;margin-bottom:12px}.subnav button{padding:8px 13px}.empty{padding:35px 20px;text-align:center;border:1px dashed #294158;border-radius:10px;background:#08111a}.empty h3{margin:0 0 7px}.empty p{margin:0;color:#7890a3;font-size:13px;line-height:1.6}.code{font-family:Consolas,monospace;color:#96e9ff;background:#0b1a27;border:1px solid #213a50;border-radius:5px;padding:2px 6px}.data-note{margin-top:12px;padding:10px 12px;border-left:3px solid var(--cyan);background:#08131e;color:#83a0b5;font-size:12px;line-height:1.5}.footer{display:flex;justify-content:space-between;gap:15px;color:#60778b;font-size:10px;font-weight:700;letter-spacing:.8px;padding:13px 3px}
+@media(max-width:1100px){.arena-quickbar{grid-template-columns:repeat(5,1fr)}}@media(max-width:940px){.hero{grid-template-columns:1fr}.featured{display:none}.arena-overview{grid-template-columns:repeat(2,minmax(220px,1fr))}.wrap{padding:12px}.brand h1{font-size:23px}.chip{display:none}}@media(max-width:620px){.arena-quickbar{grid-template-columns:repeat(3,1fr)}.arena-overview{grid-template-columns:1fr}.hero h2{font-size:29px}.tools{display:none}.search{flex:1 1 100%}}
 </style>
 </head>
-
 <body>
-
-<header>
-
-    <div class="logo">
-        <h1>CABAL Ultimate Combo Ranking</h1>
-        <p>Ultimate Gamer Ranking Interface</p>
-    </div>
-
-    <div class="server-info">
-        <div class="server-status">🟢 Server Open</div>
-        <div class="server-time" id="gmtTime">🕒 GMT+8</div>
-    </div>
-
+<div class="wrap">
+<header class="top">
+  <div class="brand"><img src="assets/cabal-logo.png" alt="CABAL"><div><h1>RANKING <span>HUB</span></h1><div class="sub">SEA COMMUNITY DATA CENTER</div></div></div>
+  <div class="tools"><div class="chip" id="dataChip"><span class="nw-icon-wrap"><img class="nw-icon" src="assets/NationWar.png" alt="Nation War"><span class="nw-tooltip">01:00 / 03:00 / 05:00 / 07:00 / 11:00 / 17:00 / 19:00 / 22:00</span></span><span class="nw-copy"><span class="nw-main" id="nwText">NATION WAR</span><span class="nw-zone">GMT+8</span></span></div></div>
 </header>
-
-<!-- TABS -->
-
-<div class="tabs">
-
-    <button class="tab-btn active" onclick="showTab('topplayer')">
-        Top Player
-    </button>
-
-    <button class="tab-btn" onclick="showTab('warstatus')">
-        War Status
-    </button>
-
-    <button class="tab-btn" onclick="showTab('saints')">
-        Saints' Owner
-    </button>
-
+<section class="hero">
+  <div class="card hero-main"><div class="eyebrow">CABAL Ultimate Combo Ranking</div><h2>CABAL Ultimate Combo <span style="color:var(--cyan)">Ranking</span></h2><p>Rankings are built from player contributions.<br>This site is non-profit. All data is entered manually with no third-party tools or game modification.</p><div class="hero-stats"><div class="stat"><b>4</b><small>Main sections</small></div><div class="stat"><b>9</b><small>Legend classes</small></div><div class="stat"><b>10</b><small>Guild Top ranks</small></div><div class="stat"><b id="trackedCount">—</b><small>Rows loaded</small></div></div></div>
+  <div class="card featured"><img src="assets/together.png" alt="Together"><div><div class="eyebrow">Guild Ranking #1</div><h3>TOGETHER <span class="gold">#1</span></h3><p id="featuredText">Loading current ranking…</p></div></div>
+</section>
+<nav class="mainnav" id="mainnav">
+  <button class="active" data-page="guild">Guild Ranking</button>
+  <button data-page="arena">Legend Arena</button>
+  <button data-page="achievement">Achievement Rank</button>
+  <button data-page="together">Guild Together</button>
+</nav>
+<section class="panel" id="content"></section>
+<div class="footer" style="justify-content:center;text-align:center"><span>CABAL RANKING HUB</span></div>
 </div>
-
-<div class="content">
-
-<!-- ======================================================= -->
-<!-- TOP PLAYER -->
-<!-- ======================================================= -->
-
-<div id="topplayer" class="tab-content active">
-
-    <!-- COMBAT POWER -->
-
-    <div class="section">
-
-        <div class="section-title">
-            Combat Power Ranking
-        </div>
-
-        <div class="table-box">
-
-            <table>
-
-                <tr>
-                    <th>Rank</th>
-                    <th>Character</th>
-                    <th>Class</th>
-                    <th>Guild</th>
-                    <th>Combat Power</th>
-                </tr>
-
-                <tr><td>1</td><td>SerraL</td><td>ForceBlader</td><td>Together</td><td>1,509,999</td></tr>
-                <tr><td>2</td><td>Nadejda</td><td>Blader</td><td>Together</td><td>1,450,000</td></tr>
-                <tr><td>3</td><td>Mobacchi</td><td>Warrior</td><td>PAPISQUAD</td><td>1,300,000</td></tr>
-                <tr><td>4</td><td>Artemis</td><td>Force Archer</td><td>Valkyrie</td><td>9,550,000</td></tr>
-                <tr><td>5</td><td>Titan</td><td>Force Shielder</td><td>Guardians</td><td>9,300,000</td></tr>
-                <tr><td>6</td><td>Reaper</td><td>Force Blader</td><td>HellCore</td><td>9,100,000</td></tr>
-                <tr><td>7</td><td>Ragnar</td><td>Gladiator</td><td>BloodMoon</td><td>8,950,000</td></tr>
-                <tr><td>8</td><td>Trigger</td><td>Force Gunner</td><td>OverDrive</td><td>8,700,000</td></tr>
-                <tr><td>9</td><td>Abyss</td><td>Dark Mage</td><td>Shadow</td><td>8,500,000</td></tr>
-                <tr><td>10</td><td>Leon</td><td>Warrior</td><td>Empire</td><td>8,300,000</td></tr>
-
-            </table>
-
-        </div>
-
-    </div>
-
-    <!-- ACHIEVEMENT -->
-
-    <div class="section">
-
-        <div class="section-title">
-            Achievement Ranking
-        </div>
-
-        <div class="table-box">
-
-            <table>
-
-                <tr>
-                    <th>Rank</th>
-                    <th>Character</th>
-                    <th>Class</th>
-                    <th>Guild</th>
-                    <th>Achievement</th>
-                </tr>
-
-                <tr><td>1</td><td>SaintJacques</td><td>Dark Mage</td><td>Together</td><td>12,000</td></tr>
-                <tr><td>2</td><td>Muichiro</td><td>Force Archer</td><td>Guardians</td><td>11,850</td></tr>
-                <tr><td>3</td><td>SerraL</td><td>Force Blader</td><td>Together</td><td>11,500</td></tr>
-                <tr><td>4</td><td>Sonate</td><td>Gladiator</td><td>BloodMoon</td><td>11,200</td></tr>
-                <tr><td>5</td><td>Azura</td><td>Warrior</td><td>Eternal</td><td>11,000</td></tr>
-                <tr><td>6</td><td>NightFox</td><td>Blader</td><td>Eclipse</td><td>10,850</td></tr>
-                <tr><td>7</td><td>Lunatic</td><td>Wizard</td><td>Nova</td><td>10,700</td></tr>
-                <tr><td>8</td><td>Artemis</td><td>Force Archer</td><td>Valkyrie</td><td>10,500</td></tr>
-                <tr><td>9</td><td>Abyss</td><td>Dark Mage</td><td>Shadow</td><td>10,200</td></tr>
-                <tr><td>10</td><td>Leon</td><td>Warrior</td><td>Empire</td><td>10,000</td></tr>
-
-            </table>
-
-        </div>
-
-    </div>
-
-</div>
-
-<!-- ======================================================= -->
-<!-- WAR STATUS -->
-<!-- ======================================================= -->
-
-<div id="warstatus" class="tab-content">
-
-    <!-- BRINGER -->
-
-    <div class="section-title">
-        Bringer War Status
-    </div>
-
-    <div class="war-grid">
-
-        <!-- CAPELLA -->
-
-        <div class="nation-card">
-
-            <div class="nation-title capella">
-                CAPELLA
-            </div>
-            <div class="bringer-list">
-            <div class="bringer-card vertical">
-                <div class="class-icon icon-warrior-capella"></div>
-                <h3>Azura</h3><p>Eternal</p><small>Lv.52~79</small>
-            </div>
-
-            <div class="bringer-card vertical">
-                <div class="class-icon icon-blader-capella"></div>
-                <h3>NightFox</h3><p>Eclipse</p><small>Lv.80~109</small>
-            </div>
-
-            <div class="bringer-card vertical">
-                <div class="class-icon icon-wizard-capella"></div>
-                <h3>Lunatic</h3><p>Nova</p><small>Lv.110~139</small>            </div>
-
-           <div class="bringer-card vertical">
-                <div class="class-icon icon-forcearcher-capella"></div>
-                <h3>Artemis</h3><p>Valkyrie</p><small>Lv.140~169</small>            </div>
-
-            <div class="bringer-card vertical">
-                <div class="class-icon icon-forceshielder-capella"></div>
-                <h3>Titan</h3><p>Guardians</p><small>Lv.170~199</small>
-            </div>
-
-            <div class="bringer-card vertical">
-                <div class="class-icon icon-forceblader-capella"></div>
-                <h3>Reaper</h3><p>HellCore</p><small>Lv.200</small>            </div>
-            </div>
-        </div>
-
-        <!-- PROCYON -->
-
-        <div class="nation-card">
-
-            <div class="nation-title procyon">
-                PROCYON
-            </div>
-            <div class="bringer-list">
-            <div class="bringer-card vertical">
-                <div class="class-icon icon-warrior-procyon"></div>
-                <h3>Ragnar</h3><p>BloodMoon</p><small>Lv.52~79</small>
-            </div>
-
-           <div class="bringer-card vertical">
-                <div class="class-icon icon-blader-procyon"></div>
-                <h3>Trigger</h3><p>OverDrive</p><small>Lv.80~109</small>
-            </div>
-
-            <div class="bringer-card vertical">      
-                <div class="class-icon icon-darkmage-procyon"></div>
-                <h3>Abyss</h3><p>Shadow</p><small>Lv.110~139</small>
-            </div>
-
-            <div class="bringer-card vertical">
-                <div class="class-icon icon-warrior-procyon"></div>
-                <h3>Leon</h3><p>Empire</p><small>Lv.140~169</small>
-            </div>
-
-            <div class="bringer-card vertical">
-                <div class="class-icon icon-blader-procyon"></div>
-                <h3>Shade</h3><p>Inferno</p><small>Lv.170~199</small>
-            </div>
-
-           <div class="bringer-card vertical">
-                <div class="class-icon icon-wizard-procyon"></div>
-                <h3>Mystic</h3><p>Celestial</p><small>Lv.200</small>
-            </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- GUARDIAN -->
-
-<div class="section-title" style="margin-top:50px;">
-</div>
-
-<!-- GUARDIAN WRAPPER -->
-
-<div class="guardian-wrapper">
-
-    <!-- LEFT : CAPELLA -->
-
-    <div class="guardian-left">
-
-        <div class="nation-card">
-
-            <div class="nation-title capella">
-                CAPELLA GUARDIANS
-            </div>
-
-            <div class="table-box">
-
-                <table>
-
-                    <tr>
-                        <th>Class</th>
-                        <th>Character</th>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-                                <div class="guardian-icon icon-warrior-capella"></div>
-                                <span>Warrior</span>
-                            </div>
-                        </td>
-                        <td>Azura</td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-                                <div class="guardian-icon icon-blader-capella"></div>
-                                <span>Blader</span>
-                            </div>
-                        </td>
-                        <td>NightFox</td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-                                <div class="guardian-icon icon-wizard-capella"></div>
-                                <span>Wizard</span>
-                            </div>
-                        </td>
-                        <td>Lunatic</td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-                                <div class="guardian-icon icon-forcearcher-capella"></div>
-                                <span>Force Archer</span>
-                            </div>
-                        </td>
-                        <td>Artemis</td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-                                <div class="guardian-icon icon-forceshielder-capella"></div>
-                                <span>Force Shielder</span>
-                            </div>
-                        </td>
-                        <td>Titan</td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-                                <div class="guardian-icon icon-forceblader-capella"></div>
-                                <span>Force Blader</span>
-                            </div>
-                        </td>
-                        <td>Reaper</td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-                                <div class="guardian-icon icon-gladiator-capella"></div>
-                                <span>Gladiator</span>
-                            </div>
-                        </td>
-                        <td>Ragnar</td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-                                <div class="guardian-icon icon-forcegunner-capella"></div>
-                                <span>Force Gunner</span>
-                            </div>
-                        </td>
-                        <td>Trigger</td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-                                <div class="guardian-icon icon-darkmage-capella"></div>
-                                <span>Dark Mage</span>
-                            </div>
-                        </td>
-                        <td>Abyss</td>
-                    </tr>
-
-                </table>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- CENTER FLAG -->
-
-    <div class="winning-flag">
-
-        <div class="flag-image"></div>
-
-        <div class="flag-text">
-            Winning Flag
-        </div>
-
-    </div>
-
-    <!-- RIGHT : PROCYON -->
-
-    <div class="guardian-right">
-
-        <div class="nation-card">
-
-            <div class="nation-title procyon">
-                PROCYON GUARDIANS
-            </div>
-
-            <div class="table-box">
-
-                <table>
-
-                    <tr>
-                        <th>Class</th>
-                        <th>Character</th>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-                                <div class="guardian-icon icon-warrior-procyon"></div>
-                                <span>Warrior</span>
-                            </div>
-                        </td>
-                        <td>Leon</td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-                                <div class="guardian-icon icon-blader-procyon"></div>
-                                <span>Blader</span>
-                            </div>
-                        </td>
-                        <td>Shade</td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-                                <div class="guardian-icon icon-wizard-procyon"></div>
-                                <span>Wizard</span>
-                            </div>
-                        </td>
-                        <td>Mystic</td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-                                <div class="guardian-icon icon-forcearcher-procyon"></div>
-                                <span>Force Archer</span>
-                            </div>
-                        </td>
-                        <td>Stella</td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-                                <div class="guardian-icon icon-forceshielder-procyon"></div>
-                                <span>Force Shielder</span>
-                            </div>
-                        </td>
-                        <td>Atlas</td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-                                <div class="guardian-icon icon-forceblader-procyon"></div>
-                                <span>Force Blader</span>
-                            </div>
-                        </td>
-                        <td>Phantom</td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-                                <div class="guardian-icon icon-gladiator-procyon"></div>
-                                <span>Gladiator</span>
-                            </div>
-                        </td>
-                        <td>Doom</td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-                                <div class="guardian-icon icon-forcegunner-procyon"></div>
-                                <span>Force Gunner</span>
-                            </div>
-                        </td>
-                        <td>Volt</td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <div style="display:flex;align-items:center;gap:10px;justify-content:flex-start;">
-                                <div class="guardian-icon icon-darkmage-procyon"></div>
-                                <span>Dark Mage</span>
-                            </div>
-                        </td>
-                        <td>Hades</td>
-                    </tr>
-
-                </table>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-</div>
-
-<!-- ======================================================= -->
-<!-- SAINTS -->
-<!-- ======================================================= -->
-
-<div id="saints" class="tab-content">
-
-    <div class="section-title">
-        Saints' Forcecalibur Owner
-    </div>
-
-    <div class="saints-grid">
-
-        <div class="saint-card"><div class="class-icon icon-warrior-capella" style="margin:auto;"></div><h2>Azura</h2><p>Eternal</p><small>Level 200</small></div>
-
-        <div class="saint-card"><div class="class-icon icon-blader-capella" style="margin:auto;"></div><h2>NightFox</h2><p>Eclipse</p><small>Level 200</small></div>
-
-        <div class="saint-card"><div class="class-icon icon-wizard-capella" style="margin:auto;"></div><h2>Lunatic</h2><p>Nova</p><small>Level 200</small></div>
-
-        <div class="saint-card"><div class="class-icon icon-forcearcher-capella" style="margin:auto;"></div><h2>Artemis</h2><p>Valkyrie</p><small>Level 200</small></div>
-
-        <div class="saint-card"><div class="class-icon icon-forceshielder-capella" style="margin:auto;"></div><h2>Titan</h2><p>Guardians</p><small>Level 200</small></div>
-
-        <div class="saint-card"><div class="class-icon icon-forceblader-capella" style="margin:auto;"></div><h2>Reaper</h2><p>HellCore</p><small>Level 200</small></div>
-
-        <div class="saint-card"><div class="class-icon icon-gladiator-capella" style="margin:auto;"></div><h2>Ragnar</h2><p>BloodMoon</p><small>Level 200</small></div>
-
-        <div class="saint-card"><div class="class-icon icon-forcegunner-capella" style="margin:auto;"></div><h2>Trigger</h2><p>OverDrive</p><small>Level 200</small></div>
-
-        <div class="saint-card"><div class="class-icon icon-darkmage-capella" style="margin:auto;"></div><h2>Abyss</h2><p>Shadow</p><small>Level 200</small></div>
-
-    </div>
-
-</div>
-
-</div>
-
-<footer>
-    CABAL Ultimate Combo Ranking © 2026
-</footer>
-
+<script src="data/ranking_data.js"></script>
 <script>
-
-/* REALTIME GMT+8 */
-
-function updateGMT8(){
-
-    const now = new Date();
-
-    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-
-    const gmt8 = new Date(utc + (3600000 * 8));
-
-    const hours = String(gmt8.getHours()).padStart(2,'0');
-    const minutes = String(gmt8.getMinutes()).padStart(2,'0');
-    const seconds = String(gmt8.getSeconds()).padStart(2,'0');
-
-    document.getElementById('gmtTime').innerHTML =
-        `🕒 GMT+8 ${hours}:${minutes}:${seconds}`;
+const D=window.CABAL_DATA||{guild:[],arena:{},achievement:[],weekly:[],seasons:[]};
+const CLASS_ORDER=[['Warrior','WA','warrior.svg'],['Blader','BL','blader.svg'],['Wizard','WI','wizard.svg'],['Force Archer','FA','force_archer.svg'],['Force Shielder','FS','force_shielder.svg'],['Force Blader','FB','force_blader.svg'],['Force Gunner','FG','force_gunner.svg'],['Dark Mage','DM','dark_mage.svg'],['Gladiator','GL','gladiator.svg']];
+const classIcon=f=>`assets/classes/${f}`;
+let page='guild', arenaClass=null, togetherTab='weekly', weeklyIndex=0, seasonIndex=0, q='';
+const esc=s=>String(s??'—').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const trClass=n=>n==1?'p1':n==2?'p2':n==3?'p3':'';
+const rank=n=>`<span class="rank">#${esc(n)}</span>`;
+const badge=x=>`<span class="badge">${esc(x)}</span>`;
+const cname=x=>`<span class="name">${esc(x)}</span>`;
+const gname=x=>`<span class="guild">${esc(x)}</span>`;
+const score=x=>`<span class="score">${esc(x)}</span>`;
+function table(head,rows,make){return `<div class="tablewrap"><table class="ranktable"><thead><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr class="${trClass(+r.ranking)}">${make(r).map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`}
+function filtered(rows){if(!q)return rows;const s=q.toLowerCase();return rows.filter(r=>Object.values(r).join(' ').toLowerCase().includes(s))}
+function searchBox(ph='Search character / guild…'){return `<div class="search"><input id="searchInput" value="${esc(q)}" placeholder="${ph}"></div>`}
+function bindSearch(){const el=document.getElementById('searchInput');if(el)el.oninput=e=>{q=e.target.value;const pos=e.target.selectionStart??q.length;render();requestAnimationFrame(()=>{const n=document.getElementById('searchInput');if(n){n.focus();try{n.setSelectionRange(pos,pos)}catch(_){}}})}}
+function renderGuild(){const rows=filtered(D.guild||[]);return `<div class="bar"><div class="title">Guild <span>Ranking</span></div>${searchBox('Search guild / guild master…')}<div class="meta">${rows.length} guilds</div></div>${table(['Ranking','Guild Name','Guild Master','Guild Score'],rows,r=>[rank(r.ranking),gname(r.guild),cname(r.master),score(r.score)])}<div class="data-note">Accepted format: <span class="code">Guild_Ranking_YYYYMMDD_HHMMSS.xlsx</span>. If several files exist, the newest date/time suffix is used.</div>`}
+function renderArena(){
+ const quickButtons=CLASS_ORDER.map(([full,code,icon])=>`<button data-classpick="${esc(full)}" title="${esc(full)}"><img src="${classIcon(icon)}" alt="${code}"><span>${code}</span></button>`).join('');
+ if(!arenaClass){
+   const cards=CLASS_ORDER.map(([full,code,icon])=>{const obj=D.arena?.[full];const top=obj?.rows?.[0];return `<article class="classcard" data-class="${esc(full)}"><div class="classhead"><div class="classidentity"><img class="classicon" src="${classIcon(icon)}" alt="${code}"><div><div class="classcode">${code}-Lv.200</div><div class="classname">${full}</div></div></div>${top?`<div class="championinfo"><div class="championname">${esc(top.character)}</div><div class="championscore">${esc(top.score)}</div></div>`:`<div class="nodata">No data</div>`}</div></article>`}).join('');
+   return `<div class="bar"><div class="title">Legend Arena <span>Class Champions</span></div><div class="meta">Choose a class • Champion overview</div></div><div class="arena-quickbar">${quickButtons}</div><div class="arena-overview">${cards}</div><div class="data-note">Accepted format: <span class="code">LegendArena_Class_YYYYMMDD_HHMMSS.xlsx</span>. Repeated classes are resolved automatically by keeping the newest file.</div>`
+ }
+ const obj=D.arena?.[arenaClass];const found=CLASS_ORDER.find(x=>x[0]===arenaClass)||[];const code=found[1]||'', selectedIcon=found[2]||'';const rows=filtered(obj?.rows||[]);const buttons=CLASS_ORDER.map(([full,c,icon])=>`<button class="${arenaClass===full?'active':''}" data-classpick="${esc(full)}"><img src="${classIcon(icon)}" alt="${c}">${c}</button>`).join('');return `<div class="backline"><button id="arenaBack">← All class champions</button><span class="meta">${esc(obj?.file||'No data file')}</span></div><div class="classbar"><button data-classpick="__all">ALL</button>${buttons}</div><div class="bar"><div class="title">Legend Arena • <span>${selectedIcon?`<img src="${classIcon(selectedIcon)}" alt="${code}" style="width:25px;height:25px;vertical-align:middle;margin-right:7px">`:''}${esc(arenaClass)}</span></div>${searchBox('Search character…')}<div class="meta">Top ${rows.length} • ${code}</div></div>${obj?table(['Ranking','Class','Character','Total Score'],rows,r=>[rank(r.ranking),badge(code),cname(r.character),score(r.score)]):`<div class="empty"><h3>No ${esc(arenaClass)} data</h3><p>Add a matching Legend Arena Excel file and rebuild the dataset.</p></div>`}`}
+function renderAchievement(){const rows=filtered(D.achievement||[]);return `<div class="bar"><div class="title">Achievement <span>Rank</span></div>${searchBox()}<div class="meta">${rows.length} characters</div></div>${table(['Ranking','Class','Level','Character','Guild','Ach. Points'],rows,r=>[rank(r.ranking),badge(r.class),esc(r.level),cname(r.character),gname(r.guild),score(r.points)])}<div class="data-note">Accepted format: <span class="code">Archievement_Rank_YYYYMMDD_HHMMSS.xlsx</span>.</div>`}
+function renderTogether(){
+ const sub=`<div class="subnav"><button class="${togetherTab==='weekly'?'active':''}" data-together="weekly">Guild Weekly</button><button class="${togetherTab==='season'?'active':''}" data-together="season">Guild Season</button></div>`;
+ if(togetherTab==='weekly'){
+   const all=D.weekly||[], obj=all[weeklyIndex]||all[0];
+   if(!obj)return `<div class="bar"><div class="title">Guild <span>Together</span></div></div>${sub}<div class="empty"><h3>Guild Weekly Ranking</h3><p>No weekly data found.<br>Accepted format: <span class="code">Guild_Weekly_Ranking__DDMMYYYY.xlsx</span></p></div>`;
+   const opts=all.map((x,i)=>`<option value="${i}" ${i===weeklyIndex?'selected':''}>${esc(x.label)}</option>`).join('');
+   const rows=filtered(obj.rows||[]);
+   return `<div class="bar"><div class="title">Guild <span>Together</span></div><div class="meta">Weekly + Season</div></div>${sub}
+   <div class="bar"><div class="title">Guild Weekly • <span>${esc(obj.label)}</span></div>
+   <select id="weeklySelect" class="tool">${opts}</select>${searchBox('Search character…')}<div class="meta">${rows.length} characters</div></div>
+   ${table(['Ranking','Character','Treasure Score'],rows,r=>[rank(r.ranking),cname(r.character),score(r.score)])}
+   <div class="data-note">Source: <span class="code">${esc(obj.file)}</span>. The date in the file name is treated as the week end date; the displayed range is automatically calculated as 7 days.</div>`;
+ }
+ const all=D.seasons||[], obj=all[seasonIndex]||all[0];
+ if(!obj)return `<div class="bar"><div class="title">Guild <span>Together</span></div></div>${sub}<div class="empty"><h3>Guild Season</h3><p>No season data found.<br>Accepted format: <span class="code">GuildSeason_N_YYYY.xlsx</span></p></div>`;
+ const opts=all.map((x,i)=>`<option value="${i}" ${i===seasonIndex?'selected':''}>${esc(x.label)}</option>`).join('');
+ const rows=filtered(obj.rows||[]);
+ const heads=['Ranking','Character',...(obj.weekColumns||[]),'Total Score'];
+ return `<div class="bar"><div class="title">Guild <span>Together</span></div><div class="meta">Weekly + Season</div></div>${sub}
+ <div class="bar"><div class="title"><span>${esc(obj.label)}</span></div>
+ <select id="seasonSelect" class="tool">${opts}</select>${searchBox('Search character…')}<div class="meta">${rows.length} characters</div></div>
+ ${table(heads,rows,r=>[rank(r.ranking),cname(r.character),...(obj.weekColumns||[]).map(w=>score(r.scores?.[w]??0)),score(r.total)])}
+ <div class="data-note">Source: <span class="code">${esc(obj.file)}</span>. Season title is generated directly from <span class="code">GuildSeason_Season_Year.xlsx</span>.</div>`;
 }
+function render(){const c=document.getElementById('content');c.innerHTML=page==='guild'?renderGuild():page==='arena'?renderArena():page==='achievement'?renderAchievement():renderTogether();bindSearch();document.querySelectorAll('.classcard').forEach(x=>x.onclick=()=>{arenaClass=x.dataset.class;q='';render()});document.querySelectorAll('[data-classpick]').forEach(x=>x.onclick=()=>{arenaClass=x.dataset.classpick==='__all'?null:x.dataset.classpick;q='';render()});const back=document.getElementById('arenaBack');if(back)back.onclick=()=>{arenaClass=null;q='';render()};document.querySelectorAll('[data-together]').forEach(x=>x.onclick=()=>{togetherTab=x.dataset.together;q='';render()});const ws=document.getElementById('weeklySelect');if(ws)ws.onchange=e=>{weeklyIndex=+e.target.value;q='';render()};const ss=document.getElementById('seasonSelect');if(ss)ss.onchange=e=>{seasonIndex=+e.target.value;q='';render()}}
+document.querySelectorAll('#mainnav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#mainnav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');page=b.dataset.page;q='';arenaClass=null;render()});
+const topGuild=D.guild?.[0];if(topGuild)document.getElementById('featuredText').innerHTML=`Guild Master: <b>${esc(topGuild.master)}</b><br>Guild Score: <span class="gold">${esc(topGuild.score)}</span>`;
+const arenaRows=Object.values(D.arena||{}).reduce((a,x)=>a+(x.rows?.length||0),0);const weeklyRows=(D.weekly||[]).reduce((a,x)=>a+(x.rows?.length||0),0);const seasonRows=(D.seasons||[]).reduce((a,x)=>a+(x.rows?.length||0),0);document.getElementById('trackedCount').textContent=(D.guild?.length||0)+arenaRows+(D.achievement?.length||0)+weeklyRows+seasonRows;
 
-setInterval(updateGMT8,1000);
-updateGMT8();
+// Nation War schedule uses CABAL game time (GMT+8).
+const NW_GAME_HOURS=[1,3,5,7,11,17,19,22];
+function updateNationWarCountdown(){
+  const text=document.getElementById('nwText');
+  const zone=document.querySelector('.nw-zone');
+  if(!text||!zone)return;
 
-/* TAB SYSTEM */
+  const gameMs=Date.now()+(8*60*60*1000);
+  const now=new Date(gameMs);
+  const y=now.getUTCFullYear(),m=now.getUTCMonth(),d=now.getUTCDate();
 
-function showTab(tabId){
+  // Live window: from HH:00:00 through HH:34:59 (35 minutes).
+  for(const hour of NW_GAME_HOURS){
+    const liveStart=Date.UTC(y,m,d,hour,0,0);
+    const liveEnd=liveStart+(35*60*1000);
+    if(gameMs>=liveStart && gameMs<liveEnd){
+      const remain=Math.max(0,Math.floor((liveEnd-gameMs)/1000));
+      const mins=Math.floor(remain/60),secs=remain%60;
+      text.innerHTML='<span class="nw-live">NATION WAR IS LIVE NOW!</span>';
+      zone.innerHTML=`<span class="nw-live-count">${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}</span>`;
+      return;
+    }
+  }
 
-    let contents=document.querySelectorAll('.tab-content');
-    let buttons=document.querySelectorAll('.tab-btn');
-
-    contents.forEach(content=>{
-        content.classList.remove('active');
-    });
-
-    buttons.forEach(btn=>{
-        btn.classList.remove('active');
-    });
-
-    document.getElementById(tabId).classList.add('active');
-
-    event.target.classList.add('active');
+  // Outside a live window, count down to the next scheduled Nation War.
+  let next=null,nextLabel=null;
+  for(const hour of NW_GAME_HOURS){
+    const t=Date.UTC(y,m,d,hour,0,0);
+    if(t>gameMs){next=t;nextLabel=hour;break}
+  }
+  if(next===null){
+    nextLabel=NW_GAME_HOURS[0];
+    next=Date.UTC(y,m,d+1,nextLabel,0,0);
+  }
+  const diff=Math.max(0,Math.floor((next-gameMs)/1000));
+  const mins=Math.floor(diff/60),secs=diff%60;
+  text.innerHTML=`NATION WAR ${String(nextLabel).padStart(2,'0')}:00 • <span class="nw-countdown">${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}</span>`;
+  zone.textContent='GMT+8';
 }
-
+updateNationWarCountdown();setInterval(updateNationWarCountdown,1000);
+render();
 </script>
-
 </body>
 </html>
