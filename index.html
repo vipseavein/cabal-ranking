@@ -22,7 +22,7 @@ body:before{content:"";position:fixed;inset:0;background:linear-gradient(rgba(4,
 <div class="wrap">
 <header class="top">
   <div class="brand"><img src="./assets/cabal-logo.png" alt="CABAL"><div><h1>RANKING <span>HUB</span></h1><div class="sub">SEA COMMUNITY DATA CENTER</div></div></div>
-  <div class="tools"><div class="chip" id="dataChip"><span class="nw-icon-wrap"><img class="nw-icon" src="./assets/NationWar.png" alt="Nation War"><span class="nw-tooltip">01:00 / 03:00 / 05:00 / 07:00 / 11:00 / 17:00 / 19:00 / 22:00</span></span><span class="nw-copy"><span class="nw-main" id="nwText">NATION WAR</span><span class="nw-zone">GMT+8</span></span></div></div>
+  <div class="tools"><div class="chip" id="dataChip"><span class="nw-icon-wrap"><img class="nw-icon" src="./assets/NationWar.png" alt="Nation War"><span class="nw-tooltip">01:00 / 03:00 / 05:00 / 07:00 / 11:00 / 17:00 / 19:00 / 22:00</span></span><span class="nw-copy"><span class="nw-main" id="nwText">NATION WAR</span><span class="nw-zone">GMT+7</span></span></div></div>
 </header>
 <section class="hero">
   <div class="card hero-main"><div class="eyebrow">CABAL Ultimate Combo Ranking</div><h2>CABAL Ultimate Combo <span style="color:var(--cyan)">Ranking</span></h2><p>Rankings are built from player contributions.<br>This site is non-profit. All data is entered manually with no third-party tools or game modification.</p><div class="hero-stats"><div class="stat"><b>4</b><small>Main sections</small></div><div class="stat"><b>9</b><small>Legend classes</small></div><div class="stat"><b>10</b><small>Guild Top ranks</small></div><div class="stat"><b id="trackedCount">—</b><small>Rows loaded</small></div></div></div>
@@ -101,18 +101,20 @@ document.querySelectorAll('#mainnav button').forEach(b=>b.onclick=()=>{document.
 const topGuild=D.guild?.[0];if(topGuild)document.getElementById('featuredText').innerHTML=`Guild Master: <b>${esc(topGuild.master)}</b><br>Guild Score: <span class="gold">${esc(topGuild.score)}</span>`;
 const arenaRows=Object.values(D.arena||{}).reduce((a,x)=>a+(x.rows?.length||0),0);const weeklyRows=(D.weekly||[]).reduce((a,x)=>a+(x.rows?.length||0),0);const seasonRows=(D.seasons||[]).reduce((a,x)=>a+(x.rows?.length||0),0);document.getElementById('trackedCount').textContent=(D.guild?.length||0)+arenaRows+(D.achievement?.length||0)+weeklyRows+seasonRows;
 
-// Nation War schedule uses CABAL game time (GMT+8).
+// Nation War schedule uses GMT+7.
 const NW_GAME_HOURS=[1,3,5,7,11,17,19,22];
+const NW_TZ_OFFSET_HOURS=7;
 function updateNationWarCountdown(){
   const text=document.getElementById('nwText');
   const zone=document.querySelector('.nw-zone');
   if(!text||!zone)return;
 
-  const gameMs=Date.now()+(8*60*60*1000);
+  // Convert current time to a synthetic GMT+7 clock so the result does not depend on viewer timezone.
+  const gameMs=Date.now()+(NW_TZ_OFFSET_HOURS*60*60*1000);
   const now=new Date(gameMs);
   const y=now.getUTCFullYear(),m=now.getUTCMonth(),d=now.getUTCDate();
 
-  // Live window: from HH:00:00 through HH:34:59 (35 minutes).
+  // Live window in GMT+7: HH:00:00 through HH:34:59 (35 minutes).
   for(const hour of NW_GAME_HOURS){
     const liveStart=Date.UTC(y,m,d,hour,0,0);
     const liveEnd=liveStart+(35*60*1000);
@@ -120,12 +122,12 @@ function updateNationWarCountdown(){
       const remain=Math.max(0,Math.floor((liveEnd-gameMs)/1000));
       const mins=Math.floor(remain/60),secs=remain%60;
       text.innerHTML='<span class="nw-live">NATION WAR IS LIVE NOW!</span>';
-      zone.innerHTML=`<span class="nw-live-count">${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}</span>`;
+      zone.innerHTML=`GMT+7 • <span class="nw-live-count">${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}</span>`;
       return;
     }
   }
 
-  // Outside a live window, count down to the next scheduled Nation War.
+  // Outside a live window, count down to the next scheduled Nation War in GMT+7.
   let next=null,nextLabel=null;
   for(const hour of NW_GAME_HOURS){
     const t=Date.UTC(y,m,d,hour,0,0);
@@ -135,10 +137,11 @@ function updateNationWarCountdown(){
     nextLabel=NW_GAME_HOURS[0];
     next=Date.UTC(y,m,d+1,nextLabel,0,0);
   }
+
   const diff=Math.max(0,Math.floor((next-gameMs)/1000));
   const mins=Math.floor(diff/60),secs=diff%60;
   text.innerHTML=`NATION WAR ${String(nextLabel).padStart(2,'0')}:00 • <span class="nw-countdown">${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}</span>`;
-  zone.textContent='GMT+8';
+  zone.textContent='GMT+7';
 }
 updateNationWarCountdown();setInterval(updateNationWarCountdown,1000);
 render();
