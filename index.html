@@ -7,7 +7,7 @@
 <style>
 :root{--bg:#050910;--panel:#0c1420;--panel2:#101c2b;--line:#25384c;--cyan:#32d7ff;--cyan2:#0d91b8;--gold:#f8c95f;--text:#ecf7ff;--muted:#7f97aa;--green:#4dd5a4;--red:#ff6772;--bronze:#d8905c;--shadow:0 18px 55px rgba(0,0,0,.46)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--text);font-family:Segoe UI,Arial,sans-serif;min-height:100vh;background:radial-gradient(circle at 24% 0%,#11263b 0,#07111c 34%,#04070c 75%)}
-body:before{content:"";position:fixed;inset:0;background:linear-gradient(rgba(4,8,14,.87),rgba(4,8,14,.96)),url('assets/bg.jpg') center/cover fixed;z-index:-2}body:after{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(50,215,255,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(50,215,255,.028) 1px,transparent 1px);background-size:38px 38px;mask-image:linear-gradient(to bottom,#000,transparent 82%);z-index:-1}
+body:before{content:"";position:fixed;inset:0;background:linear-gradient(rgba(4,8,14,.87),rgba(4,8,14,.96)),url('./assets/bg.jpg') center/cover fixed;z-index:-2}body:after{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(50,215,255,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(50,215,255,.028) 1px,transparent 1px);background-size:38px 38px;mask-image:linear-gradient(to bottom,#000,transparent 82%);z-index:-1}
 .wrap{max-width:1480px;margin:auto;padding:18px 22px 36px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:7px 0 16px;border-bottom:1px solid #1d2b3b}.brand{display:flex;align-items:center;gap:15px}.brand img{height:38px;filter:drop-shadow(0 0 12px rgba(50,215,255,.2))}.brand h1{font-size:29px;letter-spacing:2px;margin:0}.brand h1 span{color:var(--cyan)}.sub{font-size:11px;letter-spacing:2.1px;color:#7690a5;font-weight:700}.tools{display:flex;align-items:center;gap:9px}.chip,.tool{border:1px solid var(--line);background:#0b1420;color:#c7dcec;border-radius:7px;padding:8px 11px;font-size:12px;font-weight:700}.chip{font-size:16px;display:flex;align-items:flex-start;justify-content:flex-start;gap:16px;line-height:1.15;padding:10px 16px;min-height:0}.nw-icon-wrap{position:relative;width:64px;height:64px;display:flex;align-items:flex-start;justify-content:center;flex:0 0 64px}.nw-icon{width:64px;height:64px;object-fit:contain;image-rendering:auto;display:block}.nw-copy{display:flex;flex-direction:column;justify-content:flex-start;align-items:flex-start;gap:5px;min-height:0;padding-top:0}.nw-main{display:block;line-height:1.08;white-space:nowrap;margin-top:0}.nw-main .nw-countdown{color:var(--cyan)}.nw-zone{display:block;font-size:11px;line-height:1;color:#7890a4;font-weight:700;letter-spacing:.8px}.nw-live{color:var(--cyan);font-weight:900}.nw-live-count{color:var(--cyan);font-size:12px;font-weight:800;letter-spacing:.5px}.nw-tooltip{position:absolute;right:calc(100% + 12px);top:50%;transform:translateY(-50%) translateX(6px);opacity:0;pointer-events:none;white-space:nowrap;background:#07101a;border:1px solid #30516c;color:#dcecf7;padding:9px 11px;border-radius:7px;font-size:11px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.35);transition:.15s;z-index:20}.nw-tooltip:after{content:'';position:absolute;left:100%;top:50%;transform:translateY(-50%);border:6px solid transparent;border-left-color:#30516c}.nw-icon-wrap:hover .nw-tooltip{opacity:1;transform:translateY(-50%) translateX(0)}.tool{cursor:pointer}.tool:hover{border-color:var(--cyan);color:#fff}
 .hero{display:grid;grid-template-columns:1.4fr .72fr;gap:16px;margin-top:18px}.card,.panel{background:linear-gradient(145deg,rgba(15,27,42,.96),rgba(7,13,21,.96));border:1px solid #26394e;border-radius:13px;box-shadow:var(--shadow)}.hero-main{padding:23px 25px;position:relative;overflow:hidden}.hero-main:after{content:"";position:absolute;width:330px;height:330px;right:-110px;top:-180px;background:radial-gradient(circle,rgba(50,215,255,.19),transparent 66%);pointer-events:none}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--cyan);font-weight:800}.hero h2{font-size:36px;line-height:1.05;margin:7px 0 6px}.hero p{margin:0;max-width:760px;color:#91a6b8;font-size:13px;line-height:1.55}.hero-stats{display:flex;gap:10px;margin-top:17px;flex-wrap:wrap}.stat{min-width:126px;padding:9px 12px;border:1px solid #20364a;border-radius:8px;background:#0a131f}.stat b{display:block;font-size:20px}.stat small{color:#718a9f;text-transform:uppercase;font-size:10px;letter-spacing:.9px}.featured{display:flex;align-items:center;gap:15px;padding:18px}.featured img{width:82px;height:82px;object-fit:contain}.featured h3{font-size:21px;margin:4px 0}.gold{color:var(--gold)}
 .mainnav{display:flex;gap:8px;margin:17px 0 12px;overflow:auto;padding-bottom:2px}.mainnav button,.subnav button,.classbar button{white-space:nowrap;cursor:pointer;border:1px solid #22364b;background:#08111b;color:#8da4b7;border-radius:7px;font-weight:800}.mainnav button{padding:10px 16px;font-size:13px}.mainnav button:hover,.subnav button:hover,.classbar button:hover{border-color:#3c6680;color:#e7faff}.mainnav button.active,.subnav button.active,.classbar button.active{background:linear-gradient(180deg,#139dc2,#087a9a);border-color:#3bdcff;color:#fff;box-shadow:0 0 18px rgba(50,215,255,.14)}
@@ -20,12 +20,12 @@ body:before{content:"";position:fixed;inset:0;background:linear-gradient(rgba(4,
 <body>
 <div class="wrap">
 <header class="top">
-  <div class="brand"><img src="assets/cabal-logo.png" alt="CABAL"><div><h1>RANKING <span>HUB</span></h1><div class="sub">SEA COMMUNITY DATA CENTER</div></div></div>
-  <div class="tools"><div class="chip" id="dataChip"><span class="nw-icon-wrap"><img class="nw-icon" src="assets/NationWar.png" alt="Nation War"><span class="nw-tooltip">01:00 / 03:00 / 05:00 / 07:00 / 11:00 / 17:00 / 19:00 / 22:00</span></span><span class="nw-copy"><span class="nw-main" id="nwText">NATION WAR</span><span class="nw-zone">GMT+8</span></span></div></div>
+  <div class="brand"><img src="./assets/cabal-logo.png" alt="CABAL"><div><h1>RANKING <span>HUB</span></h1><div class="sub">SEA COMMUNITY DATA CENTER</div></div></div>
+  <div class="tools"><div class="chip" id="dataChip"><span class="nw-icon-wrap"><img class="nw-icon" src="./assets/NationWar.png" alt="Nation War"><span class="nw-tooltip">01:00 / 03:00 / 05:00 / 07:00 / 11:00 / 17:00 / 19:00 / 22:00</span></span><span class="nw-copy"><span class="nw-main" id="nwText">NATION WAR</span><span class="nw-zone">GMT+8</span></span></div></div>
 </header>
 <section class="hero">
   <div class="card hero-main"><div class="eyebrow">CABAL Ultimate Combo Ranking</div><h2>CABAL Ultimate Combo <span style="color:var(--cyan)">Ranking</span></h2><p>Rankings are built from player contributions.<br>This site is non-profit. All data is entered manually with no third-party tools or game modification.</p><div class="hero-stats"><div class="stat"><b>4</b><small>Main sections</small></div><div class="stat"><b>9</b><small>Legend classes</small></div><div class="stat"><b>10</b><small>Guild Top ranks</small></div><div class="stat"><b id="trackedCount">—</b><small>Rows loaded</small></div></div></div>
-  <div class="card featured"><img src="assets/together.png" alt="Together"><div><div class="eyebrow">Guild Ranking #1</div><h3>TOGETHER <span class="gold">#1</span></h3><p id="featuredText">Loading current ranking…</p></div></div>
+  <div class="card featured"><img src="./assets/together.png" alt="Together"><div><div class="eyebrow">Guild Ranking #1</div><h3>TOGETHER <span class="gold">#1</span></h3><p id="featuredText">Loading current ranking…</p></div></div>
 </section>
 <nav class="mainnav" id="mainnav">
   <button class="active" data-page="guild">Guild Ranking</button>
@@ -36,11 +36,20 @@ body:before{content:"";position:fixed;inset:0;background:linear-gradient(rgba(4,
 <section class="panel" id="content"></section>
 <div class="footer" style="justify-content:center;text-align:center"><span>CABAL RANKING HUB</span></div>
 </div>
-<script src="data/ranking_data.js"></script>
+<script src="./ranking_data.js"></script>
+<script>
+// GitHub Pages deployment guard: if data is unavailable, try the legacy data path once.
+if (!window.CABAL_DATA) {
+  const fallback = document.createElement('script');
+  fallback.src = './data/ranking_data.js';
+  fallback.async = false;
+  document.head.appendChild(fallback);
+}
+</script>
 <script>
 const D=window.CABAL_DATA||{guild:[],arena:{},achievement:[],weekly:[],seasons:[]};
 const CLASS_ORDER=[['Warrior','WA','warrior.svg'],['Blader','BL','blader.svg'],['Wizard','WI','wizard.svg'],['Force Archer','FA','force_archer.svg'],['Force Shielder','FS','force_shielder.svg'],['Force Blader','FB','force_blader.svg'],['Force Gunner','FG','force_gunner.svg'],['Dark Mage','DM','dark_mage.svg'],['Gladiator','GL','gladiator.svg']];
-const classIcon=f=>`assets/classes/${f}`;
+const classIcon=f=>`./assets/classes/${f}`;
 let page='guild', arenaClass=null, togetherTab='weekly', weeklyIndex=0, seasonIndex=0, q='';
 const esc=s=>String(s??'—').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const trClass=n=>n==1?'p1':n==2?'p2':n==3?'p3':'';
