@@ -25,14 +25,14 @@ body:before{content:"";position:fixed;inset:0;background:linear-gradient(rgba(4,
   <div class="tools"><div class="chip" id="dataChip"><span class="nw-icon-wrap"><img class="nw-icon" src="./assets/NationWar.png" alt="Nation War"><span class="nw-tooltip">06:00 / 08:00 / 12:00 / 14:00 / 16:00 / 18:00 / 20:00 / 22:00</span></span><span class="nw-copy"><span class="nw-main" id="nwText">NATION WAR</span><span class="nw-zone">GMT+8</span></span></div></div>
 </header>
 <section class="hero">
-  <div class="card hero-main"><div class="eyebrow">CABAL Ultimate Combo Ranking</div><h2>CABAL Ultimate Combo <span style="color:var(--cyan)">Ranking</span></h2><p>Rankings are built from player contributions.<br>This site is non-profit. All data is entered manually with no third-party tools or game modification.</p><div class="hero-stats"><div class="stat"><b>4</b><small>Main sections</small></div><div class="stat"><b>9</b><small>Legend classes</small></div><div class="stat"><b>10</b><small>Guild Top ranks</small></div><div class="stat"><b id="trackedCount">—</b><small>Rows loaded</small></div></div></div>
+  <div class="card hero-main"><div class="eyebrow">CABAL Ultimate Combo Ranking</div><h2>CABAL Ultimate Combo <span style="color:var(--cyan)">Ranking</span></h2><p>Rankings are built from player contributions.<br>This site is non-profit. All data is entered manually with no third-party tools or game modification.</p><div class="hero-stats"><div class="stat"><b>6+</b><small>Main sections</small></div><div class="stat"><b>9</b><small>Legend classes</small></div><div class="stat"><b>10</b><small>Guild Top ranks</small></div><div class="stat"><b id="trackedCount">—</b><small>Rows loaded</small></div></div></div>
   <div class="card featured"><img src="./assets/together.png" alt="Together"><div><div class="eyebrow">Guild Ranking #1</div><h3>TOGETHER <span class="gold">#1</span></h3><p id="featuredText">Loading current ranking…</p></div></div>
 </section>
 <nav class="mainnav" id="mainnav">
   <button class="active" data-page="guild">Guild Ranking</button>
+  <button data-page="mission">Mission Festival</button>
   <button data-page="arena">Legend Arena</button>
   <button data-page="achievement">Achievement Rank</button>
-  <button data-page="together">Guild Together</button>
 </nav>
 <section class="panel" id="content"></section>
 <div class="footer" style="justify-content:center;text-align:center"><span>CABAL RANKING HUB</span></div>
@@ -48,10 +48,11 @@ if (!window.CABAL_DATA) {
 }
 </script>
 <script>
-const D=window.CABAL_DATA||{guild:[],arena:{},achievement:[],weekly:[],seasons:[]};
+const D=window.CABAL_DATA||{guild:[],arena:{},achievement:[],weekly:[],seasons:[],missionFestival:[],guilds:{}};
 const CLASS_ORDER=[['Warrior','WA','warrior.svg'],['Blader','BL','blader.svg'],['Wizard','WI','wizard.svg'],['Force Archer','FA','force_archer.svg'],['Force Shielder','FS','force_shielder.svg'],['Force Blader','FB','force_blader.svg'],['Force Gunner','FG','force_gunner.svg'],['Dark Mage','DM','dark_mage.svg'],['Gladiator','GL','gladiator.svg']];
 const classIcon=f=>`./assets/classes/${f}`;
-let page='guild', arenaClass=null, togetherTab='weekly', weeklyIndex=0, seasonIndex=0, q='';
+let page='guild', arenaClass=null, activeGuild='Together', missionIndex=0, q='';
+const guildViewState={};
 const esc=s=>String(s??'—').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const trClass=n=>n==1?'p1':n==2?'p2':n==3?'p3':'';
 const rank=n=>`<span class="rank">#${esc(n)}</span>`;
@@ -64,6 +65,13 @@ function filtered(rows){if(!q)return rows;const s=q.toLowerCase();return rows.fi
 function searchBox(ph='Search character / guild…'){return `<div class="search"><input id="searchInput" value="${esc(q)}" placeholder="${ph}"></div>`}
 function bindSearch(){const el=document.getElementById('searchInput');if(el)el.oninput=e=>{q=e.target.value;const pos=e.target.selectionStart??q.length;render();requestAnimationFrame(()=>{const n=document.getElementById('searchInput');if(n){n.focus();try{n.setSelectionRange(pos,pos)}catch(_){}}})}}
 function renderGuild(){const rows=filtered(D.guild||[]);return `<div class="bar"><div class="title">Guild <span>Ranking</span></div>${searchBox('Search guild / guild master…')}<div class="meta">${rows.length} guilds</div></div>${table(['Ranking','Guild Name','Guild Master','Guild Score'],rows,r=>[rank(r.ranking),gname(r.guild),cname(r.master),score(r.score)])}<div class="data-note">Accepted format: <span class="code">Guild_Ranking_YYYYMMDD_HHMMSS.xlsx</span>. If several files exist, the newest date/time suffix is used.</div>`}
+function renderMissionFestival(){
+ const all=D.missionFestival||[], obj=all[missionIndex]||all[0];
+ if(!obj)return `<div class="bar"><div class="title">Mission <span>Festival</span></div></div><div class="empty"><h3>Mission Festival Ranking</h3><p>No Mission Festival data found.<br>Accepted format: <span class="code">GMF_Month_Year.xlsx</span></p></div>`;
+ const opts=all.map((x,i)=>`<option value="${i}" ${i===missionIndex?'selected':''}>${esc(x.label||x.file)}</option>`).join('');
+ const rows=filtered(obj.rows||[]);
+ return `<div class="bar"><div class="title">Mission <span>Festival</span></div><select id="missionSelect" class="tool">${opts}</select>${searchBox('Search guild…')}<div class="meta">${rows.length} guilds</div></div>${table(['Ranking','Guild Name','Guild Point'],rows,r=>[rank(r.ranking),gname(r.guild),score(r.point)])}<div class="data-note">Source: <span class="code">${esc(obj.file)}</span>. Accepted format: <span class="code">GMF_Month_Year.xlsx</span>.</div>`;
+}
 function renderArena(){
  const quickButtons=CLASS_ORDER.map(([full,code,icon])=>`<button data-classpick="${esc(full)}" title="${esc(full)}"><img src="${classIcon(icon)}" alt="${code}"><span>${code}</span></button>`).join('');
  if(!arenaClass){
@@ -72,39 +80,55 @@ function renderArena(){
  }
  const obj=D.arena?.[arenaClass];const found=CLASS_ORDER.find(x=>x[0]===arenaClass)||[];const code=found[1]||'', selectedIcon=found[2]||'';const rows=filtered(obj?.rows||[]);const buttons=CLASS_ORDER.map(([full,c,icon])=>`<button class="${arenaClass===full?'active':''}" data-classpick="${esc(full)}"><img src="${classIcon(icon)}" alt="${c}">${c}</button>`).join('');return `<div class="backline"><button id="arenaBack">← All class champions</button><span class="meta">${esc(obj?.file||'No data file')}</span></div><div class="classbar"><button data-classpick="__all">ALL</button>${buttons}</div><div class="bar"><div class="title">Legend Arena • <span>${selectedIcon?`<img src="${classIcon(selectedIcon)}" alt="${code}" style="width:25px;height:25px;vertical-align:middle;margin-right:7px">`:''}${esc(arenaClass)}</span></div>${searchBox('Search character…')}<div class="meta">Top ${rows.length} • ${code}</div></div>${obj?table(['Ranking','Class','Character','Total Score'],rows,r=>[rank(r.ranking),badge(code),cname(r.character),score(r.score)]):`<div class="empty"><h3>No ${esc(arenaClass)} data</h3><p>Add a matching Legend Arena Excel file and rebuild the dataset.</p></div>`}`}
 function renderAchievement(){const rows=filtered(D.achievement||[]);return `<div class="bar"><div class="title">Achievement <span>Rank</span></div>${searchBox()}<div class="meta">${rows.length} characters</div></div>${table(['Ranking','Class','Level','Character','Guild','Ach. Points'],rows,r=>[rank(r.ranking),badge(r.class),esc(r.level),cname(r.character),gname(r.guild),score(r.points)])}<div class="data-note">Accepted format: <span class="code">Archievement_Rank_YYYYMMDD_HHMMSS.xlsx</span>.</div>`}
-function renderTogether(){
- const sub=`<div class="subnav"><button class="${togetherTab==='weekly'?'active':''}" data-together="weekly">Guild Weekly</button><button class="${togetherTab==='season'?'active':''}" data-together="season">Guild Season</button></div>`;
- if(togetherTab==='weekly'){
-   const all=D.weekly||[], obj=all[weeklyIndex]||all[0];
-   if(!obj)return `<div class="bar"><div class="title">Guild <span>Together</span></div></div>${sub}<div class="empty"><h3>Guild Weekly Ranking</h3><p>No weekly data found.<br>Accepted format: <span class="code">Guild_Weekly_Ranking__DDMMYYYY.xlsx</span></p></div>`;
-   const opts=all.map((x,i)=>`<option value="${i}" ${i===weeklyIndex?'selected':''}>${esc(x.label)}</option>`).join('');
-   const rows=filtered(obj.rows||[]);
-   return `<div class="bar"><div class="title">Guild <span>Together</span></div><div class="meta">Weekly + Season</div></div>${sub}
-   <div class="bar"><div class="title">Guild Weekly • <span>${esc(obj.label)}</span></div>
-   <select id="weeklySelect" class="tool">${opts}</select>${searchBox('Search character…')}<div class="meta">${rows.length} characters</div></div>
-   ${table(['Ranking','Character','Treasure Score'],rows,r=>[rank(r.ranking),cname(r.character),score(r.score)])}
-   <div class="data-note">Source: <span class="code">${esc(obj.file)}</span>. The date in the file name is treated as the week end date; the displayed range is automatically calculated as 7 days.</div>`;
- }
- const all=D.seasons||[], obj=all[seasonIndex]||all[0];
- if(!obj)return `<div class="bar"><div class="title">Guild <span>Together</span></div></div>${sub}<div class="empty"><h3>Guild Season</h3><p>No season data found.<br>Accepted format: <span class="code">GuildSeason_N_YYYY.xlsx</span></p></div>`;
- const opts=all.map((x,i)=>`<option value="${i}" ${i===seasonIndex?'selected':''}>${esc(x.label)}</option>`).join('');
- const rows=filtered(obj.rows||[]);
- const heads=['Ranking','Character',...(obj.weekColumns||[]),'Total Score'];
- return `<div class="bar"><div class="title">Guild <span>Together</span></div><div class="meta">Weekly + Season</div></div>${sub}
- <div class="bar"><div class="title"><span>${esc(obj.label)}</span></div>
- <select id="seasonSelect" class="tool">${opts}</select>${searchBox('Search character…')}<div class="meta">${rows.length} characters</div></div>
- ${table(heads,rows,r=>[rank(r.ranking),cname(r.character),...(obj.weekColumns||[]).map(w=>score(r.scores?.[w]??0)),score(r.total)])}
- <div class="data-note">Source: <span class="code">${esc(obj.file)}</span>. Season title is generated directly from <span class="code">GuildSeason_Season_Year.xlsx</span>.</div>`;
+function getGuildDataset(guildName){
+ const direct=D.guilds?.[guildName];
+ if(direct)return {weekly:direct.weekly||[],seasons:direct.seasons||[]};
+ if(guildName==='Together')return {weekly:D.weekly||[],seasons:D.seasons||[]};
+ return {weekly:[],seasons:[]};
 }
-function render(){const c=document.getElementById('content');c.innerHTML=page==='guild'?renderGuild():page==='arena'?renderArena():page==='achievement'?renderAchievement():renderTogether();bindSearch();document.querySelectorAll('.classcard').forEach(x=>x.onclick=()=>{arenaClass=x.dataset.class;q='';render()});document.querySelectorAll('[data-classpick]').forEach(x=>x.onclick=()=>{arenaClass=x.dataset.classpick==='__all'?null:x.dataset.classpick;q='';render()});const back=document.getElementById('arenaBack');if(back)back.onclick=()=>{arenaClass=null;q='';render()};document.querySelectorAll('[data-together]').forEach(x=>x.onclick=()=>{togetherTab=x.dataset.together;q='';render()});const ws=document.getElementById('weeklySelect');if(ws)ws.onchange=e=>{weeklyIndex=+e.target.value;q='';render()};const ss=document.getElementById('seasonSelect');if(ss)ss.onchange=e=>{seasonIndex=+e.target.value;q='';render()}}
-document.querySelectorAll('#mainnav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#mainnav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');page=b.dataset.page;q='';arenaClass=null;render()});
+function getGuildState(guildName){return guildViewState[guildName]||(guildViewState[guildName]={tab:'weekly',weeklyIndex:0,seasonIndex:0})}
+function renderGuildHub(guildName){
+ const data=getGuildDataset(guildName), state=getGuildState(guildName);
+ const sub=`<div class="subnav"><button class="${state.tab==='weekly'?'active':''}" data-guildsub="weekly">Guild Weekly</button><button class="${state.tab==='season'?'active':''}" data-guildsub="season">Guild Season</button></div>`;
+ if(state.tab==='weekly'){
+   const all=data.weekly||[], obj=all[state.weeklyIndex]||all[0];
+   if(!obj)return `<div class="bar"><div class="title"><span>${esc(guildName)}</span></div></div>${sub}<div class="empty"><h3>${esc(guildName)} Weekly Ranking</h3><p>No weekly data found.<br>Accepted formats:<br><span class="code">Guild_Weekly_Ranking_DDMMYYYY.xlsx</span> for Together<br><span class="code">GuildName_Guild_Weekly_Ranking_DDMMYYYY.xlsx</span> for other guilds.</p></div>`;
+   const opts=all.map((x,i)=>`<option value="${i}" ${i===state.weeklyIndex?'selected':''}>${esc(x.label)}</option>`).join('');
+   const rows=filtered(obj.rows||[]);
+   return `<div class="bar"><div class="title"><span>${esc(guildName)}</span></div><div class="meta">Weekly + Season</div></div>${sub}<div class="bar"><div class="title">Guild Weekly • <span>${esc(obj.label)}</span></div><select id="guildWeeklySelect" class="tool">${opts}</select>${searchBox('Search character…')}<div class="meta">${rows.length} characters</div></div>${table(['Ranking','Character','Treasure Score'],rows,r=>[rank(r.ranking),cname(r.character),score(r.score)])}<div class="data-note">Source: <span class="code">${esc(obj.file)}</span>.</div>`;
+ }
+ const all=data.seasons||[], obj=all[state.seasonIndex]||all[0];
+ if(!obj)return `<div class="bar"><div class="title"><span>${esc(guildName)}</span></div></div>${sub}<div class="empty"><h3>${esc(guildName)} Guild Season</h3><p>No season data found.<br>Accepted formats:<br><span class="code">GuildSeason_Season_Year.xlsx</span> for Together<br><span class="code">GuildName_GuildSeason_Season_Year.xlsx</span> for other guilds.</p></div>`;
+ const opts=all.map((x,i)=>`<option value="${i}" ${i===state.seasonIndex?'selected':''}>${esc(x.label)}</option>`).join('');
+ const rows=filtered(obj.rows||[]), heads=['Ranking','Character',...(obj.weekColumns||[]),'Total Score'];
+ return `<div class="bar"><div class="title"><span>${esc(guildName)}</span></div><div class="meta">Weekly + Season</div></div>${sub}<div class="bar"><div class="title"><span>${esc(obj.label)}</span></div><select id="guildSeasonSelect" class="tool">${opts}</select>${searchBox('Search character…')}<div class="meta">${rows.length} characters</div></div>${table(heads,rows,r=>[rank(r.ranking),cname(r.character),...(obj.weekColumns||[]).map(w=>score(r.scores?.[w]??0)),score(r.total)])}<div class="data-note">Source: <span class="code">${esc(obj.file)}</span>.</div>`;
+}
+function installGuildNav(){
+ const nav=document.getElementById('mainnav');
+ const names=['Together','IDOLS',...Object.keys(D.guilds||{}).filter(x=>x!=='Together'&&x!=='IDOLS')];
+ [...new Set(names)].forEach(name=>{const b=document.createElement('button');b.dataset.page='guildhub';b.dataset.guild=name;b.textContent=name;nav.appendChild(b)});
+}
+function render(){
+ const c=document.getElementById('content');
+ c.innerHTML=page==='guild'?renderGuild():page==='mission'?renderMissionFestival():page==='arena'?renderArena():page==='achievement'?renderAchievement():renderGuildHub(activeGuild);
+ bindSearch();
+ document.querySelectorAll('.classcard').forEach(x=>x.onclick=()=>{arenaClass=x.dataset.class;q='';render()});
+ document.querySelectorAll('[data-classpick]').forEach(x=>x.onclick=()=>{arenaClass=x.dataset.classpick==='__all'?null:x.dataset.classpick;q='';render()});
+ const back=document.getElementById('arenaBack');if(back)back.onclick=()=>{arenaClass=null;q='';render()};
+ document.querySelectorAll('[data-guildsub]').forEach(x=>x.onclick=()=>{getGuildState(activeGuild).tab=x.dataset.guildsub;q='';render()});
+ const gw=document.getElementById('guildWeeklySelect');if(gw)gw.onchange=e=>{getGuildState(activeGuild).weeklyIndex=+e.target.value;q='';render()};
+ const gs=document.getElementById('guildSeasonSelect');if(gs)gs.onchange=e=>{getGuildState(activeGuild).seasonIndex=+e.target.value;q='';render()};
+ const ms=document.getElementById('missionSelect');if(ms)ms.onchange=e=>{missionIndex=+e.target.value;q='';render()};
+}
+installGuildNav();
+document.querySelectorAll('#mainnav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#mainnav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');page=b.dataset.page;if(page==='guildhub')activeGuild=b.dataset.guild;q='';arenaClass=null;render()});
 const topGuild=D.guild?.[0];if(topGuild)document.getElementById('featuredText').innerHTML=`Guild Master: <b>${esc(topGuild.master)}</b><br>Guild Score: <span class="gold">${esc(topGuild.score)}</span>`;
-const arenaRows=Object.values(D.arena||{}).reduce((a,x)=>a+(x.rows?.length||0),0);const weeklyRows=(D.weekly||[]).reduce((a,x)=>a+(x.rows?.length||0),0);const seasonRows=(D.seasons||[]).reduce((a,x)=>a+(x.rows?.length||0),0);document.getElementById('trackedCount').textContent=(D.guild?.length||0)+arenaRows+(D.achievement?.length||0)+weeklyRows+seasonRows;
+const arenaRows=Object.values(D.arena||{}).reduce((a,x)=>a+(x.rows?.length||0),0);const missionRows=(D.missionFestival||[]).reduce((a,x)=>a+(x.rows?.length||0),0);const guildDataRows=Object.keys(D.guilds||{}).length?Object.values(D.guilds||{}).reduce((a,g)=>a+(g.weekly||[]).reduce((s,x)=>s+(x.rows?.length||0),0)+(g.seasons||[]).reduce((s,x)=>s+(x.rows?.length||0),0),0):(D.weekly||[]).reduce((a,x)=>a+(x.rows?.length||0),0)+(D.seasons||[]).reduce((a,x)=>a+(x.rows?.length||0),0);document.getElementById('trackedCount').textContent=(D.guild?.length||0)+arenaRows+(D.achievement?.length||0)+missionRows+guildDataRows;
 
 // Nation War schedule uses GMT+8.
 const NW_GAME_HOURS=[6,8,12,14,16,18,20,22];
 const NW_TZ_OFFSET_HOURS=8;
-const NW_LIVE_MINUTES=35;
+const NW_LIVE_MINUTES=45;
 function updateNationWarCountdown(){
   const text=document.getElementById('nwText');
   const zone=document.querySelector('.nw-zone');
@@ -115,7 +139,7 @@ function updateNationWarCountdown(){
   const now=new Date(gameMs);
   const y=now.getUTCFullYear(),m=now.getUTCMonth(),d=now.getUTCDate();
 
-  // Live windows (GMT+8): 06-07, 08-09, 12-13, 14-15, 16-17, 18-19, 20-21, 22-23.
+  // Live windows (GMT+8): each round lasts 45 minutes.
   for(const hour of NW_GAME_HOURS){
     const liveStart=Date.UTC(y,m,d,hour,0,0);
     const liveEnd=liveStart+(NW_LIVE_MINUTES*60*1000);
