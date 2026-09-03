@@ -128,7 +128,7 @@ const arenaRows=Object.values(D.arena||{}).reduce((a,x)=>a+(x.rows?.length||0),0
 // Nation War schedule uses GMT+8.
 const NW_GAME_HOURS=[6,8,12,14,16,18,20,22];
 const NW_TZ_OFFSET_HOURS=8;
-const NW_LIVE_MINUTES=45;
+const NW_LIVE_MINUTES=35;
 function updateNationWarCountdown(){
   const text=document.getElementById('nwText');
   const zone=document.querySelector('.nw-zone');
