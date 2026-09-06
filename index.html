@@ -276,8 +276,8 @@ function updateNationWarCountdown(){
 
   const diff=Math.max(0,Math.floor((next-gameMs)/1000));
   const mins=Math.floor(diff/60),secs=diff%60;
-  text.innerHTML=`NATION WAR ${String(nextLabel).padStart(2,'0')}:00 • <span class="nw-countdown">${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}</span>`;
-  zone.textContent='GMT+8';
+  text.innerHTML=`NATION WAR ${String(nextLabel).padStart(2,'0')}:00`;
+  zone.innerHTML=`GMT+8 • <span class="nw-countdown">${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}</span>`;
 }
 updateNationWarCountdown();setInterval(updateNationWarCountdown,1000);
 render();
