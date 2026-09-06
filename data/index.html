@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CABAL Ranking Hub</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800&display=swap');
+:root{--bg:#050910;--panel:#0c1420;--panel2:#101c2b;--line:#25384c;--cyan:#32d7ff;--cyan2:#0d91b8;--gold:#f8c95f;--text:#ecf7ff;--muted:#7f97aa;--green:#4dd5a4;--red:#ff6772;--bronze:#d8905c;--shadow:0 18px 55px rgba(0,0,0,.46)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--text);font-family:Segoe UI,Arial,sans-serif;min-height:100vh;background:radial-gradient(circle at 24% 0%,#11263b 0,#07111c 34%,#04070c 75%)}
+body:before{content:"";position:fixed;inset:0;background:linear-gradient(rgba(4,8,14,.87),rgba(4,8,14,.96)),url('./assets/bg.jpg') center/cover fixed;z-index:-2}body:after{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(50,215,255,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(50,215,255,.028) 1px,transparent 1px);background-size:38px 38px;mask-image:linear-gradient(to bottom,#000,transparent 82%);z-index:-1}
+.wrap{max-width:1480px;margin:auto;padding:18px 22px 36px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:7px 0 16px;border-bottom:1px solid #1d2b3b}.brand{display:flex;align-items:center;gap:15px}.brand img{height:38px;filter:drop-shadow(0 0 12px rgba(50,215,255,.2))}.brand h1{font-size:29px;letter-spacing:2px;margin:0}.brand h1 span{color:var(--cyan)}.sub{font-size:11px;letter-spacing:2.1px;color:#7690a5;font-weight:700}.tools{display:flex;align-items:center;gap:9px}.chip,.tool{border:1px solid var(--line);background:#0b1420;color:#c7dcec;border-radius:7px;padding:8px 11px;font-size:12px;font-weight:700}.chip{font-size:15px;display:flex;align-items:flex-start;justify-content:flex-start;gap:16px;line-height:1.15;padding:10px 16px;min-height:0}.nw-icon-wrap{position:relative;width:40px;height:40px;display:flex;align-items:flex-start;justify-content:center;flex:0 0 0px}.nw-icon{width:48px;height:48px;object-fit:contain;image-rendering:auto;display:block}.nw-copy{display:flex;flex-direction:column;justify-content:flex-start;align-items:flex-start;gap:5px;min-height:0;padding-top:0}.nw-main{display:block;line-height:1.08;white-space:nowrap;margin-top:0}.nw-main .nw-countdown{color:var(--cyan);font-family:'Orbitron','Consolas',monospace;font-size:19px;font-weight:800;letter-spacing:.5px}.nw-zone{display:block;font-size:14px;line-height:1;color:#7890a4;font-weight:700;letter-spacing:.8px}.nw-zone .nw-countdown{color:var(--cyan);font-family:'Orbitron','Consolas',monospace;font-size:15px;font-weight:800;letter-spacing:.5px}.nw-live{font-weight:900}.nw-live.nw-live-warning{color:var(--gold)}.nw-live.nw-live-danger{color:var(--red);text-shadow:0 0 10px rgba(255,103,114,.28)}.nw-live-count{color:var(--cyan);font-family:'Orbitron','Consolas',monospace;font-size:15px;font-weight:800;letter-spacing:.5px}.nw-tooltip{position:absolute;right:calc(100% + 12px);top:50%;transform:translateY(-50%) translateX(6px);opacity:0;pointer-events:none;white-space:nowrap;background:#07101a;border:1px solid #30516c;color:#dcecf7;padding:9px 11px;border-radius:7px;font-size:11px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.35);transition:.15s;z-index:20}.nw-tooltip:after{content:'';position:absolute;left:100%;top:50%;transform:translateY(-50%);border:6px solid transparent;border-left-color:#30516c}.nw-icon-wrap:hover .nw-tooltip{opacity:1;transform:translateY(-50%) translateX(0)}.tool{cursor:pointer}.tool:hover{border-color:var(--cyan);color:#fff}
+.hero{display:grid;grid-template-columns:1.4fr .72fr;gap:16px;margin-top:18px}.card,.panel{background:linear-gradient(145deg,rgba(15,27,42,.96),rgba(7,13,21,.96));border:1px solid #26394e;border-radius:13px;box-shadow:var(--shadow)}.hero-main{padding:23px 25px;position:relative;overflow:hidden}.hero-main:after{content:"";position:absolute;width:330px;height:330px;right:-110px;top:-180px;background:radial-gradient(circle,rgba(50,215,255,.19),transparent 66%);pointer-events:none}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--cyan);font-weight:800}.hero h2{font-size:36px;line-height:1.05;margin:7px 0 6px}.hero p{margin:0;max-width:760px;color:#91a6b8;font-size:13px;line-height:1.55}.hero-stats{display:flex;gap:10px;margin-top:17px;flex-wrap:wrap}.stat{min-width:126px;padding:9px 12px;border:1px solid #20364a;border-radius:8px;background:#0a131f}.stat b{display:block;font-size:20px}.stat small{color:#718a9f;text-transform:uppercase;font-size:10px;letter-spacing:.9px}.featured{display:flex;align-items:center;gap:15px;padding:18px;min-width:0}.featured img{width:82px;height:82px;object-fit:contain;flex:0 0 82px;filter:drop-shadow(0 0 12px rgba(50,215,255,.16))}.featured h3{font-size:21px;margin:4px 0;overflow-wrap:anywhere}.featured .featured-copy{min-width:0}.featured .featured-detail{margin:0;color:#91a6b8;font-size:12px;line-height:1.55}.featured .featured-detail b{color:#eaf7ff}.featured .featured-detail .gold{font-weight:900}.gold{color:var(--gold)}
+.mainnav{display:flex;gap:8px;margin:17px 0 12px;overflow:auto;padding-bottom:2px}.mainnav button,.subnav button,.classbar button{white-space:nowrap;cursor:pointer;border:1px solid #22364b;background:#08111b;color:#8da4b7;border-radius:7px;font-weight:800}.mainnav button{padding:10px 16px;font-size:13px}.mainnav button:hover,.subnav button:hover,.classbar button:hover{border-color:#3c6680;color:#e7faff}.mainnav button.active,.subnav button.active,.classbar button.active{background:linear-gradient(180deg,#139dc2,#087a9a);border-color:#3bdcff;color:#fff;box-shadow:0 0 18px rgba(50,215,255,.14)}
+.panel{padding:15px}.bar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:12px}.title{font-size:18px;font-weight:800;margin-right:auto}.title span{color:var(--cyan)}.search{min-width:240px;flex:0 1 330px}.search input{width:100%;background:#07101a;border:1px solid #253b51;border-radius:7px;color:#fff;padding:9px 11px;outline:none}.search input:focus{border-color:var(--cyan)}.meta{font-size:11px;color:#7890a4}.tablewrap{overflow:auto;border:1px solid #1e3144;border-radius:9px;max-height:650px;background:#071019}.ranktable{width:100%;border-collapse:collapse;min-width:760px}.ranktable thead{position:sticky;top:0;z-index:4;background:#0d1b29}.ranktable th{font-size:11px;text-transform:uppercase;letter-spacing:.9px;color:#89a9bf;text-align:left;padding:11px 12px;border-bottom:1px solid #28445d}.ranktable td{padding:10px 12px;border-bottom:1px solid rgba(33,52,70,.58);font-size:13px}.ranktable tbody tr:hover{background:rgba(43,125,161,.13)}.ranktable tr.p1{background:linear-gradient(90deg,rgba(248,201,95,.12),transparent)}.ranktable tr.p2{background:linear-gradient(90deg,rgba(210,225,236,.07),transparent)}.ranktable tr.p3{background:linear-gradient(90deg,rgba(216,144,92,.08),transparent)}.rank{font-weight:900;font-size:15px}.p1 .rank{color:var(--gold)}.p2 .rank{color:#d9e4eb}.p3 .rank{color:var(--bronze)}.name{font-weight:800}.guild{color:#73d8ff}.score{font-weight:800;font-variant-numeric:tabular-nums}.badge{display:inline-flex;align-items:center;justify-content:center;min-width:33px;padding:3px 7px;border-radius:5px;border:1px solid #30516c;background:#0b1d2b;color:#8ce9ff;font-size:11px;font-weight:900}
+.arena-quickbar{display:grid;grid-template-columns:repeat(9,minmax(78px,1fr));gap:8px;margin:0 0 14px}.arena-quickbar button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:76px;padding:8px 5px;cursor:pointer;border:1px solid #263c52;border-radius:9px;background:linear-gradient(180deg,#0e1a28,#08111b);color:#b9cad8;font-size:10px;font-weight:900;transition:.16s}.arena-quickbar button:hover{border-color:var(--cyan);color:#fff;transform:translateY(-1px);box-shadow:0 0 18px rgba(50,215,255,.12)}.arena-quickbar img{width:38px;height:38px;object-fit:contain;filter:drop-shadow(0 0 7px rgba(50,215,255,.2))}.arena-overview{display:grid;grid-template-columns:repeat(3,minmax(240px,1fr));gap:12px}.classcard{position:relative;overflow:hidden;cursor:pointer;padding:11px 14px;border:1px solid #263c52;border-radius:10px;background:linear-gradient(150deg,#0e1b29,#080f18);min-height:104px;transition:.18s;display:flex;align-items:center}.classcard:hover{transform:translateY(-2px);border-color:#3a8aaa;box-shadow:0 10px 25px rgba(0,0,0,.25)}.classcard:after{content:"";position:absolute;width:140px;height:140px;right:-55px;top:-64px;background:radial-gradient(circle,rgba(50,215,255,.12),transparent 65%)}.classhead{display:flex;justify-content:space-between;gap:14px;align-items:center;width:100%}.classidentity{display:flex;align-items:center;gap:10px;min-width:145px}.classicon{width:44px;height:44px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(50,215,255,.18))}.classcode{font-size:11px;color:var(--cyan);font-weight:900}.classname{font-size:15px;font-weight:900}.championinfo{margin-left:auto;text-align:right;min-width:0;max-width:62%}.championname{font-size:24px;line-height:1.05;font-weight:950;color:#fff;letter-spacing:.2px;text-shadow:0 0 13px rgba(50,215,255,.16);overflow-wrap:anywhere}.championscore{font-size:11px;color:#7e93a5;font-weight:700;margin-top:6px}.championscore:before{content:'Score  ';text-transform:uppercase;letter-spacing:.7px;font-size:9px;color:#5e7588}.nodata{color:#637b8e;font-size:13px;margin-top:18px}.classbar{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}.classbar button{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;font-size:11px}.classbar img{width:22px;height:22px;object-fit:contain}.backline{display:flex;align-items:center;gap:10px;margin-bottom:10px}.backline button{background:none;border:0;color:var(--cyan);cursor:pointer;font-weight:800;padding:4px 0}.backline button:hover{text-decoration:underline}
+.subnav{display:flex;gap:7px;margin-bottom:12px}.subnav button{padding:8px 13px}.guild-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px;padding:10px;border:1px solid #1e3144;border-radius:9px;background:#071019}.guild-tabs button{display:inline-flex;align-items:center;gap:8px;cursor:pointer;border:1px solid #263c52;background:linear-gradient(180deg,#0e1a28,#08111b);color:#9eb2c3;border-radius:8px;padding:8px 12px;font-size:12px;font-weight:900;transition:.15s}.guild-tabs button:hover{border-color:#3c6680;color:#fff;transform:translateY(-1px)}.guild-tabs button.active{background:linear-gradient(180deg,#139dc2,#087a9a);border-color:#3bdcff;color:#fff;box-shadow:0 0 18px rgba(50,215,255,.14)}.guild-tabs img{width:24px;height:24px;object-fit:contain}.empty{padding:35px 20px;text-align:center;border:1px dashed #294158;border-radius:10px;background:#08111a}.empty h3{margin:0 0 7px}.empty p{margin:0;color:#7890a3;font-size:13px;line-height:1.6}.code{font-family:Consolas,monospace;color:#96e9ff;background:#0b1a27;border:1px solid #213a50;border-radius:5px;padding:2px 6px}.data-note{margin-top:12px;padding:10px 12px;border-left:3px solid var(--cyan);background:#08131e;color:#83a0b5;font-size:12px;line-height:1.5}.footer{display:flex;justify-content:space-between;gap:15px;color:#60778b;font-size:10px;font-weight:700;letter-spacing:.8px;padding:13px 3px}
+@media(max-width:1100px){.arena-quickbar{grid-template-columns:repeat(5,1fr)}}@media(max-width:940px){.hero{grid-template-columns:1fr}.featured{display:none}.arena-overview{grid-template-columns:repeat(2,minmax(220px,1fr))}.wrap{padding:12px}.brand h1{font-size:23px}.chip{display:none}}@media(max-width:620px){.arena-quickbar{grid-template-columns:repeat(3,1fr)}.arena-overview{grid-template-columns:1fr}.hero h2{font-size:29px}.tools{display:none}.search{flex:1 1 100%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div class="brand"><img src="./assets/cabal-logo.png" alt="CABAL"><div><h1>RANKING <span>HUB</span></h1><div class="sub">SEA COMMUNITY DATA CENTER</div></div></div>
+  <div class="tools"><div class="chip" id="dataChip"><span class="nw-icon-wrap"><img class="nw-icon" src="./assets/NationWar.png" alt="Nation War"><span class="nw-tooltip">06:00 / 08:00 / 12:00 / 14:00 / 16:00 / 18:00 / 20:00 / 22:00</span></span><span class="nw-copy"><span class="nw-main" id="nwText">NATION WAR</span><span class="nw-zone">GMT+8</span></span></div></div>
+</header>
+<section class="hero">
+  <div class="card hero-main"><div class="eyebrow">CABAL Ultimate Combo Ranking</div><h2>CABAL Ultimate Combo <span style="color:var(--cyan)">Ranking</span></h2><p>Rankings are built from player contributions.<br>This site is non-profit. All data is entered manually with no third-party tools or game modification.</p><div class="hero-stats"><div class="stat"><b>5</b><small>Main sections</small></div><div class="stat"><b>9</b><small>Legend classes</small></div><div class="stat"><b>10</b><small>Guild Top ranks</small></div><div class="stat"><b id="trackedCount">—</b><small>Rows loaded</small></div></div></div>
+  <div class="card featured" id="featuredCard"><img id="featuredIcon" src="./assets/together.png" alt="Featured"><div class="featured-copy"><div class="eyebrow" id="featuredEyebrow">Guild Ranking #1</div><h3 id="featuredTitle">Loading…</h3><p class="featured-detail" id="featuredText">Loading current ranking…</p></div></div>
+</section>
+<nav class="mainnav" id="mainnav">
+  <button class="active" data-page="guild">Guild Ranking</button>
+  <button data-page="mission">Mission Festival</button>
+  <button data-page="arena">Legend Arena</button>
+  <button data-page="achievement">Achievement Rank</button>
+  <button data-page="guildinfo">Guild Information</button>
+</nav>
+<section class="panel" id="content"></section>
+<div class="footer" style="justify-content:center;text-align:center"><span>CABAL RANKING HUB</span></div>
+</div>
+<script src="./ranking_data.js"></script>
+<script>
+// GitHub Pages deployment guard: if data is unavailable, try the legacy data path once.
+if (!window.CABAL_DATA) {
+  const fallback = document.createElement('script');
+  fallback.src = './data/ranking_data.js';
+  fallback.async = false;
+  document.head.appendChild(fallback);
+}
+</script>
+<script>
+const D=window.CABAL_DATA||{guild:[],arena:{},achievement:[],weekly:[],seasons:[],missionFestival:[],guilds:{}};
+const CLASS_ORDER=[['Warrior','WA','warrior.svg'],['Blader','BL','blader.svg'],['Wizard','WI','wizard.svg'],['Force Archer','FA','force_archer.svg'],['Force Shielder','FS','force_shielder.svg'],['Force Blader','FB','force_blader.svg'],['Force Gunner','FG','force_gunner.svg'],['Dark Mage','DM','dark_mage.svg'],['Gladiator','GL','gladiator.svg']];
+const classIcon=f=>`./assets/classes/${f}`;
+let page='guild', arenaClass=null, activeGuild='Together', missionIndex=0, q='';
+const guildViewState={};
+const esc=s=>String(s??'—').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const trClass=n=>n==1?'p1':n==2?'p2':n==3?'p3':'';
+const rank=n=>`<span class="rank">#${esc(n)}</span>`;
+const badge=x=>`<span class="badge">${esc(x)}</span>`;
+const cname=x=>`<span class="name">${esc(x)}</span>`;
+const gname=x=>`<span class="guild">${esc(x)}</span>`;
+const score=x=>`<span class="score">${esc(x)}</span>`;
+
+const numericValue=v=>{
+ const n=Number(String(v??'').replace(/[^0-9.-]/g,''));
+ return Number.isFinite(n)?n:-Infinity;
+};
+const findGuildInfo=name=>(D.guild||[]).find(x=>String(x.guild||'').trim().toLowerCase()===String(name||'').trim().toLowerCase())||null;
+const guildLogo=name=>{
+ const g=String(name||'').trim();
+ if(!g)return './assets/cabal-logo.png';
+ if(g.toLowerCase()==='together')return './assets/together.png';
+ return `./assets/${encodeURIComponent(g)}.png`;
+};
+const setFeaturedImage=(src,alt)=>{
+ const img=document.getElementById('featuredIcon');
+ if(!img)return;
+ img.onerror=()=>{
+   img.onerror=null;
+   img.src='./assets/cabal-logo.png';
+ };
+ img.src=src;
+ img.alt=alt||'Featured';
+};
+function setFeatured(eyebrow,title,detail,icon,alt){
+ const e=document.getElementById('featuredEyebrow');
+ const t=document.getElementById('featuredTitle');
+ const d=document.getElementById('featuredText');
+ if(e)e.textContent=eyebrow||'';
+ if(t)t.innerHTML=title||'N/A';
+ if(d)d.innerHTML=detail||'N/A';
+ setFeaturedImage(icon||'./assets/cabal-logo.png',alt||title||'Featured');
+}
+function updateFeatured(){
+ if(page==='guild'){
+   const g=(D.guild||[])[0];
+   if(!g){setFeatured('Guild Ranking','N/A','No Guild Ranking data.','./assets/cabal-logo.png','Guild Ranking');return}
+   setFeatured(
+     'Guild Ranking #1',
+     `${esc(g.guild)} <span class="gold">#${esc(g.ranking||1)}</span>`,
+     `Guild Master: <b>${esc(g.master||'N/A')}</b><br>Guild Score: <span class="gold">${esc(g.score||'N/A')}</span>`,
+     guildLogo(g.guild),g.guild
+   );
+   return;
+ }
+
+ if(page==='mission'){
+   const all=D.missionFestival||[], obj=all[missionIndex]||all[0], top=obj?.rows?.[0];
+   if(!top){setFeatured('Mission Festival','N/A','No Mission Festival data.','./assets/cabal-logo.png','Mission Festival');return}
+   const gi=findGuildInfo(top.guild);
+   setFeatured(
+     `Mission Festival • ${obj?.label||''}`,
+     `${esc(top.guild)} <span class="gold">#${esc(top.ranking||1)}</span>`,
+     `Guild Leader: <b>${esc(gi?.master||'N/A')}</b><br>Guild Point: <span class="gold">${esc(top.point||'N/A')}</span>`,
+     guildLogo(top.guild),top.guild
+   );
+   return;
+ }
+
+ if(page==='arena'){
+   // Spotlight rule: compare ONLY the class champion (first row / rank #1)
+   // from each of the 9 Legend Arena classes. Never use rank #2+ even if
+   // an OCR/input error gives that row an abnormally high score.
+   let best=null;
+   for(const [className,obj] of Object.entries(D.arena||{})){
+     const rows=obj?.rows||[];
+     const champion=rows.find(r=>String(r?.ranking??'').trim()==='1')||rows[0];
+     if(!champion)continue;
+     const n=numericValue(champion.score);
+     if(!best||n>best.value)best={className,row:champion,value:n};
+   }
+   if(!best){setFeatured('Legend Arena','N/A','No Legend Arena data.','./assets/cabal-logo.png','Legend Arena');return}
+   const cls=CLASS_ORDER.find(x=>x[0]===best.className);
+   const code=cls?.[1]||best.className;
+   const icon=cls?.[2]?classIcon(cls[2]):'./assets/cabal-logo.png';
+   setFeatured(
+     'Legend Arena • Highest Score',
+     `${esc(best.row.character)} <span class="gold">#${esc(best.row.ranking||1)}</span>`,
+     `Class: <b>${esc(code)} — ${esc(best.className)}</b><br>Total Score: <span class="gold">${esc(best.row.score||'N/A')}</span>`,
+     icon,best.className
+   );
+   return;
+ }
+
+ if(page==='achievement'){
+   const a=(D.achievement||[])[0];
+   if(!a){setFeatured('Achievement Rank','N/A','No Achievement data.','./assets/cabal-logo.png','Achievement Rank');return}
+   const cls=CLASS_ORDER.find(x=>x[1]===a.class||x[0]===a.class);
+   const icon=cls?.[2]?classIcon(cls[2]):'./assets/cabal-logo.png';
+   const fullClass=cls?.[0]||a.class||'N/A';
+   setFeatured(
+     'Achievement Rank #1',
+     `${esc(a.character)} <span class="gold">#${esc(a.ranking||1)}</span>`,
+     `Class: <b>${esc(a.class||'N/A')} — ${esc(fullClass)}</b><br>Level: <b>${esc(a.level||'N/A')}</b> • Guild: <b>${esc(a.guild||'N/A')}</b><br>Achievement Points: <span class="gold">${esc(a.points||'N/A')}</span>`,
+     icon,fullClass
+   );
+   return;
+ }
+
+ if(page==='guildinfo'){
+   const gname=activeGuild||'N/A', gi=findGuildInfo(gname);
+   setFeatured(
+     `${esc(gname)} • Guild Information`,
+     `${esc(gname)} <span class="gold">${gi?`#${esc(gi.ranking||'N/A')}`:'#N/A'}</span>`,
+     `Guild Master: <b>${esc(gi?.master||'N/A')}</b><br>Guild Score: <span class="gold">${esc(gi?.score||'N/A')}</span>`,
+     guildLogo(gname),gname
+   );
+   return;
+ }
+}
+function table(head,rows,make){return `<div class="tablewrap"><table class="ranktable"><thead><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr class="${trClass(+r.ranking)}">${make(r).map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`}
+function filtered(rows){if(!q)return rows;const s=q.toLowerCase();return rows.filter(r=>Object.values(r).join(' ').toLowerCase().includes(s))}
+function searchBox(ph='Search character / guild…'){return `<div class="search"><input id="searchInput" value="${esc(q)}" placeholder="${ph}"></div>`}
+function bindSearch(){const el=document.getElementById('searchInput');if(el)el.oninput=e=>{q=e.target.value;const pos=e.target.selectionStart??q.length;render();requestAnimationFrame(()=>{const n=document.getElementById('searchInput');if(n){n.focus();try{n.setSelectionRange(pos,pos)}catch(_){}}})}}
+function renderGuild(){const rows=filtered(D.guild||[]);return `<div class="bar"><div class="title">Guild <span>Ranking</span></div>${searchBox('Search guild / guild master…')}<div class="meta">${rows.length} guilds</div></div>${table(['Ranking','Guild Name','Guild Master','Guild Score'],rows,r=>[rank(r.ranking),gname(r.guild),cname(r.master),score(r.score)])}<div class="data-note">Accepted format: <span class="code">Guild_Ranking_YYYYMMDD_HHMMSS.xlsx</span>. If several files exist, the newest date/time suffix is used.</div>`}
+function renderMissionFestival(){
+ const all=D.missionFestival||[], obj=all[missionIndex]||all[0];
+ if(!obj)return `<div class="bar"><div class="title">Mission <span>Festival</span></div></div><div class="empty"><h3>Mission Festival Ranking</h3><p>No Mission Festival data found.<br>Accepted format: <span class="code">GMF_Month_Year.xlsx</span></p></div>`;
+ const opts=all.map((x,i)=>`<option value="${i}" ${i===missionIndex?'selected':''}>${esc(x.label||x.file)}</option>`).join('');
+ const rows=filtered(obj.rows||[]);
+ return `<div class="bar"><div class="title">Mission <span>Festival</span></div><select id="missionSelect" class="tool">${opts}</select>${searchBox('Search guild…')}<div class="meta">${rows.length} guilds</div></div>${table(['Ranking','Guild Name','Guild Point'],rows,r=>[rank(r.ranking),gname(r.guild),score(r.point)])}<div class="data-note">Source: <span class="code">${esc(obj.file)}</span>. Accepted format: <span class="code">GMF_Month_Year.xlsx</span>.</div>`;
+}
+function renderArena(){
+ const quickButtons=CLASS_ORDER.map(([full,code,icon])=>`<button data-classpick="${esc(full)}" title="${esc(full)}"><img src="${classIcon(icon)}" alt="${code}"><span>${code}</span></button>`).join('');
+ if(!arenaClass){
+   const cards=CLASS_ORDER.map(([full,code,icon])=>{const obj=D.arena?.[full];const top=obj?.rows?.[0];return `<article class="classcard" data-class="${esc(full)}"><div class="classhead"><div class="classidentity"><img class="classicon" src="${classIcon(icon)}" alt="${code}"><div><div class="classcode">${code}-Lv.200</div><div class="classname">${full}</div></div></div>${top?`<div class="championinfo"><div class="championname">${esc(top.character)}</div><div class="championscore">${esc(top.score)}</div></div>`:`<div class="nodata">No data</div>`}</div></article>`}).join('');
+   return `<div class="bar"><div class="title">Legend Arena <span>Class Champions</span></div><div class="meta">Choose a class • Champion overview</div></div><div class="arena-quickbar">${quickButtons}</div><div class="arena-overview">${cards}</div><div class="data-note">Accepted format: <span class="code">LegendArena_Class_YYYYMMDD_HHMMSS.xlsx</span>. Repeated classes are resolved automatically by keeping the newest file.</div>`
+ }
+ const obj=D.arena?.[arenaClass];const found=CLASS_ORDER.find(x=>x[0]===arenaClass)||[];const code=found[1]||'', selectedIcon=found[2]||'';const rows=filtered(obj?.rows||[]);const buttons=CLASS_ORDER.map(([full,c,icon])=>`<button class="${arenaClass===full?'active':''}" data-classpick="${esc(full)}"><img src="${classIcon(icon)}" alt="${c}">${c}</button>`).join('');return `<div class="backline"><button id="arenaBack">← All class champions</button><span class="meta">${esc(obj?.file||'No data file')}</span></div><div class="classbar"><button data-classpick="__all">ALL</button>${buttons}</div><div class="bar"><div class="title">Legend Arena • <span>${selectedIcon?`<img src="${classIcon(selectedIcon)}" alt="${code}" style="width:25px;height:25px;vertical-align:middle;margin-right:7px">`:''}${esc(arenaClass)}</span></div>${searchBox('Search character…')}<div class="meta">Top ${rows.length} • ${code}</div></div>${obj?table(['Ranking','Class','Character','Total Score'],rows,r=>[rank(r.ranking),badge(code),cname(r.character),score(r.score)]):`<div class="empty"><h3>No ${esc(arenaClass)} data</h3><p>Add a matching Legend Arena Excel file and rebuild the dataset.</p></div>`}`}
+function renderAchievement(){const rows=filtered(D.achievement||[]);return `<div class="bar"><div class="title">Achievement <span>Rank</span></div>${searchBox()}<div class="meta">${rows.length} characters</div></div>${table(['Ranking','Class','Level','Character','Guild','Ach. Points'],rows,r=>[rank(r.ranking),badge(r.class),esc(r.level),cname(r.character),gname(r.guild),score(r.points)])}<div class="data-note">Accepted format: <span class="code">Archievement_Rank_YYYYMMDD_HHMMSS.xlsx</span>.</div>`}
+function getGuildDataset(guildName){
+ const direct=D.guilds?.[guildName];
+ if(direct)return {weekly:direct.weekly||[],seasons:direct.seasons||[],contributions:direct.contributions||[]};
+ if(guildName==='Together')return {weekly:D.weekly||[],seasons:D.seasons||[],contributions:[]};
+ return {weekly:[],seasons:[],contributions:[]};
+}
+function getGuildState(guildName){return guildViewState[guildName]||(guildViewState[guildName]={tab:'weekly',weeklyIndex:0,seasonIndex:0,contributionIndex:0})}
+function renderGuildHub(guildName){
+ const data=getGuildDataset(guildName), state=getGuildState(guildName);
+ const sub=`<div class="subnav"><button class="${state.tab==='weekly'?'active':''}" data-guildsub="weekly">Guild Weekly</button><button class="${state.tab==='season'?'active':''}" data-guildsub="season">Guild Season</button><button class="${state.tab==='contribution'?'active':''}" data-guildsub="contribution">GMF Contribution Ranking</button></div>`;
+ if(state.tab==='weekly'){
+   const parseWeeklyDate=x=>{
+     const s=String(x?.date||'');
+     if(/^\d{8}$/.test(s)){
+       const d=+s.slice(0,2),m=+s.slice(2,4)-1,y=+s.slice(4,8);
+       return Date.UTC(y,m,d);
+     }
+     return 0;
+   };
+   const all=[...(data.weekly||[])].sort((a,b)=>parseWeeklyDate(b)-parseWeeklyDate(a));
+   if(state.weeklyIndex>=all.length)state.weeklyIndex=0;
+   const obj=all[state.weeklyIndex]||all[0];
+   if(!obj)return `<div class="bar"><div class="title"><span>${esc(guildName)}</span></div></div>${sub}<div class="empty"><h3>${esc(guildName)} Weekly Ranking</h3><p>No weekly data found.<br>Accepted formats:<br><span class="code">Guild_Weekly_Ranking_DDMMYYYY.xlsx</span> for Together<br><span class="code">GuildName_Guild_Weekly_Ranking_DDMMYYYY.xlsx</span> for other guilds.</p></div>`;
+   const opts=all.map((x,i)=>`<option value="${i}" ${i===state.weeklyIndex?'selected':''}>${esc(x.label)}</option>`).join('');
+   const rows=filtered(obj.rows||[]);
+   return `<div class="bar"><div class="title"><span>${esc(guildName)}</span></div><div class="meta">Weekly • Season • GMF Contribution</div></div>${sub}<div class="bar"><div class="title">Guild Weekly • <span>${esc(obj.label)}</span></div><select id="guildWeeklySelect" class="tool">${opts}</select>${searchBox('Search character…')}<div class="meta">${rows.length} characters</div></div>${table(['Ranking','Character','Treasure Score'],rows,r=>[rank(r.ranking),cname(r.character),score(r.score)])}<div class="data-note">Source: <span class="code">${esc(obj.file)}</span>.</div>`;
+ }
+ if(state.tab==='season'){
+   const all=[...(data.seasons||[])].sort((a,b)=>((+b.year*100)+(+b.season))-((+a.year*100)+(+a.season)));
+   if(state.seasonIndex>=all.length)state.seasonIndex=0;
+   const obj=all[state.seasonIndex]||all[0];
+   if(!obj)return `<div class="bar"><div class="title"><span>${esc(guildName)}</span></div></div>${sub}<div class="empty"><h3>${esc(guildName)} Guild Season</h3><p>No season data found.<br>Accepted formats:<br><span class="code">GuildSeason_Season_Year.xlsx</span> for Together<br><span class="code">GuildName_GuildSeason_Season_Year.xlsx</span> for other guilds.</p></div>`;
+   const opts=all.map((x,i)=>`<option value="${i}" ${i===state.seasonIndex?'selected':''}>${esc(x.label)}</option>`).join('');
+   const rows=filtered(obj.rows||[]), heads=['Ranking','Character',...(obj.weekColumns||[]),'Total Score'];
+   return `<div class="bar"><div class="title"><span>${esc(guildName)}</span></div><div class="meta">Weekly • Season • GMF Contribution</div></div>${sub}<div class="bar"><div class="title"><span>${esc(obj.label)}</span></div><select id="guildSeasonSelect" class="tool">${opts}</select>${searchBox('Search character…')}<div class="meta">${rows.length} characters</div></div>${table(heads,rows,r=>[rank(r.ranking),cname(r.character),...(obj.weekColumns||[]).map(w=>score(r.scores?.[w]??0)),score(r.total)])}<div class="data-note">Source: <span class="code">${esc(obj.file)}</span>.</div>`;
+ }
+ const monthNo=x=>{
+   const m=String(x?.month||'').trim();
+   if(/^\d{1,2}$/.test(m))return +m;
+   const map={jan:1,january:1,feb:2,february:2,mar:3,march:3,apr:4,april:4,may:5,jun:6,june:6,jul:7,july:7,aug:8,august:8,sep:9,september:9,oct:10,october:10,nov:11,november:11,dec:12,december:12};
+   return map[m.toLowerCase()]||0;
+ };
+ const all=[...(data.contributions||[])].sort((a,b)=>(+b.year*100+monthNo(b))-(+a.year*100+monthNo(a)));
+ if(state.contributionIndex>=all.length)state.contributionIndex=0;
+ const obj=all[state.contributionIndex]||all[0];
+ if(!obj)return `<div class="bar"><div class="title"><span>${esc(guildName)}</span></div></div>${sub}<div class="empty"><h3>${esc(guildName)} GMF Contribution Ranking</h3><p>No contribution data found.<br>Accepted format:<br><span class="code">GuildName_GMF_Month_Year.xlsx</span><br>Example: <span class="code">${esc(guildName)}_GMF_09_2026.xlsx</span></p></div>`;
+ const opts=all.map((x,i)=>`<option value="${i}" ${i===state.contributionIndex?'selected':''}>${esc(x.label)}</option>`).join('');
+ const rows=filtered(obj.rows||[]);
+ return `<div class="bar"><div class="title"><span>${esc(guildName)}</span></div><div class="meta">Weekly • Season • GMF Contribution</div></div>${sub}<div class="bar"><div class="title">GMF Contribution • <span>${esc(obj.label)}</span></div><select id="guildContributionSelect" class="tool">${opts}</select>${searchBox('Search character…')}<div class="meta">${rows.length} characters</div></div>${table(['Ranking','Character Name','Score','Mission Count'],rows,r=>[rank(r.ranking),cname(r.character),score(r.score),esc(r.missionCount||'')])}<div class="data-note">Source: <span class="code">${esc(obj.file)}</span>.</div>`;
+}
+function guildNames(){
+ const keys=Object.keys(D.guilds||{});
+ const preferred=['Together','IDOLS'];
+ return [...new Set([
+   ...preferred.filter(x=>keys.includes(x)||(x==='Together'&&((D.weekly||[]).length||(D.seasons||[]).length))),
+   ...keys.filter(x=>!preferred.includes(x)).sort((a,b)=>a.localeCompare(b))
+ ])];
+}
+function guildTabs(){
+ const names=guildNames();
+ if(!names.length)return '';
+ if(!names.includes(activeGuild))activeGuild=names[0];
+ return `<div class="guild-tabs">${names.map(name=>`<button class="${name===activeGuild?'active':''}" data-guildpick="${esc(name)}"><img src="${guildLogo(name)}" alt="${esc(name)}" onerror="this.onerror=null;this.src='./assets/cabal-logo.png'"><span>${esc(name)}</span></button>`).join('')}</div>`;
+}
+function renderGuildInformation(){
+ const names=guildNames();
+ if(!names.length)return `<div class="bar"><div class="title">Guild <span>Information</span></div></div><div class="empty"><h3>No guild information data</h3><p>Add guild Weekly/Season files and rebuild the dataset.</p></div>`;
+ if(!names.includes(activeGuild))activeGuild=names[0];
+ return `<div class="bar"><div class="title">Guild <span>Information</span></div><div class="meta">${names.length} guild${names.length===1?'':'s'}</div></div>${guildTabs()}${renderGuildHub(activeGuild)}`;
+}
+function render(){
+ const c=document.getElementById('content');
+ c.innerHTML=page==='guild'?renderGuild():page==='mission'?renderMissionFestival():page==='arena'?renderArena():page==='achievement'?renderAchievement():renderGuildInformation();
+ updateFeatured();
+ bindSearch();
+ document.querySelectorAll('.classcard').forEach(x=>x.onclick=()=>{arenaClass=x.dataset.class;q='';render()});
+ document.querySelectorAll('[data-classpick]').forEach(x=>x.onclick=()=>{arenaClass=x.dataset.classpick==='__all'?null:x.dataset.classpick;q='';render()});
+ const back=document.getElementById('arenaBack');if(back)back.onclick=()=>{arenaClass=null;q='';render()};
+ document.querySelectorAll('[data-guildpick]').forEach(x=>x.onclick=()=>{activeGuild=x.dataset.guildpick;q='';render()});
+ document.querySelectorAll('[data-guildsub]').forEach(x=>x.onclick=()=>{getGuildState(activeGuild).tab=x.dataset.guildsub;q='';render()});
+ const gw=document.getElementById('guildWeeklySelect');if(gw)gw.onchange=e=>{getGuildState(activeGuild).weeklyIndex=+e.target.value;q='';render()};
+ const gs=document.getElementById('guildSeasonSelect');if(gs)gs.onchange=e=>{getGuildState(activeGuild).seasonIndex=+e.target.value;q='';render()};
+ const gc=document.getElementById('guildContributionSelect');if(gc)gc.onchange=e=>{getGuildState(activeGuild).contributionIndex=+e.target.value;q='';render()};
+ const ms=document.getElementById('missionSelect');if(ms)ms.onchange=e=>{missionIndex=+e.target.value;q='';render()};
+}
+document.querySelectorAll('#mainnav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#mainnav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');page=b.dataset.page;q='';arenaClass=null;render()});
+const arenaRows=Object.values(D.arena||{}).reduce((a,x)=>a+(x.rows?.length||0),0);const missionRows=(D.missionFestival||[]).reduce((a,x)=>a+(x.rows?.length||0),0);const guildDataRows=Object.keys(D.guilds||{}).length?Object.values(D.guilds||{}).reduce((a,g)=>a+(g.weekly||[]).reduce((s,x)=>s+(x.rows?.length||0),0)+(g.seasons||[]).reduce((s,x)=>s+(x.rows?.length||0),0)+(g.contributions||[]).reduce((s,x)=>s+(x.rows?.length||0),0),0):(D.weekly||[]).reduce((a,x)=>a+(x.rows?.length||0),0)+(D.seasons||[]).reduce((a,x)=>a+(x.rows?.length||0),0);document.getElementById('trackedCount').textContent=(D.guild?.length||0)+arenaRows+(D.achievement?.length||0)+missionRows+guildDataRows;
+
+// Nation War schedule uses GMT+8.
+const NW_GAME_HOURS=[6,8,12,14,16,18,20,22];
+const NW_TZ_OFFSET_HOURS=8;
+const NW_LIVE_MINUTES=35;
+function updateNationWarCountdown(){
+  const text=document.getElementById('nwText');
+  const zone=document.querySelector('.nw-zone');
+  if(!text||!zone)return;
+
+  // Convert current time to a synthetic GMT+8 clock so the result does not depend on viewer timezone.
+  const gameMs=Date.now()+(NW_TZ_OFFSET_HOURS*60*60*1000);
+  const now=new Date(gameMs);
+  const y=now.getUTCFullYear(),m=now.getUTCMonth(),d=now.getUTCDate();
+
+  // Live windows (GMT+8): each round lasts 35 minutes. First 30 minutes yellow, final 5 minutes red.
+  for(const hour of NW_GAME_HOURS){
+    const liveStart=Date.UTC(y,m,d,hour,0,0);
+    const liveEnd=liveStart+(NW_LIVE_MINUTES*60*1000);
+    if(gameMs>=liveStart && gameMs<liveEnd){
+      const remain=Math.max(0,Math.floor((liveEnd-gameMs)/1000));
+      const mins=Math.floor(remain/60),secs=remain%60;
+      const elapsedMinutes=(gameMs-liveStart)/(60*1000);
+      const liveClass=elapsedMinutes>=30?'nw-live-danger':'nw-live-warning';
+      text.innerHTML=`<span class="nw-live ${liveClass}">NATION WAR IS LIVE NOW!</span>`;
+      zone.innerHTML=`GMT+8 • <span class="nw-live-count">${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}</span>`;
+      return;
+    }
+  }
+
+  // Outside a live window, count down to the next scheduled Nation War in GMT+8.
+  let next=null,nextLabel=null;
+  for(const hour of NW_GAME_HOURS){
+    const t=Date.UTC(y,m,d,hour,0,0);
+    if(t>gameMs){next=t;nextLabel=hour;break}
+  }
+  if(next===null){
+    nextLabel=NW_GAME_HOURS[0];
+    next=Date.UTC(y,m,d+1,nextLabel,0,0);
+  }
+
+  const diff=Math.max(0,Math.floor((next-gameMs)/1000));
+  const mins=Math.floor(diff/60),secs=diff%60;
+  text.innerHTML=`NATION WAR ${String(nextLabel).padStart(2,'0')}:00`;
+  zone.innerHTML=`GMT+8 • <span class="nw-countdown">${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}</span>`;
+}
+updateNationWarCountdown();setInterval(updateNationWarCountdown,1000);
+render();
+</script>
+</body>
+</html>
