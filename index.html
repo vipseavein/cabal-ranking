@@ -10,7 +10,7 @@
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--text);font-family:Segoe UI,Arial,sans-serif;min-height:100vh;background:radial-gradient(circle at 24% 0%,#11263b 0,#07111c 34%,#04070c 75%)}
 body:before{content:"";position:fixed;inset:0;background:linear-gradient(rgba(4,8,14,.87),rgba(4,8,14,.96)),url('./assets/bg.jpg') center/cover fixed;z-index:-2}body:after{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(50,215,255,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(50,215,255,.028) 1px,transparent 1px);background-size:38px 38px;mask-image:linear-gradient(to bottom,#000,transparent 82%);z-index:-1}
 .wrap{max-width:1480px;margin:auto;padding:18px 22px 36px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:7px 0 16px;border-bottom:1px solid #1d2b3b}.brand{display:flex;align-items:center;gap:15px}.brand img{height:38px;filter:drop-shadow(0 0 12px rgba(50,215,255,.2))}.brand h1{font-size:29px;letter-spacing:2px;margin:0}.brand h1 span{color:var(--cyan)}.sub{font-size:11px;letter-spacing:2.1px;color:#7690a5;font-weight:700}.tools{display:flex;align-items:center;gap:9px}.chip,.tool{border:1px solid var(--line);background:#0b1420;color:#c7dcec;border-radius:7px;padding:8px 11px;font-size:12px;font-weight:700}.chip{font-size:16px;display:flex;align-items:flex-start;justify-content:flex-start;gap:16px;line-height:1.15;padding:10px 16px;min-height:0}.nw-icon-wrap{position:relative;width:40px;height:40px;display:flex;align-items:flex-start;justify-content:center;flex:0 0 0px}.nw-icon{width:48px;height:48px;object-fit:contain;image-rendering:auto;display:block}.nw-copy{display:flex;flex-direction:column;justify-content:flex-start;align-items:flex-start;gap:5px;min-height:0;padding-top:0}.nw-main{display:block;line-height:1.08;white-space:nowrap;margin-top:0}.nw-main .nw-countdown{color:var(--cyan)}.nw-zone{display:block;font-size:11px;line-height:1;color:#7890a4;font-weight:700;letter-spacing:.8px}.nw-live{color:var(--cyan);font-weight:900}.nw-live-count{color:var(--cyan);font-size:12px;font-weight:800;letter-spacing:.5px}.nw-tooltip{position:absolute;right:calc(100% + 12px);top:50%;transform:translateY(-50%) translateX(6px);opacity:0;pointer-events:none;white-space:nowrap;background:#07101a;border:1px solid #30516c;color:#dcecf7;padding:9px 11px;border-radius:7px;font-size:11px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.35);transition:.15s;z-index:20}.nw-tooltip:after{content:'';position:absolute;left:100%;top:50%;transform:translateY(-50%);border:6px solid transparent;border-left-color:#30516c}.nw-icon-wrap:hover .nw-tooltip{opacity:1;transform:translateY(-50%) translateX(0)}.tool{cursor:pointer}.tool:hover{border-color:var(--cyan);color:#fff}
-.hero{display:grid;grid-template-columns:1.4fr .72fr;gap:16px;margin-top:18px}.card,.panel{background:linear-gradient(145deg,rgba(15,27,42,.96),rgba(7,13,21,.96));border:1px solid #26394e;border-radius:13px;box-shadow:var(--shadow)}.hero-main{padding:23px 25px;position:relative;overflow:hidden}.hero-main:after{content:"";position:absolute;width:330px;height:330px;right:-110px;top:-180px;background:radial-gradient(circle,rgba(50,215,255,.19),transparent 66%);pointer-events:none}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--cyan);font-weight:800}.hero h2{font-size:36px;line-height:1.05;margin:7px 0 6px}.hero p{margin:0;max-width:760px;color:#91a6b8;font-size:13px;line-height:1.55}.hero-stats{display:flex;gap:10px;margin-top:17px;flex-wrap:wrap}.stat{min-width:126px;padding:9px 12px;border:1px solid #20364a;border-radius:8px;background:#0a131f}.stat b{display:block;font-size:20px}.stat small{color:#718a9f;text-transform:uppercase;font-size:10px;letter-spacing:.9px}.featured{display:flex;align-items:center;gap:15px;padding:18px}.featured img{width:82px;height:82px;object-fit:contain}.featured h3{font-size:21px;margin:4px 0}.gold{color:var(--gold)}
+.hero{display:grid;grid-template-columns:1.4fr .72fr;gap:16px;margin-top:18px}.card,.panel{background:linear-gradient(145deg,rgba(15,27,42,.96),rgba(7,13,21,.96));border:1px solid #26394e;border-radius:13px;box-shadow:var(--shadow)}.hero-main{padding:23px 25px;position:relative;overflow:hidden}.hero-main:after{content:"";position:absolute;width:330px;height:330px;right:-110px;top:-180px;background:radial-gradient(circle,rgba(50,215,255,.19),transparent 66%);pointer-events:none}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--cyan);font-weight:800}.hero h2{font-size:36px;line-height:1.05;margin:7px 0 6px}.hero p{margin:0;max-width:760px;color:#91a6b8;font-size:13px;line-height:1.55}.hero-stats{display:flex;gap:10px;margin-top:17px;flex-wrap:wrap}.stat{min-width:126px;padding:9px 12px;border:1px solid #20364a;border-radius:8px;background:#0a131f}.stat b{display:block;font-size:20px}.stat small{color:#718a9f;text-transform:uppercase;font-size:10px;letter-spacing:.9px}.featured{display:flex;align-items:center;gap:15px;padding:18px;min-width:0}.featured img{width:82px;height:82px;object-fit:contain;flex:0 0 82px;filter:drop-shadow(0 0 12px rgba(50,215,255,.16))}.featured h3{font-size:21px;margin:4px 0;overflow-wrap:anywhere}.featured .featured-copy{min-width:0}.featured .featured-detail{margin:0;color:#91a6b8;font-size:12px;line-height:1.55}.featured .featured-detail b{color:#eaf7ff}.featured .featured-detail .gold{font-weight:900}.gold{color:var(--gold)}
 .mainnav{display:flex;gap:8px;margin:17px 0 12px;overflow:auto;padding-bottom:2px}.mainnav button,.subnav button,.classbar button{white-space:nowrap;cursor:pointer;border:1px solid #22364b;background:#08111b;color:#8da4b7;border-radius:7px;font-weight:800}.mainnav button{padding:10px 16px;font-size:13px}.mainnav button:hover,.subnav button:hover,.classbar button:hover{border-color:#3c6680;color:#e7faff}.mainnav button.active,.subnav button.active,.classbar button.active{background:linear-gradient(180deg,#139dc2,#087a9a);border-color:#3bdcff;color:#fff;box-shadow:0 0 18px rgba(50,215,255,.14)}
 .panel{padding:15px}.bar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:12px}.title{font-size:18px;font-weight:800;margin-right:auto}.title span{color:var(--cyan)}.search{min-width:240px;flex:0 1 330px}.search input{width:100%;background:#07101a;border:1px solid #253b51;border-radius:7px;color:#fff;padding:9px 11px;outline:none}.search input:focus{border-color:var(--cyan)}.meta{font-size:11px;color:#7890a4}.tablewrap{overflow:auto;border:1px solid #1e3144;border-radius:9px;max-height:650px;background:#071019}.ranktable{width:100%;border-collapse:collapse;min-width:760px}.ranktable thead{position:sticky;top:0;z-index:4;background:#0d1b29}.ranktable th{font-size:11px;text-transform:uppercase;letter-spacing:.9px;color:#89a9bf;text-align:left;padding:11px 12px;border-bottom:1px solid #28445d}.ranktable td{padding:10px 12px;border-bottom:1px solid rgba(33,52,70,.58);font-size:13px}.ranktable tbody tr:hover{background:rgba(43,125,161,.13)}.ranktable tr.p1{background:linear-gradient(90deg,rgba(248,201,95,.12),transparent)}.ranktable tr.p2{background:linear-gradient(90deg,rgba(210,225,236,.07),transparent)}.ranktable tr.p3{background:linear-gradient(90deg,rgba(216,144,92,.08),transparent)}.rank{font-weight:900;font-size:15px}.p1 .rank{color:var(--gold)}.p2 .rank{color:#d9e4eb}.p3 .rank{color:var(--bronze)}.name{font-weight:800}.guild{color:#73d8ff}.score{font-weight:800;font-variant-numeric:tabular-nums}.badge{display:inline-flex;align-items:center;justify-content:center;min-width:33px;padding:3px 7px;border-radius:5px;border:1px solid #30516c;background:#0b1d2b;color:#8ce9ff;font-size:11px;font-weight:900}
 .arena-quickbar{display:grid;grid-template-columns:repeat(9,minmax(78px,1fr));gap:8px;margin:0 0 14px}.arena-quickbar button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:76px;padding:8px 5px;cursor:pointer;border:1px solid #263c52;border-radius:9px;background:linear-gradient(180deg,#0e1a28,#08111b);color:#b9cad8;font-size:10px;font-weight:900;transition:.16s}.arena-quickbar button:hover{border-color:var(--cyan);color:#fff;transform:translateY(-1px);box-shadow:0 0 18px rgba(50,215,255,.12)}.arena-quickbar img{width:38px;height:38px;object-fit:contain;filter:drop-shadow(0 0 7px rgba(50,215,255,.2))}.arena-overview{display:grid;grid-template-columns:repeat(3,minmax(240px,1fr));gap:12px}.classcard{position:relative;overflow:hidden;cursor:pointer;padding:11px 14px;border:1px solid #263c52;border-radius:10px;background:linear-gradient(150deg,#0e1b29,#080f18);min-height:104px;transition:.18s;display:flex;align-items:center}.classcard:hover{transform:translateY(-2px);border-color:#3a8aaa;box-shadow:0 10px 25px rgba(0,0,0,.25)}.classcard:after{content:"";position:absolute;width:140px;height:140px;right:-55px;top:-64px;background:radial-gradient(circle,rgba(50,215,255,.12),transparent 65%)}.classhead{display:flex;justify-content:space-between;gap:14px;align-items:center;width:100%}.classidentity{display:flex;align-items:center;gap:10px;min-width:145px}.classicon{width:44px;height:44px;object-fit:contain;filter:drop-shadow(0 0 8px rgba(50,215,255,.18))}.classcode{font-size:11px;color:var(--cyan);font-weight:900}.classname{font-size:15px;font-weight:900}.championinfo{margin-left:auto;text-align:right;min-width:0;max-width:62%}.championname{font-size:24px;line-height:1.05;font-weight:950;color:#fff;letter-spacing:.2px;text-shadow:0 0 13px rgba(50,215,255,.16);overflow-wrap:anywhere}.championscore{font-size:11px;color:#7e93a5;font-weight:700;margin-top:6px}.championscore:before{content:'Score  ';text-transform:uppercase;letter-spacing:.7px;font-size:9px;color:#5e7588}.nodata{color:#637b8e;font-size:13px;margin-top:18px}.classbar{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}.classbar button{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;font-size:11px}.classbar img{width:22px;height:22px;object-fit:contain}.backline{display:flex;align-items:center;gap:10px;margin-bottom:10px}.backline button{background:none;border:0;color:var(--cyan);cursor:pointer;font-weight:800;padding:4px 0}.backline button:hover{text-decoration:underline}
@@ -26,7 +26,7 @@ body:before{content:"";position:fixed;inset:0;background:linear-gradient(rgba(4,
 </header>
 <section class="hero">
   <div class="card hero-main"><div class="eyebrow">CABAL Ultimate Combo Ranking</div><h2>CABAL Ultimate Combo <span style="color:var(--cyan)">Ranking</span></h2><p>Rankings are built from player contributions.<br>This site is non-profit. All data is entered manually with no third-party tools or game modification.</p><div class="hero-stats"><div class="stat"><b>6+</b><small>Main sections</small></div><div class="stat"><b>9</b><small>Legend classes</small></div><div class="stat"><b>10</b><small>Guild Top ranks</small></div><div class="stat"><b id="trackedCount">—</b><small>Rows loaded</small></div></div></div>
-  <div class="card featured"><img src="./assets/together.png" alt="Together"><div><div class="eyebrow">Guild Ranking #1</div><h3>TOGETHER <span class="gold">#1</span></h3><p id="featuredText">Loading current ranking…</p></div></div>
+  <div class="card featured" id="featuredCard"><img id="featuredIcon" src="./assets/together.png" alt="Featured"><div class="featured-copy"><div class="eyebrow" id="featuredEyebrow">Guild Ranking #1</div><h3 id="featuredTitle">Loading…</h3><p class="featured-detail" id="featuredText">Loading current ranking…</p></div></div>
 </section>
 <nav class="mainnav" id="mainnav">
   <button class="active" data-page="guild">Guild Ranking</button>
@@ -60,6 +60,110 @@ const badge=x=>`<span class="badge">${esc(x)}</span>`;
 const cname=x=>`<span class="name">${esc(x)}</span>`;
 const gname=x=>`<span class="guild">${esc(x)}</span>`;
 const score=x=>`<span class="score">${esc(x)}</span>`;
+
+const numericValue=v=>{
+ const n=Number(String(v??'').replace(/[^0-9.-]/g,''));
+ return Number.isFinite(n)?n:-Infinity;
+};
+const findGuildInfo=name=>(D.guild||[]).find(x=>String(x.guild||'').trim().toLowerCase()===String(name||'').trim().toLowerCase())||null;
+const guildLogo=name=>{
+ const g=String(name||'').trim();
+ if(!g)return './assets/cabal-logo.png';
+ if(g.toLowerCase()==='together')return './assets/together.png';
+ return `./assets/${encodeURIComponent(g)}.png`;
+};
+const setFeaturedImage=(src,alt)=>{
+ const img=document.getElementById('featuredIcon');
+ if(!img)return;
+ img.onerror=()=>{
+   img.onerror=null;
+   img.src='./assets/cabal-logo.png';
+ };
+ img.src=src;
+ img.alt=alt||'Featured';
+};
+function setFeatured(eyebrow,title,detail,icon,alt){
+ const e=document.getElementById('featuredEyebrow');
+ const t=document.getElementById('featuredTitle');
+ const d=document.getElementById('featuredText');
+ if(e)e.textContent=eyebrow||'';
+ if(t)t.innerHTML=title||'N/A';
+ if(d)d.innerHTML=detail||'N/A';
+ setFeaturedImage(icon||'./assets/cabal-logo.png',alt||title||'Featured');
+}
+function updateFeatured(){
+ if(page==='guild'){
+   const g=(D.guild||[])[0];
+   if(!g){setFeatured('Guild Ranking','N/A','No Guild Ranking data.','./assets/cabal-logo.png','Guild Ranking');return}
+   setFeatured(
+     'Guild Ranking #1',
+     `${esc(g.guild)} <span class="gold">#${esc(g.ranking||1)}</span>`,
+     `Guild Master: <b>${esc(g.master||'N/A')}</b><br>Guild Score: <span class="gold">${esc(g.score||'N/A')}</span>`,
+     guildLogo(g.guild),g.guild
+   );
+   return;
+ }
+
+ if(page==='mission'){
+   const all=D.missionFestival||[], obj=all[missionIndex]||all[0], top=obj?.rows?.[0];
+   if(!top){setFeatured('Mission Festival','N/A','No Mission Festival data.','./assets/cabal-logo.png','Mission Festival');return}
+   const gi=findGuildInfo(top.guild);
+   setFeatured(
+     `Mission Festival • ${obj?.label||''}`,
+     `${esc(top.guild)} <span class="gold">#${esc(top.ranking||1)}</span>`,
+     `Guild Leader: <b>${esc(gi?.master||'N/A')}</b><br>Guild Point: <span class="gold">${esc(top.point||'N/A')}</span>`,
+     guildLogo(top.guild),top.guild
+   );
+   return;
+ }
+
+ if(page==='arena'){
+   let best=null;
+   for(const [className,obj] of Object.entries(D.arena||{})){
+     for(const row of (obj?.rows||[])){
+       const n=numericValue(row.score);
+       if(!best||n>best.value)best={className,row,value:n};
+     }
+   }
+   if(!best){setFeatured('Legend Arena','N/A','No Legend Arena data.','./assets/cabal-logo.png','Legend Arena');return}
+   const cls=CLASS_ORDER.find(x=>x[0]===best.className);
+   const code=cls?.[1]||best.className;
+   const icon=cls?.[2]?classIcon(cls[2]):'./assets/cabal-logo.png';
+   setFeatured(
+     'Legend Arena • Highest Score',
+     `${esc(best.row.character)} <span class="gold">#${esc(best.row.ranking||1)}</span>`,
+     `Class: <b>${esc(code)} — ${esc(best.className)}</b><br>Total Score: <span class="gold">${esc(best.row.score||'N/A')}</span>`,
+     icon,best.className
+   );
+   return;
+ }
+
+ if(page==='achievement'){
+   const a=(D.achievement||[])[0];
+   if(!a){setFeatured('Achievement Rank','N/A','No Achievement data.','./assets/cabal-logo.png','Achievement Rank');return}
+   const cls=CLASS_ORDER.find(x=>x[1]===a.class||x[0]===a.class);
+   const icon=cls?.[2]?classIcon(cls[2]):'./assets/cabal-logo.png';
+   const fullClass=cls?.[0]||a.class||'N/A';
+   setFeatured(
+     'Achievement Rank #1',
+     `${esc(a.character)} <span class="gold">#${esc(a.ranking||1)}</span>`,
+     `Class: <b>${esc(a.class||'N/A')} — ${esc(fullClass)}</b><br>Level: <b>${esc(a.level||'N/A')}</b> • Guild: <b>${esc(a.guild||'N/A')}</b><br>Achievement Points: <span class="gold">${esc(a.points||'N/A')}</span>`,
+     icon,fullClass
+   );
+   return;
+ }
+
+ if(page==='guildhub'){
+   const gname=activeGuild||'N/A', gi=findGuildInfo(gname);
+   setFeatured(
+     `${esc(gname)} • Guild Information`,
+     `${esc(gname)} <span class="gold">${gi?`#${esc(gi.ranking||'N/A')}`:'#N/A'}</span>`,
+     `Guild Master: <b>${esc(gi?.master||'N/A')}</b><br>Guild Score: <span class="gold">${esc(gi?.score||'N/A')}</span>`,
+     guildLogo(gname),gname
+   );
+   return;
+ }
+}
 function table(head,rows,make){return `<div class="tablewrap"><table class="ranktable"><thead><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr class="${trClass(+r.ranking)}">${make(r).map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`}
 function filtered(rows){if(!q)return rows;const s=q.toLowerCase();return rows.filter(r=>Object.values(r).join(' ').toLowerCase().includes(s))}
 function searchBox(ph='Search character / guild…'){return `<div class="search"><input id="searchInput" value="${esc(q)}" placeholder="${ph}"></div>`}
@@ -111,6 +215,7 @@ function installGuildNav(){
 function render(){
  const c=document.getElementById('content');
  c.innerHTML=page==='guild'?renderGuild():page==='mission'?renderMissionFestival():page==='arena'?renderArena():page==='achievement'?renderAchievement():renderGuildHub(activeGuild);
+ updateFeatured();
  bindSearch();
  document.querySelectorAll('.classcard').forEach(x=>x.onclick=()=>{arenaClass=x.dataset.class;q='';render()});
  document.querySelectorAll('[data-classpick]').forEach(x=>x.onclick=()=>{arenaClass=x.dataset.classpick==='__all'?null:x.dataset.classpick;q='';render()});
@@ -122,13 +227,12 @@ function render(){
 }
 installGuildNav();
 document.querySelectorAll('#mainnav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#mainnav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');page=b.dataset.page;if(page==='guildhub')activeGuild=b.dataset.guild;q='';arenaClass=null;render()});
-const topGuild=D.guild?.[0];if(topGuild)document.getElementById('featuredText').innerHTML=`Guild Master: <b>${esc(topGuild.master)}</b><br>Guild Score: <span class="gold">${esc(topGuild.score)}</span>`;
 const arenaRows=Object.values(D.arena||{}).reduce((a,x)=>a+(x.rows?.length||0),0);const missionRows=(D.missionFestival||[]).reduce((a,x)=>a+(x.rows?.length||0),0);const guildDataRows=Object.keys(D.guilds||{}).length?Object.values(D.guilds||{}).reduce((a,g)=>a+(g.weekly||[]).reduce((s,x)=>s+(x.rows?.length||0),0)+(g.seasons||[]).reduce((s,x)=>s+(x.rows?.length||0),0),0):(D.weekly||[]).reduce((a,x)=>a+(x.rows?.length||0),0)+(D.seasons||[]).reduce((a,x)=>a+(x.rows?.length||0),0);document.getElementById('trackedCount').textContent=(D.guild?.length||0)+arenaRows+(D.achievement?.length||0)+missionRows+guildDataRows;
 
 // Nation War schedule uses GMT+8.
 const NW_GAME_HOURS=[6,8,12,14,16,18,20,22];
 const NW_TZ_OFFSET_HOURS=8;
-const NW_LIVE_MINUTES=35;
+const NW_LIVE_MINUTES=45;
 function updateNationWarCountdown(){
   const text=document.getElementById('nwText');
   const zone=document.querySelector('.nw-zone');
