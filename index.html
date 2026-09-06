@@ -201,20 +201,40 @@ function renderGuildHub(guildName){
  const data=getGuildDataset(guildName), state=getGuildState(guildName);
  const sub=`<div class="subnav"><button class="${state.tab==='weekly'?'active':''}" data-guildsub="weekly">Guild Weekly</button><button class="${state.tab==='season'?'active':''}" data-guildsub="season">Guild Season</button><button class="${state.tab==='contribution'?'active':''}" data-guildsub="contribution">GMF Contribution Ranking</button></div>`;
  if(state.tab==='weekly'){
-   const all=data.weekly||[], obj=all[state.weeklyIndex]||all[0];
+   const parseWeeklyDate=x=>{
+     const s=String(x?.date||'');
+     if(/^\d{8}$/.test(s)){
+       const d=+s.slice(0,2),m=+s.slice(2,4)-1,y=+s.slice(4,8);
+       return Date.UTC(y,m,d);
+     }
+     return 0;
+   };
+   const all=[...(data.weekly||[])].sort((a,b)=>parseWeeklyDate(b)-parseWeeklyDate(a));
+   if(state.weeklyIndex>=all.length)state.weeklyIndex=0;
+   const obj=all[state.weeklyIndex]||all[0];
    if(!obj)return `<div class="bar"><div class="title"><span>${esc(guildName)}</span></div></div>${sub}<div class="empty"><h3>${esc(guildName)} Weekly Ranking</h3><p>No weekly data found.<br>Accepted formats:<br><span class="code">Guild_Weekly_Ranking_DDMMYYYY.xlsx</span> for Together<br><span class="code">GuildName_Guild_Weekly_Ranking_DDMMYYYY.xlsx</span> for other guilds.</p></div>`;
    const opts=all.map((x,i)=>`<option value="${i}" ${i===state.weeklyIndex?'selected':''}>${esc(x.label)}</option>`).join('');
    const rows=filtered(obj.rows||[]);
    return `<div class="bar"><div class="title"><span>${esc(guildName)}</span></div><div class="meta">Weekly • Season • GMF Contribution</div></div>${sub}<div class="bar"><div class="title">Guild Weekly • <span>${esc(obj.label)}</span></div><select id="guildWeeklySelect" class="tool">${opts}</select>${searchBox('Search character…')}<div class="meta">${rows.length} characters</div></div>${table(['Ranking','Character','Treasure Score'],rows,r=>[rank(r.ranking),cname(r.character),score(r.score)])}<div class="data-note">Source: <span class="code">${esc(obj.file)}</span>.</div>`;
  }
  if(state.tab==='season'){
-   const all=data.seasons||[], obj=all[state.seasonIndex]||all[0];
+   const all=[...(data.seasons||[])].sort((a,b)=>((+b.year*100)+(+b.season))-((+a.year*100)+(+a.season)));
+   if(state.seasonIndex>=all.length)state.seasonIndex=0;
+   const obj=all[state.seasonIndex]||all[0];
    if(!obj)return `<div class="bar"><div class="title"><span>${esc(guildName)}</span></div></div>${sub}<div class="empty"><h3>${esc(guildName)} Guild Season</h3><p>No season data found.<br>Accepted formats:<br><span class="code">GuildSeason_Season_Year.xlsx</span> for Together<br><span class="code">GuildName_GuildSeason_Season_Year.xlsx</span> for other guilds.</p></div>`;
    const opts=all.map((x,i)=>`<option value="${i}" ${i===state.seasonIndex?'selected':''}>${esc(x.label)}</option>`).join('');
    const rows=filtered(obj.rows||[]), heads=['Ranking','Character',...(obj.weekColumns||[]),'Total Score'];
    return `<div class="bar"><div class="title"><span>${esc(guildName)}</span></div><div class="meta">Weekly • Season • GMF Contribution</div></div>${sub}<div class="bar"><div class="title"><span>${esc(obj.label)}</span></div><select id="guildSeasonSelect" class="tool">${opts}</select>${searchBox('Search character…')}<div class="meta">${rows.length} characters</div></div>${table(heads,rows,r=>[rank(r.ranking),cname(r.character),...(obj.weekColumns||[]).map(w=>score(r.scores?.[w]??0)),score(r.total)])}<div class="data-note">Source: <span class="code">${esc(obj.file)}</span>.</div>`;
  }
- const all=data.contributions||[], obj=all[state.contributionIndex]||all[0];
+ const monthNo=x=>{
+   const m=String(x?.month||'').trim();
+   if(/^\d{1,2}$/.test(m))return +m;
+   const map={jan:1,january:1,feb:2,february:2,mar:3,march:3,apr:4,april:4,may:5,jun:6,june:6,jul:7,july:7,aug:8,august:8,sep:9,september:9,oct:10,october:10,nov:11,november:11,dec:12,december:12};
+   return map[m.toLowerCase()]||0;
+ };
+ const all=[...(data.contributions||[])].sort((a,b)=>(+b.year*100+monthNo(b))-(+a.year*100+monthNo(a)));
+ if(state.contributionIndex>=all.length)state.contributionIndex=0;
+ const obj=all[state.contributionIndex]||all[0];
  if(!obj)return `<div class="bar"><div class="title"><span>${esc(guildName)}</span></div></div>${sub}<div class="empty"><h3>${esc(guildName)} GMF Contribution Ranking</h3><p>No contribution data found.<br>Accepted format:<br><span class="code">GuildName_GMF_Month_Year.xlsx</span><br>Example: <span class="code">${esc(guildName)}_GMF_09_2026.xlsx</span></p></div>`;
  const opts=all.map((x,i)=>`<option value="${i}" ${i===state.contributionIndex?'selected':''}>${esc(x.label)}</option>`).join('');
  const rows=filtered(obj.rows||[]);
