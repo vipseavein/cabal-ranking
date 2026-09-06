@@ -192,26 +192,33 @@ function renderArena(){
 function renderAchievement(){const rows=filtered(D.achievement||[]);return `<div class="bar"><div class="title">Achievement <span>Rank</span></div>${searchBox()}<div class="meta">${rows.length} characters</div></div>${table(['Ranking','Class','Level','Character','Guild','Ach. Points'],rows,r=>[rank(r.ranking),badge(r.class),esc(r.level),cname(r.character),gname(r.guild),score(r.points)])}<div class="data-note">Accepted format: <span class="code">Archievement_Rank_YYYYMMDD_HHMMSS.xlsx</span>.</div>`}
 function getGuildDataset(guildName){
  const direct=D.guilds?.[guildName];
- if(direct)return {weekly:direct.weekly||[],seasons:direct.seasons||[]};
- if(guildName==='Together')return {weekly:D.weekly||[],seasons:D.seasons||[]};
- return {weekly:[],seasons:[]};
+ if(direct)return {weekly:direct.weekly||[],seasons:direct.seasons||[],contributions:direct.contributions||[]};
+ if(guildName==='Together')return {weekly:D.weekly||[],seasons:D.seasons||[],contributions:[]};
+ return {weekly:[],seasons:[],contributions:[]};
 }
-function getGuildState(guildName){return guildViewState[guildName]||(guildViewState[guildName]={tab:'weekly',weeklyIndex:0,seasonIndex:0})}
+function getGuildState(guildName){return guildViewState[guildName]||(guildViewState[guildName]={tab:'weekly',weeklyIndex:0,seasonIndex:0,contributionIndex:0})}
 function renderGuildHub(guildName){
  const data=getGuildDataset(guildName), state=getGuildState(guildName);
- const sub=`<div class="subnav"><button class="${state.tab==='weekly'?'active':''}" data-guildsub="weekly">Guild Weekly</button><button class="${state.tab==='season'?'active':''}" data-guildsub="season">Guild Season</button></div>`;
+ const sub=`<div class="subnav"><button class="${state.tab==='weekly'?'active':''}" data-guildsub="weekly">Guild Weekly</button><button class="${state.tab==='season'?'active':''}" data-guildsub="season">Guild Season</button><button class="${state.tab==='contribution'?'active':''}" data-guildsub="contribution">GMF Contribution Ranking</button></div>`;
  if(state.tab==='weekly'){
    const all=data.weekly||[], obj=all[state.weeklyIndex]||all[0];
    if(!obj)return `<div class="bar"><div class="title"><span>${esc(guildName)}</span></div></div>${sub}<div class="empty"><h3>${esc(guildName)} Weekly Ranking</h3><p>No weekly data found.<br>Accepted formats:<br><span class="code">Guild_Weekly_Ranking_DDMMYYYY.xlsx</span> for Together<br><span class="code">GuildName_Guild_Weekly_Ranking_DDMMYYYY.xlsx</span> for other guilds.</p></div>`;
    const opts=all.map((x,i)=>`<option value="${i}" ${i===state.weeklyIndex?'selected':''}>${esc(x.label)}</option>`).join('');
    const rows=filtered(obj.rows||[]);
-   return `<div class="bar"><div class="title"><span>${esc(guildName)}</span></div><div class="meta">Weekly + Season</div></div>${sub}<div class="bar"><div class="title">Guild Weekly • <span>${esc(obj.label)}</span></div><select id="guildWeeklySelect" class="tool">${opts}</select>${searchBox('Search character…')}<div class="meta">${rows.length} characters</div></div>${table(['Ranking','Character','Treasure Score'],rows,r=>[rank(r.ranking),cname(r.character),score(r.score)])}<div class="data-note">Source: <span class="code">${esc(obj.file)}</span>.</div>`;
+   return `<div class="bar"><div class="title"><span>${esc(guildName)}</span></div><div class="meta">Weekly • Season • GMF Contribution</div></div>${sub}<div class="bar"><div class="title">Guild Weekly • <span>${esc(obj.label)}</span></div><select id="guildWeeklySelect" class="tool">${opts}</select>${searchBox('Search character…')}<div class="meta">${rows.length} characters</div></div>${table(['Ranking','Character','Treasure Score'],rows,r=>[rank(r.ranking),cname(r.character),score(r.score)])}<div class="data-note">Source: <span class="code">${esc(obj.file)}</span>.</div>`;
  }
- const all=data.seasons||[], obj=all[state.seasonIndex]||all[0];
- if(!obj)return `<div class="bar"><div class="title"><span>${esc(guildName)}</span></div></div>${sub}<div class="empty"><h3>${esc(guildName)} Guild Season</h3><p>No season data found.<br>Accepted formats:<br><span class="code">GuildSeason_Season_Year.xlsx</span> for Together<br><span class="code">GuildName_GuildSeason_Season_Year.xlsx</span> for other guilds.</p></div>`;
- const opts=all.map((x,i)=>`<option value="${i}" ${i===state.seasonIndex?'selected':''}>${esc(x.label)}</option>`).join('');
- const rows=filtered(obj.rows||[]), heads=['Ranking','Character',...(obj.weekColumns||[]),'Total Score'];
- return `<div class="bar"><div class="title"><span>${esc(guildName)}</span></div><div class="meta">Weekly + Season</div></div>${sub}<div class="bar"><div class="title"><span>${esc(obj.label)}</span></div><select id="guildSeasonSelect" class="tool">${opts}</select>${searchBox('Search character…')}<div class="meta">${rows.length} characters</div></div>${table(heads,rows,r=>[rank(r.ranking),cname(r.character),...(obj.weekColumns||[]).map(w=>score(r.scores?.[w]??0)),score(r.total)])}<div class="data-note">Source: <span class="code">${esc(obj.file)}</span>.</div>`;
+ if(state.tab==='season'){
+   const all=data.seasons||[], obj=all[state.seasonIndex]||all[0];
+   if(!obj)return `<div class="bar"><div class="title"><span>${esc(guildName)}</span></div></div>${sub}<div class="empty"><h3>${esc(guildName)} Guild Season</h3><p>No season data found.<br>Accepted formats:<br><span class="code">GuildSeason_Season_Year.xlsx</span> for Together<br><span class="code">GuildName_GuildSeason_Season_Year.xlsx</span> for other guilds.</p></div>`;
+   const opts=all.map((x,i)=>`<option value="${i}" ${i===state.seasonIndex?'selected':''}>${esc(x.label)}</option>`).join('');
+   const rows=filtered(obj.rows||[]), heads=['Ranking','Character',...(obj.weekColumns||[]),'Total Score'];
+   return `<div class="bar"><div class="title"><span>${esc(guildName)}</span></div><div class="meta">Weekly • Season • GMF Contribution</div></div>${sub}<div class="bar"><div class="title"><span>${esc(obj.label)}</span></div><select id="guildSeasonSelect" class="tool">${opts}</select>${searchBox('Search character…')}<div class="meta">${rows.length} characters</div></div>${table(heads,rows,r=>[rank(r.ranking),cname(r.character),...(obj.weekColumns||[]).map(w=>score(r.scores?.[w]??0)),score(r.total)])}<div class="data-note">Source: <span class="code">${esc(obj.file)}</span>.</div>`;
+ }
+ const all=data.contributions||[], obj=all[state.contributionIndex]||all[0];
+ if(!obj)return `<div class="bar"><div class="title"><span>${esc(guildName)}</span></div></div>${sub}<div class="empty"><h3>${esc(guildName)} GMF Contribution Ranking</h3><p>No contribution data found.<br>Accepted format:<br><span class="code">GuildName_GMF_Month_Year.xlsx</span><br>Example: <span class="code">${esc(guildName)}_GMF_09_2026.xlsx</span></p></div>`;
+ const opts=all.map((x,i)=>`<option value="${i}" ${i===state.contributionIndex?'selected':''}>${esc(x.label)}</option>`).join('');
+ const rows=filtered(obj.rows||[]);
+ return `<div class="bar"><div class="title"><span>${esc(guildName)}</span></div><div class="meta">Weekly • Season • GMF Contribution</div></div>${sub}<div class="bar"><div class="title">GMF Contribution • <span>${esc(obj.label)}</span></div><select id="guildContributionSelect" class="tool">${opts}</select>${searchBox('Search character…')}<div class="meta">${rows.length} characters</div></div>${table(['Ranking','Character Name','Score','Mission Count'],rows,r=>[rank(r.ranking),cname(r.character),score(r.score),esc(r.missionCount||'')])}<div class="data-note">Source: <span class="code">${esc(obj.file)}</span>.</div>`;
 }
 function guildNames(){
  const keys=Object.keys(D.guilds||{});
@@ -245,10 +252,11 @@ function render(){
  document.querySelectorAll('[data-guildsub]').forEach(x=>x.onclick=()=>{getGuildState(activeGuild).tab=x.dataset.guildsub;q='';render()});
  const gw=document.getElementById('guildWeeklySelect');if(gw)gw.onchange=e=>{getGuildState(activeGuild).weeklyIndex=+e.target.value;q='';render()};
  const gs=document.getElementById('guildSeasonSelect');if(gs)gs.onchange=e=>{getGuildState(activeGuild).seasonIndex=+e.target.value;q='';render()};
+ const gc=document.getElementById('guildContributionSelect');if(gc)gc.onchange=e=>{getGuildState(activeGuild).contributionIndex=+e.target.value;q='';render()};
  const ms=document.getElementById('missionSelect');if(ms)ms.onchange=e=>{missionIndex=+e.target.value;q='';render()};
 }
 document.querySelectorAll('#mainnav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#mainnav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');page=b.dataset.page;q='';arenaClass=null;render()});
-const arenaRows=Object.values(D.arena||{}).reduce((a,x)=>a+(x.rows?.length||0),0);const missionRows=(D.missionFestival||[]).reduce((a,x)=>a+(x.rows?.length||0),0);const guildDataRows=Object.keys(D.guilds||{}).length?Object.values(D.guilds||{}).reduce((a,g)=>a+(g.weekly||[]).reduce((s,x)=>s+(x.rows?.length||0),0)+(g.seasons||[]).reduce((s,x)=>s+(x.rows?.length||0),0),0):(D.weekly||[]).reduce((a,x)=>a+(x.rows?.length||0),0)+(D.seasons||[]).reduce((a,x)=>a+(x.rows?.length||0),0);document.getElementById('trackedCount').textContent=(D.guild?.length||0)+arenaRows+(D.achievement?.length||0)+missionRows+guildDataRows;
+const arenaRows=Object.values(D.arena||{}).reduce((a,x)=>a+(x.rows?.length||0),0);const missionRows=(D.missionFestival||[]).reduce((a,x)=>a+(x.rows?.length||0),0);const guildDataRows=Object.keys(D.guilds||{}).length?Object.values(D.guilds||{}).reduce((a,g)=>a+(g.weekly||[]).reduce((s,x)=>s+(x.rows?.length||0),0)+(g.seasons||[]).reduce((s,x)=>s+(x.rows?.length||0),0)+(g.contributions||[]).reduce((s,x)=>s+(x.rows?.length||0),0),0):(D.weekly||[]).reduce((a,x)=>a+(x.rows?.length||0),0)+(D.seasons||[]).reduce((a,x)=>a+(x.rows?.length||0),0);document.getElementById('trackedCount').textContent=(D.guild?.length||0)+arenaRows+(D.achievement?.length||0)+missionRows+guildDataRows;
 
 // Nation War schedule uses GMT+8.
 const NW_GAME_HOURS=[6,8,12,14,16,18,20,22];
