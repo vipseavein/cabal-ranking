@@ -42,4 +42,8 @@ CREATE TABLE IF NOT EXISTS quiz_results (
 
 CREATE INDEX IF NOT EXISTS idx_quiz_results_all ON quiz_results(score DESC,duration_ms ASC,completed_at ASC);
 CREATE INDEX IF NOT EXISTS idx_quiz_results_day ON quiz_results(day_key,score DESC,duration_ms ASC);
-CREATE INDEX
+CREATE INDEX IF NOT EXISTS idx_quiz_results_week ON quiz_results(week_key,score DESC,duration_ms ASC);
+CREATE INDEX IF NOT EXISTS idx_quiz_results_month ON quiz_results(month_key,score DESC,duration_ms ASC);
+CREATE INDEX IF NOT EXISTS idx_quiz_results_year ON quiz_results(year_key,score DESC,duration_ms ASC);
+CREATE INDEX IF NOT EXISTS idx_quiz_results_name ON quiz_results(player_name_key);
+CREATE INDEX IF NOT EXISTS idx_quiz_sessions_expiry ON quiz_sessions(expires_at);
