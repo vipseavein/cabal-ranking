@@ -1,6 +1,6 @@
 (()=> {
 'use strict';
-const API='/api/quiz';
+const API=(window.CABAL_QUIZ_API_BASE||'')+'/api/quiz';
 const LANGKEY='cabalRankingQuizLang';
 let lang=localStorage.getItem(LANGKEY)||'en';
 let size=100, period='all', rows=null, loading=false, error='';
