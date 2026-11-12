@@ -165,7 +165,7 @@ async function leaderboard(request,env){
   if(!env.QUIZ_DB)return fail('QUIZ_DB binding is not configured.',500);
   const u=new URL(request.url),period=u.searchParams.get('period')||'all',size=Number(u.searchParams.get('size')||50);
   if(!['all','day','week','month','year'].includes(period))return fail('Invalid period.');
-  if(!ALLOWED_SIZES.includes(size))return fail('Quiz size must be 20, 50, or 100.');
+  if(!ALLOWED_SIZES.includes(size))return fail('Quiz size must be 15, 30, or 50.');
   const now=periodKeys(),keyMap={day:now.dayKey,week:now.weekKey,month:now.monthKey,year:now.yearKey},fieldMap={day:'day_key',week:'week_key',month:'month_key',year:'year_key'};
   let where='WHERE total=?',bind=[size];
   if(period!=='all'){where+=` AND ${fieldMap[period]}=?`;bind.push(keyMap[period]);}
