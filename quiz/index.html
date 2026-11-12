@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CABAL Quiz • Ranking Hub</title>
+<link rel="icon" type="image/x-icon" href="../favicon.ico">
+<link rel="stylesheet" href="../quiz.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800&display=swap');
+:root{--bg:#050910;--panel:#0c1420;--panel2:#101c2b;--line:#25384c;--cyan:#32d7ff;--cyan2:#0d91b8;--gold:#f8c95f;--text:#ecf7ff;--muted:#7f97aa;--green:#4dd5a4;--red:#ff6772;--bronze:#d8905c;--shadow:0 18px 55px rgba(0,0,0,.46)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--text);font-family:Segoe UI,Arial,sans-serif;min-height:100vh;background:radial-gradient(circle at 24% 0%,#11263b 0,#07111c 34%,#04070c 75%)}
+body:before{content:"";position:fixed;inset:0;background:linear-gradient(rgba(4,8,14,.87),rgba(4,8,14,.96)),url('../assets/bg.jpg') center/cover fixed;z-index:-2}body:after{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(50,215,255,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(50,215,255,.028) 1px,transparent 1px);background-size:38px 38px;mask-image:linear-gradient(to bottom,#000,transparent 82%);z-index:-1}
+.wrap{max-width:1480px;margin:auto;padding:18px 22px 36px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:7px 0 16px;border-bottom:1px solid #1d2b3b}.brand{display:flex;align-items:center;gap:15px;text-decoration:none;color:inherit}.brand img{height:38px;filter:drop-shadow(0 0 12px rgba(50,215,255,.2))}.brand h1{font-size:29px;letter-spacing:2px;margin:0}.brand h1 span{color:var(--cyan)}.sub{font-size:11px;letter-spacing:2.1px;color:#7690a5;font-weight:700}.top-actions{display:flex;gap:8px;align-items:center}.top-link{border:1px solid var(--line);background:#0b1420;color:#c7dcec;border-radius:7px;padding:9px 12px;font-size:12px;font-weight:800;text-decoration:none}.top-link:hover{border-color:var(--cyan);color:#fff}.footer{display:flex;justify-content:center;color:#60778b;font-size:10px;font-weight:700;letter-spacing:.8px;padding:18px 3px}.meta{font-size:11px;color:#7890a4}.title{font-size:18px;font-weight:800}.title span{color:var(--cyan)}.tablewrap{overflow:auto;border:1px solid #1e3144;border-radius:9px;max-height:650px;background:#071019}.ranktable{width:100%;border-collapse:collapse;min-width:760px}.ranktable thead{position:sticky;top:0;z-index:4;background:#0d1b29}.ranktable th{font-size:11px;text-transform:uppercase;letter-spacing:.9px;color:#89a9bf;text-align:left;padding:11px 12px;border-bottom:1px solid #28445d}.ranktable td{padding:10px 12px;border-bottom:1px solid rgba(33,52,70,.58);font-size:13px}.name{font-weight:800}.score{font-weight:800}.bar{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.data-note{margin-top:12px;padding:10px 12px;border-left:3px solid var(--cyan);background:#08131e;color:#83a0b5;font-size:12px;line-height:1.5}
+@media(max-width:760px){.wrap{padding:12px}.brand h1{font-size:22px}.top{align-items:flex-start}.sub{letter-spacing:1.3px}.top-actions{flex-wrap:wrap;justify-content:flex-end}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <a class="brand" href="/"><img src="../assets/cabal-logo.png" alt="CABAL"><div><h1>RANKING <span>HUB</span></h1><div class="sub">CABAL KNOWLEDGE QUIZ</div></div></a>
+  <div class="top-actions"><a class="top-link" href="/">← Ranking Hub</a></div>
+</header>
+<main id="quizApp"></main>
+<div id="quizLeaderboard" class="quiz-board-container"></div>
+<div class="footer">CABAL RANKING HUB • QUIZ</div>
+</div>
+<script src="../quiz-config.js"></script>
+<script src="./play.js"></script>
+<script src="./leaderboard.js"></script>
+</body>
+</html>
