@@ -30,11 +30,12 @@ body:before{content:"";position:fixed;inset:0;background:linear-gradient(rgba(4,
   <div class="card featured" id="featuredCard"><img id="featuredIcon" src="./assets/together.png" alt="Featured"><div class="featured-copy"><div class="eyebrow" id="featuredEyebrow">Guild Ranking #1</div><h3 id="featuredTitle">Loading…</h3><p class="featured-detail" id="featuredText">Loading current ranking…</p></div></div>
 </section>
 <nav class="mainnav" id="mainnav">
-  <button class="active" data-page="guild">Guild Ranking</button>
+  <button class="active" data-page="quiz">Quiz</button>
+  <button data-page="guild">Guild Ranking</button>
   <button data-page="mission">Mission Festival</button>
   <button data-page="arena">Legend Arena</button>
   <button data-page="achievement">Achievement Rank</button>
-  <button data-page="guildinfo">Guild Information</button>\n  <button data-page="quiz">Quiz</button>
+  <button data-page="guildinfo">Guild Information</button>
 </nav>
 <section class="panel" id="content"></section>
 <div class="footer" style="justify-content:center;text-align:center"><span>CABAL RANKING HUB</span></div>
@@ -53,7 +54,7 @@ if (!window.CABAL_DATA) {
 const D=window.CABAL_DATA||{guild:[],arena:{},achievement:[],weekly:[],seasons:[],missionFestival:[],guilds:{}};
 const CLASS_ORDER=[['Warrior','WA','warrior.svg'],['Blader','BL','blader.svg'],['Wizard','WI','wizard.svg'],['Force Archer','FA','force_archer.svg'],['Force Shielder','FS','force_shielder.svg'],['Force Blader','FB','force_blader.svg'],['Force Gunner','FG','force_gunner.svg'],['Dark Mage','DM','dark_mage.svg'],['Gladiator','GL','gladiator.svg']];
 const classIcon=f=>`./assets/classes/${f}`;
-let page='guild', arenaClass=null, activeGuild='Together', missionIndex=0, q='';
+let page='quiz', arenaClass=null, activeGuild='Together', missionIndex=0, q='';
 const guildViewState={};
 const esc=s=>String(s??'—').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const trClass=n=>n==1?'p1':n==2?'p2':n==3?'p3':'';
@@ -162,8 +163,8 @@ function updateFeatured(){
  if(page==='quiz'){
    setFeatured(
      'CABAL Quiz',
-     '9,999 <span class="gold">Questions</span>',
-     '100 random questions per attempt • EN / VI • Overall / Daily / Weekly / Monthly / Yearly leaderboard',
+     '15,000 <span class="gold">Questions</span>',
+     'Quiz Ranking • High 20 • Highest 50 • Ultimate 100 • EN / VI',
      './assets/cabal-logo.png','CABAL Quiz'
    );
    return;
@@ -273,12 +274,12 @@ function renderGuildInformation(){
 function render(){
  const c=document.getElementById('content');
  if(page==='quiz'){
-   c.innerHTML=window.CABAL_QUIZ?.render?.()||'<div class="empty"><h3>CABAL Quiz</h3><p>Quiz module unavailable.</p></div>';
+   c.innerHTML=window.CABAL_QUIZ_RANKING?.render?.()||'<div class="empty"><h3>CABAL Quiz Ranking</h3><p>Quiz ranking module unavailable.</p></div>';
    updateFeatured();
-   window.CABAL_QUIZ?.bind?.();
+   window.CABAL_QUIZ_RANKING?.bind?.();
    return;
  }
- window.CABAL_QUIZ?.deactivate?.();
+ window.CABAL_QUIZ_RANKING?.deactivate?.();
  c.innerHTML=page==='guild'?renderGuild():page==='mission'?renderMissionFestival():page==='arena'?renderArena():page==='achievement'?renderAchievement():renderGuildInformation();
  updateFeatured();
  bindSearch();
