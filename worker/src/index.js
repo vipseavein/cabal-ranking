@@ -1,4 +1,4 @@
-const ALLOWED_SIZES=[20,50,100];
+const ALLOWED_SIZES=[15,30,50];
 const LETTERS=['A','B','C','D'];
 const BANK_SIZE=15000;
 const TTL_MS=3*60*60*1000;
@@ -20,7 +20,7 @@ function randomIds(count){
   for(let i=0;i<count;i++){const j=i+randomInt(BANK_SIZE-i);[a[i],a[j]]=[a[j],a[i]];}
   return a.slice(0,count).map(n=>'Q'+String(n).padStart(5,'0'));
 }
-function tier(total){return total===20?'High':total===50?'Highest':'Ultimate';}
+function tier(total){return total===15?'High':total===30?'Highest':'Ultimate';}
 function shuffleQuestion(q){
   const canonical={A:q.option_a,B:q.option_b,C:q.option_c,D:q.option_d};
   const order=[...LETTERS];
@@ -82,8 +82,8 @@ async function rankFor(env,total,score,durationMs){
 async function startQuiz(request,env){
   if(!env.QUIZ_DB)return fail('QUIZ_DB binding is not configured.',500);
   let body={};try{body=await request.json();}catch(_){}
-  const count=Number(body.count||100);
-  if(!ALLOWED_SIZES.includes(count))return fail('Quiz size must be 20, 50, or 100.');
+  const count=Number(body.count||50);
+  if(!ALLOWED_SIZES.includes(count))return fail('Quiz size must be 15, 30, or 50.');
   const ids=randomIds(count),marks=ids.map(()=>'?').join(',');
   const res=await env.QUIZ_DB.prepare(`
     SELECT id,category_vi,category_en,subtopic_vi,subtopic_en,difficulty_vi,difficulty_en,
@@ -163,7 +163,7 @@ async function recordQuiz(request,env){
 }
 async function leaderboard(request,env){
   if(!env.QUIZ_DB)return fail('QUIZ_DB binding is not configured.',500);
-  const u=new URL(request.url),period=u.searchParams.get('period')||'all',size=Number(u.searchParams.get('size')||100);
+  const u=new URL(request.url),period=u.searchParams.get('period')||'all',size=Number(u.searchParams.get('size')||50);
   if(!['all','day','week','month','year'].includes(period))return fail('Invalid period.');
   if(!ALLOWED_SIZES.includes(size))return fail('Quiz size must be 20, 50, or 100.');
   const now=periodKeys(),keyMap={day:now.dayKey,week:now.weekKey,month:now.monthKey,year:now.yearKey},fieldMap={day:'day_key',week:'week_key',month:'month_key',year:'year_key'};
@@ -187,7 +187,7 @@ async function health(env){
   if(!env.QUIZ_DB)return fail('QUIZ_DB binding is not configured.',500);
   const q=await env.QUIZ_DB.prepare('SELECT COUNT(*) AS n FROM quiz_questions').first();
   const r=await env.QUIZ_DB.prepare('SELECT COUNT(*) AS n FROM quiz_results').first();
-  return json({ok:true,questionCount:Number(q?.n||0),resultCount:Number(r?.n||0),expectedQuestions:15000,quizSizes:ALLOWED_SIZES,tiers:{20:'High',50:'Highest',100:'Ultimate'}});
+  return json({ok:true,questionCount:Number(q?.n||0),resultCount:Number(r?.n||0),expectedQuestions:15000,quizSizes:ALLOWED_SIZES,tiers:{15:'High',30:'Highest',50:'Ultimate'}});
 }
 
 export default {
