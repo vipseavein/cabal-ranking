@@ -1,6 +1,11 @@
-name: CABAL Quiz V5 - Deploy STAGING (manual only)
+name: CABAL Quiz V5 - Deploy STAGING
 
 on:
+  push:
+    branches:
+      - quiz-v5-worker-d1
+    paths:
+      - '.github/workflows/quiz-worker-staging.yml'
   workflow_dispatch:
     inputs:
       confirmation:
@@ -22,7 +27,7 @@ concurrency:
 
 jobs:
   deploy-staging:
-    if: ${{ github.ref == 'refs/heads/quiz-v5-worker-d1' && inputs.confirmation == 'DEPLOY_STAGING' }}
+    if: ${{ github.ref == 'refs/heads/quiz-v5-worker-d1' && (github.event_name == 'push' || inputs.confirmation == 'DEPLOY_STAGING') }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -49,9 +54,12 @@ jobs:
       - name: Validate staging bundle (no deploy)
         run: npx wrangler deploy --config wrangler.staging.toml --dry-run --outdir .wrangler-staging-preview
       - name: Initialize staging D1 schema (optional)
-        if: ${{ inputs.initialize_schema }}
+        if: ${{ github.event_name == 'push' || inputs.initialize_schema }}
         run: npx wrangler d1 execute cabal-ranking-quiz-v5-staging --config wrangler.staging.toml --remote --file ./schema.sql --yes
       - name: Deploy staging Worker only
         run: npx wrangler deploy --config wrangler.staging.toml
       - name: Show staging health URL
         run: echo "Visit https://cabal-quiz-api-staging.<your-workers-subdomain>.workers.dev/api/quiz/health"
+
+# The push trigger is limited to edits to THIS workflow on quiz-v5-worker-d1.
+# Regular worker commits do not deploy automatically; future manual runs require confirmation.
