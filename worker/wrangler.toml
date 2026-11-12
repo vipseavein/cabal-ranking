@@ -1,0 +1,9 @@
+name = "cabal-quiz-api"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+workers_dev = true
+
+[[d1_databases]]
+binding = "QUIZ_DB"
+database_name = "cabal-ranking-quiz-v5"
+database_id = "2a338af0-3f80-433f-aed6-33677b5bb47b"

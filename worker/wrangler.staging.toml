@@ -1,0 +1,14 @@
+# Isolated V5 staging deployment. Never use the production wrangler.toml for testing.
+name = "cabal-quiz-api-staging"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+workers_dev = true
+
+[[d1_databases]]
+binding = "QUIZ_DB"
+database_name = "cabal-ranking-quiz-v5-staging"
+database_id = "b99cfc80-f420-4c7c-bf6d-7e03839d46a5"
+
+[assets]
+directory = "./public-staging"
+run_worker_first = ["/api/*"]

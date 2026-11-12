@@ -1,0 +1,41 @@
+name: CABAL Quiz Worker - Safe Validation
+
+on:
+  push:
+    branches:
+      - quiz-v5-worker-d1
+    paths:
+      - 'worker/**'
+      - '.github/workflows/quiz-worker-check.yml'
+  pull_request:
+    paths:
+      - 'worker/**'
+      - '.github/workflows/quiz-worker-check.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-worker:
+    name: Validate Worker (NO DEPLOY)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: worker
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript syntax
+        run: node --check src/index.js
+      - name: Install Worker dependencies
+        run: npm install --no-audit --no-fund
+      - name: Compile Wrangler deployment artifact (dry run only)
+        run: npx wrangler deploy --dry-run --outdir .wrangler-dry-run
+
+# SAFETY: No Cloudflare credentials are accessed, and no worker or D1 is deployed.
+# Staging deployment requires a separate staging Worker AND staging D1 database.
