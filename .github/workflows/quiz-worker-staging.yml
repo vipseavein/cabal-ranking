@@ -1,0 +1,57 @@
+name: CABAL Quiz V5 - Deploy STAGING (manual only)
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: 'Type DEPLOY_STAGING to deploy the isolated staging Worker'
+        required: true
+        type: string
+      initialize_schema:
+        description: 'Create missing SQL tables in staging D1 (never production)'
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cabal-quiz-v5-staging
+  cancel-in-progress: false
+
+jobs:
+  deploy-staging:
+    if: ${{ github.ref == 'refs/heads/quiz-v5-worker-d1' && inputs.confirmation == 'DEPLOY_STAGING' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: worker
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check required secrets
+        run: |
+          test -n "$CLOUDFLARE_API_TOKEN" || { echo "Missing CLOUDFLARE_API_TOKEN"; exit 1; }
+          test -n "$CLOUDFLARE_ACCOUNT_ID" || { echo "Missing CLOUDFLARE_ACCOUNT_ID"; exit 1; }
+      - name: Enforce isolation before any Cloudflare command
+        run: |
+          grep -Fxq 'name = "cabal-quiz-api-staging"' wrangler.staging.toml
+          grep -Fxq 'database_name = "cabal-ranking-quiz-v5-staging"' wrangler.staging.toml
+          grep -Fxq 'database_id = "b99cfc80-f420-4c7c-bf6d-7e03839d46a5"' wrangler.staging.toml
+      - name: Install Worker dependencies
+        run: npm install --no-audit --no-fund
+      - name: Validate staging bundle (no deploy)
+        run: npx wrangler deploy --config wrangler.staging.toml --dry-run --outdir .wrangler-staging-preview
+      - name: Initialize staging D1 schema (optional)
+        if: ${{ inputs.initialize_schema }}
+        run: npx wrangler d1 execute cabal-ranking-quiz-v5-staging --config wrangler.staging.toml --remote --file ./schema.sql --yes
+      - name: Deploy staging Worker only
+        run: npx wrangler deploy --config wrangler.staging.toml
+      - name: Show staging health URL
+        run: echo "Visit https://cabal-quiz-api-staging.<your-workers-subdomain>.workers.dev/api/quiz/health"
