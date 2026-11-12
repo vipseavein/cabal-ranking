@@ -20,10 +20,15 @@ CREATE TABLE IF NOT EXISTS quiz_questions (
 CREATE TABLE IF NOT EXISTS quiz_sessions (
   id TEXT PRIMARY KEY,
   question_ids TEXT NOT NULL,
+  answers_json TEXT NOT NULL DEFAULT '{}',
   started_at INTEGER NOT NULL,
   expires_at INTEGER NOT NULL,
   completed INTEGER NOT NULL DEFAULT 0,
-  completed_at INTEGER
+  completed_at INTEGER,
+  score INTEGER,
+  total INTEGER,
+  duration_ms INTEGER,
+  recorded INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS quiz_results (
@@ -40,10 +45,10 @@ CREATE TABLE IF NOT EXISTS quiz_results (
   year_key TEXT NOT NULL
 );
 
-CREATE INDEX IF NOT EXISTS idx_quiz_results_all ON quiz_results(score DESC,duration_ms ASC,completed_at ASC);
-CREATE INDEX IF NOT EXISTS idx_quiz_results_day ON quiz_results(day_key,score DESC,duration_ms ASC);
-CREATE INDEX IF NOT EXISTS idx_quiz_results_week ON quiz_results(week_key,score DESC,duration_ms ASC);
-CREATE INDEX IF NOT EXISTS idx_quiz_results_month ON quiz_results(month_key,score DESC,duration_ms ASC);
-CREATE INDEX IF NOT EXISTS idx_quiz_results_year ON quiz_results(year_key,score DESC,duration_ms ASC);
-CREATE INDEX IF NOT EXISTS idx_quiz_results_name ON quiz_results(player_name_key);
+CREATE INDEX IF NOT EXISTS idx_quiz_results_all ON quiz_results(total,score DESC,duration_ms ASC,completed_at ASC);
+CREATE INDEX IF NOT EXISTS idx_quiz_results_day ON quiz_results(total,day_key,score DESC,duration_ms ASC);
+CREATE INDEX IF NOT EXISTS idx_quiz_results_week ON quiz_results(total,week_key,score DESC,duration_ms ASC);
+CREATE INDEX IF NOT EXISTS idx_quiz_results_month ON quiz_results(total,month_key,score DESC,duration_ms ASC);
+CREATE INDEX IF NOT EXISTS idx_quiz_results_year ON quiz_results(total,year_key,score DESC,duration_ms ASC);
+CREATE INDEX IF NOT EXISTS idx_quiz_results_name ON quiz_results(total,player_name_key);
 CREATE INDEX IF NOT EXISTS idx_quiz_sessions_expiry ON quiz_sessions(expires_at);
