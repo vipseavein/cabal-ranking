@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CABAL Ranking Hub</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">\n  <link rel="stylesheet" href="./quiz.css">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;800&display=swap');
 :root{--bg:#050910;--panel:#0c1420;--panel2:#101c2b;--line:#25384c;--cyan:#32d7ff;--cyan2:#0d91b8;--gold:#f8c95f;--text:#ecf7ff;--muted:#7f97aa;--green:#4dd5a4;--red:#ff6772;--bronze:#d8905c;--shadow:0 18px 55px rgba(0,0,0,.46)}
@@ -26,11 +26,12 @@ body:before{content:"";position:fixed;inset:0;background:linear-gradient(rgba(4,
   <div class="tools"><div class="chip" id="dataChip"><span class="nw-icon-wrap"><img class="nw-icon" src="./assets/NationWar.png" alt="Nation War"><span class="nw-tooltip">06:00 / 08:00 / 12:00 / 14:00 / 16:00 / 18:00 / 20:00 / 22:00</span></span><span class="nw-copy"><span class="nw-main" id="nwText">NATION WAR</span><span class="nw-zone">GMT+8</span></span></div></div>
 </header>
 <section class="hero">
-  <div class="card hero-main"><div class="eyebrow">CABAL Ultimate Combo Ranking</div><h2>CABAL Ultimate Combo <span style="color:var(--cyan)">Ranking</span></h2><p>Rankings are built from player contributions.<br>This site is non-profit. All data is entered manually with no third-party tools or game modification.</p><div class="hero-stats"><div class="stat"><b>5</b><small>Main sections</small></div><div class="stat"><b>9</b><small>Legend classes</small></div><div class="stat"><b>10</b><small>Guild Top ranks</small></div><div class="stat"><b id="trackedCount">—</b><small>Rows loaded</small></div></div></div>
+  <div class="card hero-main"><div class="eyebrow">CABAL Ultimate Combo Ranking</div><h2>CABAL Ultimate Combo <span style="color:var(--cyan)">Ranking</span></h2><p>Rankings are built from player contributions.<br>This site is non-profit. All data is entered manually with no third-party tools or game modification.</p><div class="hero-stats"><div class="stat"><b>6</b><small>Main sections</small></div><div class="stat"><b>9</b><small>Legend classes</small></div><div class="stat"><b>10</b><small>Guild Top ranks</small></div><div class="stat"><b id="trackedCount">—</b><small>Rows loaded</small></div></div></div>
   <div class="card featured" id="featuredCard"><img id="featuredIcon" src="./assets/together.png" alt="Featured"><div class="featured-copy"><div class="eyebrow" id="featuredEyebrow">Guild Ranking #1</div><h3 id="featuredTitle">Loading…</h3><p class="featured-detail" id="featuredText">Loading current ranking…</p></div></div>
 </section>
 <nav class="mainnav" id="mainnav">
-  <button class="active" data-page="guild">Guild Ranking</button>
+  <button class="active" data-page="quiz">Quiz</button>
+  <button data-page="guild">Guild Ranking</button>
   <button data-page="mission">Mission Festival</button>
   <button data-page="arena">Legend Arena</button>
   <button data-page="achievement">Achievement Rank</button>
@@ -39,7 +40,7 @@ body:before{content:"";position:fixed;inset:0;background:linear-gradient(rgba(4,
 <section class="panel" id="content"></section>
 <div class="footer" style="justify-content:center;text-align:center"><span>CABAL RANKING HUB</span></div>
 </div>
-<script src="./ranking_data.js"></script>
+<script src="./ranking_data.js"></script>\n<script src="./quiz.js"></script>
 <script>
 // GitHub Pages deployment guard: if data is unavailable, try the legacy data path once.
 if (!window.CABAL_DATA) {
@@ -53,7 +54,7 @@ if (!window.CABAL_DATA) {
 const D=window.CABAL_DATA||{guild:[],arena:{},achievement:[],weekly:[],seasons:[],missionFestival:[],guilds:{}};
 const CLASS_ORDER=[['Warrior','WA','warrior.svg'],['Blader','BL','blader.svg'],['Wizard','WI','wizard.svg'],['Force Archer','FA','force_archer.svg'],['Force Shielder','FS','force_shielder.svg'],['Force Blader','FB','force_blader.svg'],['Force Gunner','FG','force_gunner.svg'],['Dark Mage','DM','dark_mage.svg'],['Gladiator','GL','gladiator.svg']];
 const classIcon=f=>`./assets/classes/${f}`;
-let page='guild', arenaClass=null, activeGuild='Together', missionIndex=0, q='';
+let page='quiz', arenaClass=null, activeGuild='Together', missionIndex=0, q='';
 const guildViewState={};
 const esc=s=>String(s??'—').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const trClass=n=>n==1?'p1':n==2?'p2':n==3?'p3':'';
@@ -155,6 +156,16 @@ function updateFeatured(){
      `${esc(a.character)} <span class="gold">#${esc(a.ranking||1)}</span>`,
      `Class: <b>${esc(a.class||'N/A')} — ${esc(fullClass)}</b><br>Level: <b>${esc(a.level||'N/A')}</b> • Guild: <b>${esc(a.guild||'N/A')}</b><br>Achievement Points: <span class="gold">${esc(a.points||'N/A')}</span>`,
      icon,fullClass
+   );
+   return;
+ }
+
+ if(page==='quiz'){
+   setFeatured(
+     'CABAL Quiz',
+     '15,000 <span class="gold">Questions</span>',
+     'Quiz Ranking • High 20 • Highest 50 • Ultimate 100 • EN / VI',
+     './assets/cabal-logo.png','CABAL Quiz'
    );
    return;
  }
@@ -262,6 +273,13 @@ function renderGuildInformation(){
 }
 function render(){
  const c=document.getElementById('content');
+ if(page==='quiz'){
+   c.innerHTML=window.CABAL_QUIZ_RANKING?.render?.()||'<div class="empty"><h3>CABAL Quiz Ranking</h3><p>Quiz ranking module unavailable.</p></div>';
+   updateFeatured();
+   window.CABAL_QUIZ_RANKING?.bind?.();
+   return;
+ }
+ window.CABAL_QUIZ_RANKING?.deactivate?.();
  c.innerHTML=page==='guild'?renderGuild():page==='mission'?renderMissionFestival():page==='arena'?renderArena():page==='achievement'?renderAchievement():renderGuildInformation();
  updateFeatured();
  bindSearch();
@@ -275,6 +293,7 @@ function render(){
  const gc=document.getElementById('guildContributionSelect');if(gc)gc.onchange=e=>{getGuildState(activeGuild).contributionIndex=+e.target.value;q='';render()};
  const ms=document.getElementById('missionSelect');if(ms)ms.onchange=e=>{missionIndex=+e.target.value;q='';render()};
 }
+window.CABAL_RANKING_RENDER=render;
 document.querySelectorAll('#mainnav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#mainnav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');page=b.dataset.page;q='';arenaClass=null;render()});
 const arenaRows=Object.values(D.arena||{}).reduce((a,x)=>a+(x.rows?.length||0),0);const missionRows=(D.missionFestival||[]).reduce((a,x)=>a+(x.rows?.length||0),0);const guildDataRows=Object.keys(D.guilds||{}).length?Object.values(D.guilds||{}).reduce((a,g)=>a+(g.weekly||[]).reduce((s,x)=>s+(x.rows?.length||0),0)+(g.seasons||[]).reduce((s,x)=>s+(x.rows?.length||0),0)+(g.contributions||[]).reduce((s,x)=>s+(x.rows?.length||0),0),0):(D.weekly||[]).reduce((a,x)=>a+(x.rows?.length||0),0)+(D.seasons||[]).reduce((a,x)=>a+(x.rows?.length||0),0);document.getElementById('trackedCount').textContent=(D.guild?.length||0)+arenaRows+(D.achievement?.length||0)+missionRows+guildDataRows;
 
