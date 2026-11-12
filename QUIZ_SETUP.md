@@ -12,7 +12,7 @@ This branch adds a **Quiz** tab to the existing CABAL Ranking Hub without replac
   - `/api/quiz/health`
 - D1 schema: `migrations/0001_quiz_schema.sql`
 
-The **9,999-question seed is intentionally NOT committed to this public repository** because it contains the answer key.
+The **9,999-question seed is intentionally NOT committed to this public repository** because it contains the answer key. Use the latest private package: `CABAL_Ranking_Quiz_9999_GAMEPLAY_ONLY_V2_PRIVATE_D1_SETUP.zip`.
 
 ## Quiz rules
 
@@ -38,7 +38,7 @@ The **9,999-question seed is intentionally NOT committed to this public reposito
 npx wrangler d1 execute cabal-ranking-quiz --remote --file=migrations/0001_quiz_schema.sql --yes
 ```
 
-4. Load the private 9,999-question seed package supplied separately. Do not commit those SQL seed files to the public repository.
+4. Load `CABAL_Ranking_Quiz_9999_GAMEPLAY_ONLY_V2_PRIVATE_D1_SETUP.zip` supplied separately. Do not commit those SQL seed files to the public repository. This V2 bank removes client-file / CABAL Dictionary wording and only uses gameplay-facing questions.
 5. Redeploy the Pages project after adding the D1 binding.
 6. Verify:
 
