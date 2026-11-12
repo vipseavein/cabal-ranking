@@ -3,12 +3,12 @@
 const API=(window.CABAL_QUIZ_API_BASE||'')+'/api/quiz';
 const LANGKEY='cabalRankingQuizLang';
 let lang=localStorage.getItem(LANGKEY)||'en';
-let size=100, period='all', rows=null, loading=false, error='';
+let size=50, period='all', rows=null, loading=false, error='';
 const t=(vi,en)=>lang==='vi'?vi:en;
 const h=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const fmt=ms=>{const sec=Math.max(0,Math.floor(ms/1000)),m=Math.floor(sec/60),s=sec%60;return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`};
 const rerender=()=>window.CABAL_RANKING_RENDER?.();
-const tier=n=>n===20?'High':n===50?'Highest':'Ultimate';
+const tier=n=>n===15?'High':n===30?'Highest':'Ultimate';
 async function api(path){const r=await fetch(API+path,{headers:{'cache-control':'no-cache'}});let d={};try{d=await r.json()}catch(_){ }if(!r.ok)throw new Error(d.error||`HTTP ${r.status}`);return d}
 async function load(){
   loading=true;error='';rerender();
@@ -17,7 +17,7 @@ async function load(){
   finally{loading=false;rerender()}
 }
 function render(){
-  const tierButtons=[[20,'High'],[50,'Highest'],[100,'Ultimate']].map(([n,l])=>`<button class="quiz-btn ${size===n?'active':''}" data-quiz-size="${n}"><b>${l}</b><span>${n} ${t('câu','questions')}</span></button>`).join('');
+  const tierButtons=[[15,'High'],[30,'Highest'],[50,'Ultimate']].map(([n,l])=>`<button class="quiz-btn ${size===n?'active':''}" data-quiz-size="${n}"><b>${l}</b><span>${n} ${t('câu','questions')}</span></button>`).join('');
   const periods=[['all',t('Top tổng','Overall')],['day',t('Hôm nay','Daily')],['week',t('Tuần','Weekly')],['month',t('Tháng','Monthly')],['year',t('Năm','Yearly')]];
   let body='';
   if(loading)body=`<tr><td colspan="5">${t('Đang tải bảng xếp hạng…','Loading leaderboard…')}</td></tr>`;
@@ -32,7 +32,7 @@ function render(){
     <div class="quiz-tabs">${periods.map(([p,l])=>`<button class="quiz-btn ${period===p?'active':''}" data-quiz-period="${p}">${l}</button>`).join('')}</div>
     ${error?`<div class="quiz-error">${h(error)}</div>`:''}
     <div class="tablewrap"><table class="ranktable quiz-lb-table"><thead><tr><th>#</th><th>Name</th><th>${t('Điểm','Score')}</th><th>${t('Thời gian','Time')}</th><th>${t('Hoàn thành','Completed')}</th></tr></thead><tbody>${body}</tbody></table></div>
-    <div class="data-note">${t('High = 20 câu • Highest = 50 câu • Ultimate = 100 câu. Mỗi hạng có bảng Top tổng, ngày, tuần, tháng và năm riêng.','High = 20 questions • Highest = 50 • Ultimate = 100. Each tier has separate overall, daily, weekly, monthly and yearly rankings.')}</div>
+    <div class="data-note">${t('High = 15 câu • Highest = 30 câu • Ultimate = 50 câu. Mỗi hạng có bảng Top tổng, ngày, tuần, tháng và năm riêng.','High = 15 questions • Highest = 30 • Ultimate = 50. Each tier has separate overall, daily, weekly, monthly and yearly rankings.')}</div>
   </div>`;
 }
 function bind(){
