@@ -53,15 +53,17 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Assemble isolated public Quiz frontend
         run: |
-          mkdir -p public-staging/quiz public-staging/assets
+          mkdir -p public-staging/quiz
           cp ../quiz/index.html public-staging/quiz/index.html
           cp ../quiz/play.js public-staging/quiz/play.js
+          cp ../quiz/leaderboard.js public-staging/quiz/leaderboard.js
           cp ../quiz.css public-staging/quiz.css
-          cp ../assets/cabal-logo.png public-staging/assets/cabal-logo.png
-          cp ../assets/bg.jpg public-staging/assets/bg.jpg
+          cp ../quiz.js public-staging/quiz.js
+          cp ../ranking_data.js public-staging/ranking_data.js
+          cp ../index.html public-staging/index.html
+          cp -R ../assets public-staging/assets
           cp ../favicon.ico public-staging/favicon.ico
-          printf "window.CABAL_QUIZ_API_BASE='';\\n" > public-staging/quiz-config.js
-          printf '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=https://cabal-ranking.pages.dev/"></head><body><a href="https://cabal-ranking.pages.dev/">Ranking Hub</a></body></html>\\n' > public-staging/index.html
+          printf "window.CABAL_QUIZ_API_BASE='';\\nwindow.CABAL_QUIZ_PLAY_BASE='/quiz/';\\n" > public-staging/quiz-config.js
           test -s public-staging/quiz/index.html
           test -s public-staging/quiz/play.js
       - name: Validate staging bundle (no deploy)
