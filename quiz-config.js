@@ -1,0 +1,1 @@
+window.CABAL_QUIZ_API_BASE='';
