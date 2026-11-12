@@ -1,9 +1,27 @@
 const json=(data,status=200)=>new Response(JSON.stringify(data),{status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store'}});
 const fail=(error,status=400)=>json({error},status);
 
-const QUIZ_SIZE=100;
-function cleanName(v){const s=String(v??'').normalize('NFKC').replace(/[\u0000-\u001f\u007f]/g,'').replace(/\s+/g,' ').trim();if(s.length<2||s.length>32)throw new Error('Name must be 2-32 characters.');return s}
-function keyName(s){return s.normalize('NFKC').toLocaleLowerCase('en-US')}
-function isoWeekKey(date){const d=new Date(date.getTime()+7*3600000);const x=new Date(Date.UTTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()));const day=x.getUTCDay()||7;x.setUTCDate(x.getUTCDate()+4-day);const y=x.getUTCFullYear(),y0=new Date(Date.UTC(y,0,1)),w=Math.ceil((((x-y0)/86400000)+1)/7);return `${y}-W${String(w).padStart(2,'0')}`}
-function periodKeys(ms){const d=new Date(ms+7*3600000),y=d.getUTCFullYear(),m=d.getUTCMonth()+1,day=d.getUTCDate();return{dayKey:`${y}-${String(m).padStart(2,'0')}-${String(day).padStart(2,'0')}`,weekKey:isoWeekKey(new Date(ms)),monthKey:`${y}-${String(m).padStart(2,'0')}`,yearKey:String(y)}}
-export async function onRequestPost({request,env}){try{if(!env.QUIZ_DB)return fail('QUIZ_DB binding is not configured.',500);const body=await request.json();const sessionId=String(body.sessionId||'').trim(),answers=body.answers||{},playerName=cleanName(body.playerName);if(!sessionId)return fail('Missing sessionId.');const session=await env.QUIZ_DB.prepare('SELECT id,question_ids,started_at,expires_at,completed FROM quiz_sessions WHERE id=?').bind(sessionId).first();if(!session)return fail('Quiz session not found.',404);if(session.completed)return fail('This quiz was already submitted.',409);const now=Date.now();if(Number(session.expires_at)<now)return fail('Quiz session expired.',410);let ids;try{ids=JSON.parse(session.question_ids)}catch(_){return fail('Invalid quiz session.',500)}if(!Array.isArray(ids)||ids.length!==QUIZ_SIZE)return fail('Invalid quiz session.',500);for(const id of ids){if(!['A','B','C','D'].includes(String(answers[id]||'').toUpperCase()))return fail(`Please answer all ${QUIZ_SIZE} questions.`)}const marks=ids.map(()=>'?').join(',');const res=await env.QUIZ_DB.prepare(`SELECT id,correct FROM quiz_questions WHERE id IN (${marks})`).bind(...ids).all();if(!res.success||res.results.length!==QUIZ_SIZE)return fail('Question bank mismatch.',500);const key=new Map(res.results.map(x=>[x.id,x.correct]));let score=0;for(const id of ids)if(String(answers[id]).toUpperCase()===key.get(id))score++;const durationMs=Math.max(0,now-Number(session.started_at)),p=periodKeys(now);const update=env.QUIZ_DB.prepare('UPDATE quiz_sessions SET completed=1,completed_at=? WHERE id=? AND completed=0').bind(now,sessionId);const insert=env.QUIZ_DB.prepare('INSERT INTO quiz_results (session_id,player_name,player_name_key,score,total,duration_ms,completed_at,day_key,week_key,month_key,year_key) VALUES (?,?,?,?,?,?,?,?,?,?,?)').bind(sessionId,playerName,keyName(playerName),score,QUIZ_SIZE,durationMs,now,p.dayKey,p.weekKey,p.monthKey,p.yearKey);await env.QUIZ_DB.batch([update,insert]);return json({score,total:QUIZ_SIZE,durationMs,completedAt:now})}catch(e){console.error(e);if(e?.message?.startsWith('Name must'))return fail(e.message,400);return fail('Unable to submit quiz result.',500)}}
+async function rankFor(env,total,score,durationMs){const r=await env.QUIZ_DB.prepare('SELECT COUNT(*) AS n FROM quiz_results WHERE total=? AND (score>? OR (score=? AND duration_ms<?))').bind(total,score,score,durationMs).first();return Number(r?.n||0)+1}
+export async function onRequestPost({request,env}){
+  try{
+    if(!env.QUIZ_DB)return fail('QUIZ_DB binding is not configured.',500);
+    const body=await request.json(),sessionId=String(body.sessionId||'').trim();
+    if(!sessionId)return fail('Missing sessionId.');
+    const s=await env.QUIZ_DB.prepare('SELECT question_ids,answers_json,started_at,expires_at,completed,completed_at,score,total,duration_ms FROM quiz_sessions WHERE id=?').bind(sessionId).first();
+    if(!s)return fail('Quiz session not found.',404);
+    let payload,answers;try{payload=JSON.parse(s.question_ids);answers=JSON.parse(s.answers_json||'{}')}catch(_){return fail('Invalid quiz session.',500)}
+    const total=Array.isArray(payload)?payload.length:Number(s.total||0);
+    if(![20,50,100].includes(total))return fail('Invalid quiz size.',500);
+    if(s.completed){
+      const score=Number(s.score||0),durationMs=Number(s.duration_ms||0);
+      return json({score,total,durationMs,completedAt:Number(s.completed_at||0),rank:await rankFor(env,total,score,durationMs),tier:total===20?'High':total===50?'Highest':'Ultimate',review:Object.values(answers)});
+    }
+    const now=Date.now();if(Number(s.expires_at)<now)return fail('Quiz session expired.',410);
+    if(Object.keys(answers).length!==total)return fail(`Please answer all ${total} questions.`);
+    let score=0;for(const item of Object.values(answers))if(item?.isCorrect)score++;
+    const durationMs=Math.max(0,now-Number(s.started_at));
+    await env.QUIZ_DB.prepare('UPDATE quiz_sessions SET completed=1,completed_at=?,score=?,total=?,duration_ms=? WHERE id=? AND completed=0')
+      .bind(now,score,total,durationMs,sessionId).run();
+    return json({score,total,durationMs,completedAt:now,rank:await rankFor(env,total,score,durationMs),tier:total===20?'High':total===50?'Highest':'Ultimate',review:Object.values(answers)});
+  }catch(e){console.error(e);return fail('Unable to finish quiz.',500)}
+}
