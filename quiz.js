@@ -2,6 +2,7 @@
 'use strict';
 const API=(window.CABAL_QUIZ_API_BASE||'')+'/api/quiz';
 const LANGKEY='cabalRankingQuizLang';
+const PLAY_BASE=window.CABAL_QUIZ_PLAY_BASE||'/quiz/';
 let lang=localStorage.getItem(LANGKEY)||'en';
 let size=50, period='all', rows=null, loading=false, error='';
 const t=(vi,en)=>lang==='vi'?vi:en;
@@ -17,7 +18,7 @@ async function load(){
   finally{loading=false;rerender()}
 }
 function render(){
-  const tierButtons=[[15,'High'],[30,'Highest'],[50,'Ultimate']].map(([n,l])=>`<button class="quiz-btn ${size===n?'active':''}" data-quiz-size="${n}"><b>${l}</b><span>${n} ${t('câu','questions')}</span></button>`).join('');
+  const tierButtons=[[15,'High'],[30,'Highest'],[50,'Ultimate']].map(([n,l])=>`<div class="quiz-tier-quick"><button class="quiz-btn ${size===n?'active':''}" data-quiz-size="${n}"><b>${l}</b><span>${n} ${t('câu','questions')}</span></button><a class="quiz-btn primary quiz-quick-play" href="${PLAY_BASE}?size=${n}">▶ ${t('Chơi ngay','Play now')}</a></div>`).join('');
   const periods=[['all',t('Top tổng','Overall')],['day',t('Hôm nay','Daily')],['week',t('Tuần','Weekly')],['month',t('Tháng','Monthly')],['year',t('Năm','Yearly')]];
   let body='';
   if(loading)body=`<tr><td colspan="5">${t('Đang tải bảng xếp hạng…','Loading leaderboard…')}</td></tr>`;
@@ -26,7 +27,7 @@ function render(){
   return `<div class="quiz-ranking-shell">
     <div class="bar quiz-ranking-head">
       <div><div class="quiz-kicker">CABAL KNOWLEDGE RANKING</div><div class="title">${t('Bảng xếp hạng','Quiz Ranking')} <span>${tier(size)}</span></div><div class="meta">${t('Điểm cao trước, nếu bằng điểm thì thời gian nhanh hơn xếp trên.','Higher score ranks first; ties are broken by faster completion time.')} • GMT+7</div></div>
-      <div class="quiz-actions"><a class="quiz-btn primary" href="/quiz/">${t('Làm Quiz','Play Quiz')} →</a><button class="quiz-btn" data-quiz-lang="${lang==='en'?'vi':'en'}">${lang==='en'?'VI':'EN'}</button></div>
+      <div class="quiz-actions"><a class="quiz-btn primary" href="${PLAY_BASE}">${t('Làm Quiz','Play Quiz')} →</a><button class="quiz-btn" data-quiz-lang="${lang==='en'?'vi':'en'}">${lang==='en'?'VI':'EN'}</button></div>
     </div>
     <div class="quiz-tier-tabs">${tierButtons}</div>
     <div class="quiz-tabs">${periods.map(([p,l])=>`<button class="quiz-btn ${period===p?'active':''}" data-quiz-period="${p}">${l}</button>`).join('')}</div>
