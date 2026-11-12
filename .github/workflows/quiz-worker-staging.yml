@@ -51,6 +51,19 @@ jobs:
           grep -Fxq 'database_id = "b99cfc80-f420-4c7c-bf6d-7e03839d46a5"' wrangler.staging.toml
       - name: Install Worker dependencies
         run: npm install --no-audit --no-fund
+      - name: Assemble isolated public Quiz frontend
+        run: |
+          mkdir -p public-staging/quiz public-staging/assets
+          cp ../quiz/index.html public-staging/quiz/index.html
+          cp ../quiz/play.js public-staging/quiz/play.js
+          cp ../quiz.css public-staging/quiz.css
+          cp ../assets/cabal-logo.png public-staging/assets/cabal-logo.png
+          cp ../assets/bg.jpg public-staging/assets/bg.jpg
+          cp ../favicon.ico public-staging/favicon.ico
+          printf "window.CABAL_QUIZ_API_BASE='';\\n" > public-staging/quiz-config.js
+          printf '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=https://cabal-ranking.pages.dev/"></head><body><a href="https://cabal-ranking.pages.dev/">Ranking Hub</a></body></html>\\n' > public-staging/index.html
+          test -s public-staging/quiz/index.html
+          test -s public-staging/quiz/play.js
       - name: Validate staging bundle (no deploy)
         run: npx wrangler deploy --config wrangler.staging.toml --dry-run --outdir .wrangler-staging-preview
       - name: Initialize staging D1 schema (optional)
