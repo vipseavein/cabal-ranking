@@ -82,6 +82,29 @@ async function rankFor(env,total,score,durationMs){
   `).bind(total,score,score,durationMs).first();
   return Number(r?.n||0)+1;
 }
+// Compare with ONE best result per normalized IGN in the same tier.
+// Strictly lower scores and strictly slower equal-score results only. No artificial estimates.
+async function peerStatistics(env,total,score,durationMs){
+  const stats=await env.QUIZ_DB.prepare(`
+    WITH ranked AS (
+      SELECT player_name_key,score,duration_ms,
+        ROW_NUMBER() OVER (PARTITION BY player_name_key ORDER BY score DESC,duration_ms ASC,completed_at ASC) AS rn
+      FROM quiz_results WHERE total=?
+    ), best AS (SELECT score,duration_ms FROM ranked WHERE rn=1)
+    SELECT COUNT(*) AS players,
+      SUM(CASE WHEN score<? THEN 1 ELSE 0 END) AS lower_scores,
+      SUM(CASE WHEN score=? THEN 1 ELSE 0 END) AS same_score,
+      SUM(CASE WHEN score=? AND duration_ms>? THEN 1 ELSE 0 END) AS slower_same_score
+    FROM best
+  `).bind(total,score,score,score,durationMs).first();
+  const players=Number(stats?.players||0),lower=Number(stats?.lower_scores||0),
+    same=Number(stats?.same_score||0),slower=Number(stats?.slower_same_score||0);
+  return {
+    population:players,lowerScores:lower,sameScorePlayers:same,slowerSameScore:slower,
+    scorePercentile:players?Math.round(lower*100/players):null,
+    speedPercentile:same?Math.round(slower*100/same):null
+  };
+}
 async function startQuiz(request,env){
   if(!env.QUIZ_DB)return fail('QUIZ_DB binding is not configured.',500);
   let body={};try{body=await request.json();}catch(_){}
@@ -165,7 +188,7 @@ async function finishQuiz(request,env){
   if(!ALLOWED_SIZES.includes(total))return fail('Invalid quiz size.',500);
   if(s.completed){
     const score=Number(s.score||0),durationMs=Number(s.duration_ms||0);
-    return json({score,total,durationMs,completedAt:Number(s.completed_at||0),rank:await rankFor(env,total,score,durationMs),tier:tier(total),review:Object.values(answers)});
+    return json({score,total,durationMs,completedAt:Number(s.completed_at||0),rank:await rankFor(env,total,score,durationMs),tier:tier(total),peerStats:await peerStatistics(env,total,score,durationMs),review:Object.values(answers)});
   }
   const now=Date.now();
   if(Number(s.expires_at)<now)return fail('Quiz session expired.',410);
@@ -174,7 +197,7 @@ async function finishQuiz(request,env){
   const durationMs=Math.max(0,now-Number(s.started_at));
   await env.QUIZ_DB.prepare('UPDATE quiz_sessions SET completed=1,completed_at=?,score=?,total=?,duration_ms=? WHERE id=? AND completed=0')
     .bind(now,score,total,durationMs,sessionId).run();
-  return json({score,total,durationMs,completedAt:now,rank:await rankFor(env,total,score,durationMs),tier:tier(total),review:Object.values(answers)});
+  return json({score,total,durationMs,completedAt:now,rank:await rankFor(env,total,score,durationMs),tier:tier(total),peerStats:await peerStatistics(env,total,score,durationMs),review:Object.values(answers)});
 }
 // Best records use normalized IGN and separate tiers; IGN itself is not identity verification.
 async function bestForName(env,name,size){
