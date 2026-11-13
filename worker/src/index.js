@@ -105,6 +105,10 @@ async function peerStatistics(env,total,score,durationMs){
     speedPercentile:same?Math.round(slower*100/same):null
   };
 }
+async function questionLimit(env,sessionId){
+  const r=await env.QUIZ_DB.prepare('SELECT limit_ms FROM quiz_session_limits WHERE session_id=?').bind(sessionId).first();
+  return Number(r?.limit_ms||QUESTION_LIMIT_MS);
+}
 async function startQuiz(request,env){
   if(!env.QUIZ_DB)return fail('QUIZ_DB binding is not configured.',500);
   let body={};try{body=await request.json();}catch(_){}
@@ -118,15 +122,18 @@ async function startQuiz(request,env){
   for(let i=selected.length-1;i>0;i--){const j=randomInt(i+1);[selected[i],selected[j]]=[selected[j],selected[i]];}
   const shuffled=selected.map(shuffleQuestion);
   const now=Date.now(),sessionId=crypto.randomUUID();
+  const timerSetting=await env.QUIZ_DB.prepare('SELECT seconds FROM quiz_tier_timers WHERE tier_size=?').bind(count).first();
+  const limitMs=Number(timerSetting?.seconds||15)*1000;
   await env.QUIZ_DB.batch([
     env.QUIZ_DB.prepare(`
       INSERT INTO quiz_sessions
       (id,question_ids,answers_json,started_at,expires_at,completed,recorded,total)
       VALUES (?,?,?,?,?,0,0,?)
     `).bind(sessionId,JSON.stringify(shuffled.map(x=>x.private)),'{}',now,now+TTL_MS,count),
-    env.QUIZ_DB.prepare('INSERT INTO quiz_question_timers(session_id,question_index,started_at) VALUES (?,0,?)').bind(sessionId,now)
+    env.QUIZ_DB.prepare('INSERT INTO quiz_question_timers(session_id,question_index,started_at) VALUES (?,0,?)').bind(sessionId,now),
+    env.QUIZ_DB.prepare('INSERT INTO quiz_session_limits(session_id,limit_ms) VALUES (?,?)').bind(sessionId,limitMs)
   ]);
-  return json({sessionId,questionCount:count,tier:tier(count),questions:shuffled.map(x=>x.public),questionDeadline:now+QUESTION_LIMIT_MS,questionLimitSeconds:15});
+  return json({sessionId,questionCount:count,tier:tier(count),questions:shuffled.map(x=>x.public),questionDeadline:now+limitMs,questionLimitSeconds:limitMs/1000});
 }
 async function answerQuiz(request,env){
   if(!env.QUIZ_DB)return fail('QUIZ_DB binding is not configured.',500);
@@ -149,7 +156,8 @@ async function answerQuiz(request,env){
   const index=Number(timer.question_index);
   if(payload[index]?.id!==questionId)return fail('Answer the current question first.',409);
   const now=Date.now();
-  const timedOut=now>=Number(timer.started_at)+QUESTION_LIMIT_MS||answer==='TIMEOUT';
+  const limitMs=await questionLimit(env,sessionId);
+  const timedOut=now>=Number(timer.started_at)+limitMs||answer==='TIMEOUT';
   const selected=timedOut?'TIMEOUT':answer;
   const result={questionId,answer:selected,isCorrect:!timedOut&&selected===q.correctLetter,correctLetter:q.correctLetter,correctAnswer:q.correctAnswer,timedOut};
   answers[questionId]=result;
@@ -175,7 +183,8 @@ async function advanceQuiz(request,env){
   const nextIndex=index+1,now=Date.now();
   const updated=await env.QUIZ_DB.prepare('UPDATE quiz_question_timers SET question_index=?,started_at=? WHERE session_id=? AND question_index=?').bind(nextIndex,now,sessionId,index).run();
   if(!updated.meta?.changes)return fail('Question already advanced. Reload your quiz.',409);
-  return json({questionIndex:nextIndex,questionDeadline:now+QUESTION_LIMIT_MS,questionLimitSeconds:15});
+  const limitMs=await questionLimit(env,sessionId);
+  return json({questionIndex:nextIndex,questionDeadline:now+limitMs,questionLimitSeconds:limitMs/1000});
 }
 async function finishQuiz(request,env){
   if(!env.QUIZ_DB)return fail('QUIZ_DB binding is not configured.',500);
