@@ -147,6 +147,10 @@ async function finishQuiz(request,env){
 async function recordQuiz(request,env){
   if(!env.QUIZ_DB)return fail('QUIZ_DB binding is not configured.',500);
   const body=await request.json(),sessionId=String(body.sessionId||'').trim(),playerName=cleanName(body.playerName);
+  const rawEmail=String(body.email??'').trim();
+  // Optional contact email for private admin event verification only. Never part of public leaderboard.
+  if(rawEmail.length>254||rawEmail&&(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(rawEmail)||/[<>\\r\\n]/.test(rawEmail)))return fail('Invalid email address.',400);
+  const email=rawEmail.toLowerCase();
   const s=await env.QUIZ_DB.prepare('SELECT completed,recorded,score,total,duration_ms,completed_at FROM quiz_sessions WHERE id=?').bind(sessionId).first();
   if(!s)return fail('Quiz session not found.',404);
   if(!s.completed)return fail('Finish the quiz before saving a record.',409);
@@ -158,7 +162,9 @@ async function recordQuiz(request,env){
     VALUES (?,?,?,?,?,?,?,?,?,?,?)
   `).bind(sessionId,playerName,keyName(playerName),score,total,durationMs,completedAt,p.dayKey,p.weekKey,p.monthKey,p.yearKey);
   const update=env.QUIZ_DB.prepare('UPDATE quiz_sessions SET recorded=1 WHERE id=? AND recorded=0').bind(sessionId);
-  await env.QUIZ_DB.batch([insert,update]);
+  const statements=[insert,update];
+  if(email)statements.push(env.QUIZ_DB.prepare('INSERT INTO quiz_player_contacts(session_id,email,supplied_at) VALUES(?,?,?)').bind(sessionId,email,Date.now()));
+  await env.QUIZ_DB.batch(statements);
   return json({saved:true,playerName,score,total,durationMs,rank:await rankFor(env,total,score,durationMs),tier:tier(total)});
 }
 async function leaderboard(request,env){
