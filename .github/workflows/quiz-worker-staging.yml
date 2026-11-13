@@ -95,6 +95,8 @@ jobs:
         run: npx wrangler d1 execute cabal-ranking-quiz-v5-staging --config wrangler.staging.toml --remote --file ./timer-schema.sql --yes
       - name: Deploy staging Worker only
         run: npx wrangler deploy --config wrangler.staging.toml
+      - name: Smoke test timed quiz and IGN lookup without ranking writes
+        run: node ./scripts/verify-record-status.mjs
       - name: Show staging health URL
         run: echo "Visit https://cabal-quiz-api-staging.<your-workers-subdomain>.workers.dev/api/quiz/health"
 
@@ -119,3 +121,5 @@ jobs:
 # V5.6 verification: health endpoint advertises questionLimitSeconds:15.
 
 # V5.9: polished tier-specific Save Ranking and best-only IGN record checks.
+
+# Tests new IGN checks without writing leaderboard records.
