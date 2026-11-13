@@ -63,6 +63,7 @@ function recordSaveCard(){
 function renderNameStatus(){
  const el=document.getElementById('quizNameStatus');
  if(!el)return;
+ updateNameVisual();
  const entered=typedName.trim();
  if(entered.length<2){el.className='quiz-record-status neutral';el.innerHTML='⌨ '+t('Nhập Name / IGN (ít nhất 2 ký tự) để kiểm tra kỷ lục.','Type your Name / IGN (at least 2 characters) to check your record.');return;}
  if(nameChecking){el.className='quiz-record-status neutral';el.textContent=t('Đang kiểm tra kỷ lục…','Checking existing record…');return;}
@@ -106,7 +107,34 @@ function bindNameCard(){
  if(typedName.trim().length>=2&&!nameStatus&&!nameChecking){clearTimeout(nameCheckTimer);nameCheckTimer=setTimeout(checkName,300)}
 }
 
-function completed(){if(!finishResult)return home();const pct=Math.round(finishResult.score/finishResult.total*100),saved=!!savedResult;return `<div class="quiz-page-shell"><section class="quiz-card quiz-finish-card"><div class="quiz-celebrate">✦</div><div class="quiz-kicker">${t('HOÀN THÀNH','COMPLETED')} • ${finishResult.tier}</div><h1>${t('Chúc mừng! Bạn đã hoàn thành bài trắc nghiệm.','Congratulations! You completed the quiz.')}</h1><div class="quiz-result-grid"><div><b>${finishResult.score}/${finishResult.total}</b><span>${t('Điểm','Score')}</span></div><div><b>${pct}%</b><span>${t('Chính xác','Accuracy')}</span></div><div><b>${fmt(finishResult.durationMs)}</b><span>${t('Thời gian','Time')}</span></div><div><b>#${savedResult?.rank||finishResult.rank}</b><span>${saved?t('Xếp hạng','Ranking'):t('Xếp hạng tạm tính','Provisional rank')}</span></div></div>${saved?recordSavedBanner():recordSaveCard()}<div class="quiz-finish-actions"><button class="quiz-btn" id="toggleReview">${reviewOpen?t('Ẩn đáp án','Hide Review'):t('Xem câu trả lời đúng','Review Correct Answers')}</button><button class="quiz-btn primary" id="newQuiz">${t('Làm lượt mới','New Quiz')}</button><button class="quiz-btn" type="button" id="viewRanking">${t('Xem Ranking','View Ranking')} ↓</button>${langButtons()}</div></section>${reviewOpen?`<section class="quiz-card quiz-review"><div class="quiz-review-head"><div><div class="quiz-kicker">${t('XEM LẠI ĐÁP ÁN','ANSWER REVIEW')}</div><h2>${t('Kiểm tra những câu bạn đã trả lời','Review your answers')}</h2></div><div class="quiz-tabs"><button class="quiz-btn ${reviewFilter==='wrong'?'active':''}" data-review-filter="wrong">${t('Chỉ câu sai','Incorrect only')}</button><button class="quiz-btn ${reviewFilter==='all'?'active':''}" data-review-filter="all">${t('Tất cả câu','All questions')}</button></div></div>${reviewRows()}</section>`:''}</div>`}
+function comparisonStats(){
+ const x=finishResult?.peerStats;
+ if(!x)return '';
+ const sampleText=t('Dựa trên kỷ lục tốt nhất của người chơi High / Highest / Ultimate trong bảng xếp hạng cùng cấp độ.','Compared with each player’s best result in the same tier.');
+ const scoreText=x.population>0
+  ?t('Bạn đạt điểm cao hơn ','You outscored ')+x.scorePercentile+'% '+t('người chơi','of ranked players')
+  :t('Chưa có dữ liệu người chơi để so sánh điểm.','No ranked players available for score comparison yet.');
+ const timeText=x.sameScorePlayers>0
+  ?t('Bạn hoàn thành nhanh hơn ','You finished faster than ')+x.speedPercentile+'% '+t('người chơi có cùng số câu đúng','of players with the same score')
+  :t('Chưa có ai trong Ranking đạt cùng số câu đúng.','No ranked players with the same score yet.');
+ return '<div class="quiz-peer-insights">'+
+ '<div class="quiz-peer-card"><div class="quiz-peer-kicker">✦ '+t('SO SÁNH ĐIỂM','SCORE COMPARISON')+'</div>'+
+ '<div class="quiz-peer-value">'+(x.population?x.scorePercentile+'%':'—')+'</div><strong>'+h(scoreText)+'</strong>'+
+ '<small>'+h(t('Mẫu so sánh: ','Compared with ')+x.population+t(' người chơi ở cấp độ này',' ranked players in this tier'))+'</small></div>'+
+ '<div class="quiz-peer-card"><div class="quiz-peer-kicker">◷ '+t('SO SÁNH TỐC ĐỘ','SPEED COMPARISON')+'</div>'+
+ '<div class="quiz-peer-value">'+(x.sameScorePlayers?x.speedPercentile+'%':'—')+'</div><strong>'+h(timeText)+'</strong>'+
+ '<small>'+h(t('Mẫu cùng điểm: ','Same-score sample: ')+x.sameScorePlayers+t(' người chơi',' players'))+'</small></div>'+
+ '</div><p class="quiz-peer-note">'+h(sampleText)+' '+h(t('Tỷ lệ dựa trên dữ liệu hiện có, không phải ước lượng.','These percentages are calculated from saved records, not estimates.'))+'</p>';
+}
+function updateNameVisual(){
+ const input=document.getElementById('playerName'),card=document.getElementById('recordCard');
+ if(!input||!card)return;
+ const status=typedName.trim().length<2||nameChecking||!nameStatus?'pending':nameStatus.comparison==='new'?'fresh':nameStatus.comparison==='improved'?'improved':'existing';
+ input.classList.remove('ign-pending','ign-fresh','ign-improved','ign-existing');
+ input.classList.add('ign-'+status);
+ card.dataset.nameStatus=status;
+}
+function completed(){if(!finishResult)return home();const pct=Math.round(finishResult.score/finishResult.total*100),saved=!!savedResult;return `<div class="quiz-page-shell"><section class="quiz-card quiz-finish-card"><div class="quiz-celebrate">✦</div><div class="quiz-kicker">${t('HOÀN THÀNH','COMPLETED')} • ${finishResult.tier}</div><h1>${t('Chúc mừng! Bạn đã hoàn thành bài trắc nghiệm.','Congratulations! You completed the quiz.')}</h1><div class="quiz-result-grid"><div><b>${finishResult.score}/${finishResult.total}</b><span>${t('Điểm','Score')}</span></div><div><b>${pct}%</b><span>${t('Chính xác','Accuracy')}</span></div><div><b>${fmt(finishResult.durationMs)}</b><span>${t('Thời gian','Time')}</span></div><div><b>#${savedResult?.rank||finishResult.rank}</b><span>${saved?t('Xếp hạng','Ranking'):t('Xếp hạng tạm tính','Provisional rank')}</span></div></div>${comparisonStats()}${saved?recordSavedBanner():recordSaveCard()}<div class="quiz-finish-actions"><button class="quiz-btn" id="toggleReview">${reviewOpen?t('Ẩn đáp án','Hide Review'):t('Xem câu trả lời đúng','Review Correct Answers')}</button><button class="quiz-btn primary" id="newQuiz">${t('Làm lượt mới','New Quiz')}</button><button class="quiz-btn" type="button" id="viewRanking">${t('Xem Ranking','View Ranking')} ↓</button>${langButtons()}</div></section>${reviewOpen?`<section class="quiz-card quiz-review"><div class="quiz-review-head"><div><div class="quiz-kicker">${t('XEM LẠI ĐÁP ÁN','ANSWER REVIEW')}</div><h2>${t('Kiểm tra những câu bạn đã trả lời','Review your answers')}</h2></div><div class="quiz-tabs"><button class="quiz-btn ${reviewFilter==='wrong'?'active':''}" data-review-filter="wrong">${t('Chỉ câu sai','Incorrect only')}</button><button class="quiz-btn ${reviewFilter==='all'?'active':''}" data-review-filter="all">${t('Tất cả câu','All questions')}</button></div></div>${reviewRows()}</section>`:''}</div>`}
 function render(){if(phase==='loading')return loading();if(phase==='quiz')return question();if(phase==='completed'||phase==='saved')return completed();return home()}
 function renderApp(){document.getElementById('quizApp').innerHTML=render();bind();window.CABAL_QUIZ_BOARD?.show(phase!=='quiz'&&phase!=='loading')}
 async function start(n){phase='loading';error='';renderApp();try{const d=await api('/start',{method:'POST',body:JSON.stringify({count:n})});sessionId=d.sessionId;questions=d.questions||[];current=0;feedback={};startedClientAt=Date.now();questionDeadline=Number(d.questionDeadline)||Date.now()+QUESTION_LIMIT_MS;autoTimeoutPending=false;finishResult=null;savedResult=null;phase='quiz';persist();renderApp()}catch(e){phase='home';renderApp();toast(e.message||t('Không thể bắt đầu Quiz.','Unable to start quiz.'))}}
