@@ -58,6 +58,7 @@ jobs:
           cp ../quiz/play.js public-staging/quiz/play.js
           cp ../quiz/leaderboard.js public-staging/quiz/leaderboard.js
           cp ../quiz-manager/index.html public-staging/quiz-manager/index.html
+          cp ../quiz-manager/rules-ui.js public-staging/quiz-manager/rules-ui.js
           cp ../quiz.css public-staging/quiz.css
           cp ../quiz.js public-staging/quiz.js
           cp ../ranking_data.js public-staging/ranking_data.js
@@ -71,6 +72,9 @@ jobs:
         run: |
           node --check src/index.js
           node --check src/admin.js
+          node --check src/rules.js
+          node --check src/admin-rules.js
+          node --check ../quiz-manager/rules-ui.js
       - name: Validate staging bundle (no deploy)
         run: npx wrangler deploy --config wrangler.staging.toml --dry-run --outdir .wrangler-staging-preview
       - name: Initialize staging D1 schema (optional)
@@ -78,6 +82,8 @@ jobs:
         run: npx wrangler d1 execute cabal-ranking-quiz-v5-staging --config wrangler.staging.toml --remote --file ./schema.sql --yes
       - name: Initialize STAGING Admin Audit (safe to re-run)
         run: npx wrangler d1 execute cabal-ranking-quiz-v5-staging --config wrangler.staging.toml --remote --file ./admin-schema.sql --yes
+      - name: Initialize STAGING Rules Config and History
+        run: npx wrangler d1 execute cabal-ranking-quiz-v5-staging --config wrangler.staging.toml --remote --file ./rules-schema.sql --yes
       - name: Deploy staging Worker only
         run: npx wrangler deploy --config wrangler.staging.toml
       - name: Show staging health URL
@@ -94,3 +100,5 @@ jobs:
 
 # V5.5: Skill joins one combined group quota (Skill/Myth/Merit/Stellar/OLV/Wing).
 # Question Manager staging endpoints remain LOCKED until QUIZ_ADMIN_TOKEN is configured.
+
+# V1.2 Quiz Rules Manager: read/save/preview/rollback protected, staging database only.
