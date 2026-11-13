@@ -84,15 +84,24 @@ async function startQuiz(request,env){
   let body={};try{body=await request.json();}catch(_){}
   const count=Number(body.count||50);
   if(!ALLOWED_SIZES.includes(count))return fail('Quiz size must be 15, 30, or 50.');
-  const ids=randomIds(count),marks=ids.map(()=>'?').join(',');
-  const res=await env.QUIZ_DB.prepare(`
-    SELECT id,category_vi,category_en,subtopic_vi,subtopic_en,difficulty_vi,difficulty_en,
-    question_vi,question_en,option_a,option_b,option_c,option_d,correct
-    FROM quiz_questions WHERE id IN (${marks})
-  `).bind(...ids).all();
-  if(!res.success||res.results.length!==count)return fail('Question bank is not fully seeded (expected 15,000 questions).',503);
-  const map=new Map(res.results.map(x=>[x.id,x]));
-  const shuffled=ids.map(id=>shuffleQuestion(map.get(id)));
+  // Each special knowledge category appears exactly 1 / 2 / 3 times by quiz tier.
+  // OLV is represented by the source category "Overload Mastery".
+  const specialCategories=['Myth','Merit','Stellar Force','Overload Mastery'];
+  const perTopic=count===15?1:count===30?2:3;
+  const selectFields='id,category_vi,category_en,subtopic_vi,subtopic_en,difficulty_vi,difficulty_en,question_vi,question_en,option_a,option_b,option_c,option_d,correct';
+  const pickCategory=async category=>{
+    const result=await env.QUIZ_DB.prepare(`SELECT ${selectFields} FROM quiz_questions WHERE category_en=? ORDER BY RANDOM() LIMIT ?`).bind(category,perTopic).all();
+    if(!result.success||result.results.length!==perTopic)throw Error('Not enough questions for '+category);
+    return result.results;
+  };
+  const groups=await Promise.all(specialCategories.map(pickCategory));
+  const remaining=count-specialCategories.length*perTopic;
+  const other=await env.QUIZ_DB.prepare(`SELECT ${selectFields} FROM quiz_questions WHERE category_en NOT IN (?,?,?,?) ORDER BY RANDOM() LIMIT ?`).bind(...specialCategories,remaining).all();
+  if(!other.success||other.results.length!==remaining)return fail('Question bank does not contain enough general questions.',503);
+  const selected=[...groups.flat(),...other.results];
+  // Shuffle the final set so special categories do not always appear first.
+  for(let i=selected.length-1;i>0;i--){const j=randomInt(i+1);[selected[i],selected[j]]=[selected[j],selected[i]];}
+  const shuffled=selected.map(shuffleQuestion);
   const now=Date.now(),sessionId=crypto.randomUUID();
   await env.QUIZ_DB.prepare(`
     INSERT INTO quiz_sessions
