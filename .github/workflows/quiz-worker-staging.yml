@@ -78,3 +78,5 @@ jobs:
 
 # The push trigger is limited to edits to THIS workflow on quiz-v5-worker-d1.
 # Regular worker commits do not deploy automatically; future manual runs require confirmation.
+
+# V5.3 staging verification: category quotas + localized units + tier colors.
