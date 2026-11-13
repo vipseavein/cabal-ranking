@@ -1,3 +1,5 @@
+import {handleRankingDelete} from './admin-records.js';
+import {handleAdminTimers} from './admin-timers.js';
 import {handleRulesAdmin} from './admin-rules.js';
 // Protected Quiz Question Manager API. Secrets are never returned to frontend.
 const FIELDS=['category_vi','category_en','subtopic_vi','subtopic_en','difficulty_vi','difficulty_en','question_vi','question_en','option_a','option_b','option_c','option_d','correct'];
@@ -40,6 +42,8 @@ export async function handleAdmin(request,env,url){
   const action=url.pathname.slice('/api/quiz/admin/'.length);
   try{
     if(action==='rules'||action.startsWith('rules/'))return await handleRulesAdmin(request,db,action);
+    if(action==='timers'||action.startsWith('timers/'))return await handleAdminTimers(request,db,action);
+    if(action.startsWith('rankings/delete-'))return await handleRankingDelete(request,db,action);
     if(request.method==='GET'&&action==='ping')return reply({ok:true,environment:'staging',writeEnabled:true});
     if(request.method==='GET'&&action==='rankings'){
       const size=Number(url.searchParams.get('size')||15);
@@ -62,8 +66,8 @@ export async function handleAdmin(request,env,url){
       const qbind=search?['%'+search+'%','%'+search+'%']:[];
       const core='WITH ranked AS (SELECT session_id,player_name,player_name_key,score,total,duration_ms,completed_at,ROW_NUMBER() OVER (PARTITION BY player_name_key ORDER BY score DESC,duration_ms ASC,completed_at ASC) rn FROM quiz_results '+where+'), leaders AS (SELECT * FROM ranked WHERE rn=1), filtered AS (SELECT r.session_id,r.player_name,r.score,r.total,r.duration_ms,r.completed_at,c.email FROM leaders r LEFT JOIN quiz_player_contacts c ON c.session_id=r.session_id'+query+') ';
       const total=await db.prepare(core+'SELECT COUNT(*) AS n FROM filtered').bind(...bind,...qbind).first();
-      const records=await db.prepare(core+'SELECT player_name,score,total,duration_ms,completed_at,email FROM filtered ORDER BY score DESC,duration_ms ASC,completed_at ASC LIMIT 50 OFFSET ?').bind(...bind,...qbind,(page-1)*50).all();
-      return reply({size,period,page,total:Number(total?.n||0),rows:(records.results||[]).map((x,i)=>({rank:(page-1)*50+i+1,playerName:x.player_name,score:x.score,total:x.total,durationMs:x.duration_ms,completedAt:x.completed_at,email:x.email||null}))});
+      const records=await db.prepare(core+'SELECT session_id,player_name,score,total,duration_ms,completed_at,email FROM filtered ORDER BY score DESC,duration_ms ASC,completed_at ASC LIMIT 50 OFFSET ?').bind(...bind,...qbind,(page-1)*50).all();
+      return reply({size,period,page,total:Number(total?.n||0),rows:(records.results||[]).map((x,i)=>({rank:(page-1)*50+i+1,sessionId:x.session_id,playerName:x.player_name,score:x.score,total:x.total,durationMs:x.duration_ms,completedAt:x.completed_at,email:x.email||null}))});
     }
     if(request.method==='GET'&&action==='questions'){
       const query=(url.searchParams.get('q')||'').trim().slice(0,120);
