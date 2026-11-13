@@ -133,3 +133,5 @@ jobs:
 # V5.10: server-computed comparison of score and speed among tier best records; IGN state colors.
 
 # V1.4: dedicated Tier Timer tab and embedded Player Ranking record management (individual, day, month) with audit archive.
+
+# V1.4 verify public tier-specific timer settings and configurable session smoke test.
