@@ -123,3 +123,5 @@ jobs:
 # V5.9: polished tier-specific Save Ranking and best-only IGN record checks.
 
 # Tests new IGN checks without writing leaderboard records.
+
+# V5.10: server-computed comparison of score and speed among tier best records; IGN state colors.
