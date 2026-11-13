@@ -16,8 +16,8 @@ button.secondary{background:#142336;border-color:#39556a}.danger{color:#ff9fac}.
 table{border-collapse:collapse;width:100%}th,td{text-align:left;white-space:nowrap;padding:10px;border-bottom:1px solid #243b50}th{color:#85aacc;background:#101f2d;position:sticky;top:0}td{max-width:550px;overflow:hidden;text-overflow:ellipsis}
 .pill{padding:4px 9px;border-radius:25px;border:1px solid #2d86aa;color:#8fe2ff;font-size:11px;font-weight:800}
 #status{padding:12px 14px;background:#0b2232;border:1px solid #286180;border-radius:8px;margin:12px 0;white-space:pre-wrap}
-[hidden]{display:none!important}a{color:#8adfff}footer{color:#8ea7bb;text-align:center;margin:30px 0}
-@media(max-width:760px){.grid,.search{grid-template-columns:1fr}main{padding:12px}}
+[hidden]{display:none!important}.tabbar{display:flex;gap:9px;margin:16px 0}.tabbar button{background:#142336}.tabbar button.selected{background:#13729a;border-color:#57d6f7}.topic-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.topic-option{display:flex;gap:9px;align-items:center;padding:11px;border:1px solid #304a60;border-radius:8px;color:#deefff;background:#0c1a29}.topic-option input{width:auto}.topic-option small{margin-left:auto;color:#88acbf}.rules-tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.rules-tiers input{font-size:24px;font-weight:800;text-align:center}#rulesStatus{white-space:pre-wrap;padding:12px;border:1px solid #286180;border-radius:8px;background:#0b2232}a{color:#8adfff}footer{color:#8ea7bb;text-align:center;margin:30px 0}
+@media(max-width:760px){.grid,.search,.topic-grid,.rules-tiers{grid-template-columns:1fr}main{padding:12px}}
 </style></head><body><main>
 <header><div><div class="sub">CABAL QUIZ • PRIVATE CONTROL PANEL</div><h1>Question Manager <span class="pill">STAGING ONLY</span></h1><div class="muted">Quản lý ngân hàng câu hỏi D1 • không công khai đáp án • không chỉnh production</div></div><a href="/quiz/">← Trang Quiz</a></header>
 <section class="panel" id="login">
@@ -26,6 +26,8 @@ table{border-collapse:collapse;width:100%}th,td{text-align:left;white-space:nowr
 <div class="row"><input id="token" type="password" autocomplete="off" placeholder="Nhập Admin Token" style="max-width:540px"><button id="loginBtn">Kết nối STAGING</button></div>
 </section>
 <div id="app" hidden>
+<nav class="tabbar"><button type="button" id="questionsTab" class="selected">Questions • Ngân hàng câu hỏi</button><button type="button" id="rulesTab">Quiz Rules • Phân bổ chủ đề</button></nav>
+<div id="questionsView">
 <section class="panel"><h2>Tìm kiếm câu hỏi <span id="count" class="pill">—</span></h2>
 <div class="search"><input id="query" placeholder="ID Q00001 hoặc nội dung VI / EN..."><select id="category"><option value="">Tất cả chủ đề</option></select><button id="searchBtn">Tìm kiếm</button></div>
 <div id="status" role="status">Đã kết nối với staging.</div>
@@ -38,7 +40,37 @@ table{border-collapse:collapse;width:100%}th,td{text-align:left;white-space:nowr
 <div id="importPreview" hidden><p id="importInfo"></p><div class="tablewrap"><table><thead><tr><th>ID</th><th>Category</th><th>Question EN</th><th>Correct</th></tr></thead><tbody id="previewRows"></tbody></table></div><p class="danger">Chỉ import sau khi đã kiểm tra câu hỏi, đáp án và ID. Để khôi phục, dùng lịch sử hoặc bản sao D1.</p><button id="importBtn">Xác nhận import vào STAGING</button></div>
 </section>
 </div>
-<footer>Question Manager V1 • STAGING • ID cố định • Import 40 bản ghi/lô • Worker-side authentication</footer>
+<div id="rulesView" hidden>
+<section class="panel">
+  <div class="sub">QUIZ RULES • STAGING D1</div>
+  <h2 style="margin-top:8px">Giới hạn chung theo nhóm chủ đề</h2>
+  <p class="muted">Chọn các chủ đề tính CHUNG một giới hạn. Ví dụ: nếu High = 1 thì toàn bộ Skill, Myth, Merit, Stellar Force, OLV, Wing cộng lại chỉ xuất hiện 1 câu; không phải mỗi chủ đề 1 câu.</p>
+  <div class="row" style="justify-content:space-between;margin-bottom:12px"><strong id="ruleVersion">—</strong><button type="button" class="secondary" id="rulesReloadBtn">↻ Tải lại quy tắc</button></div>
+  <div id="rulesTopics" class="topic-grid"></div>
+  <p id="rulesUnmatched" class="danger"></p>
+  <h2 style="margin-top:24px">Số câu từ cả nhóm trong mỗi lượt</h2>
+  <div class="rules-tiers">
+    <div><label for="ruleQuota15">HIGH (15 câu) • Đỏ</label><input id="ruleQuota15" type="number" min="0" max="15" step="1" value="1"><small id="ruleRest15" class="muted"></small></div>
+    <div><label for="ruleQuota30">HIGHEST (30 câu) • Trắng</label><input id="ruleQuota30" type="number" min="0" max="30" step="1" value="2"><small id="ruleRest30" class="muted"></small></div>
+    <div><label for="ruleQuota50">ULTIMATE (50 câu) • Xanh</label><input id="ruleQuota50" type="number" min="0" max="50" step="1" value="3"><small id="ruleRest50" class="muted"></small></div>
+  </div>
+  <div class="row" style="margin-top:18px"><button id="rulesPreviewBtn" type="button" class="secondary">Xem trước 15 / 30 / 50</button><button id="rulesSaveBtn" type="button">Lưu Rules vào STAGING</button><button id="rulesHistoryBtn" type="button" class="secondary">Lịch sử / Khôi phục</button></div>
+  <div id="rulesStatus" role="status" style="margin-top:14px">Đăng nhập và chọn tab Quiz Rules để tải dữ liệu.</div>
+</section>
+<section class="panel" id="rulesPreview" hidden>
+  <h2>Preview • Không tạo lượt chơi, không ghi điểm</h2>
+  <p id="rulesPreviewSummary"></p>
+  <div class="tablewrap"><table><thead><tr><th>Cấp độ</th><th>Tổng câu</th><th>Nhóm giới hạn</th><th>Nhóm khác</th><th>Kiểm tra</th></tr></thead><tbody id="rulesPreviewRows"></tbody></table></div>
+  <p id="rulesCategorySummary" class="muted"></p>
+</section>
+<section class="panel" id="rulesHistory" hidden>
+  <h2>Lịch sử thay đổi</h2>
+  <p class="muted">Khôi phục cấu hình trước một lần cập nhật, có xác nhận và tạo phiên bản mới. Các lượt đã chơi không thay đổi.</p>
+  <div class="tablewrap"><table><thead><tr><th>Ngày</th><th>Phiên bản</th><th>Thao tác</th><th>Khôi phục</th></tr></thead><tbody id="rulesHistoryRows"></tbody></table></div>
+</section>
+</div>
+</div>
+<footer>Question Manager V1.2 • STAGING • ID cố định • Import 40 bản ghi/lô • Worker-side authentication</footer>
 </main>
 <script>
 (()=>{'use strict';
@@ -53,7 +85,12 @@ async function api(url,opt={}){
  let d;try{d=await r.json()}catch{throw Error('Response invalid: HTTP '+r.status)}
  if(!r.ok)throw Error(d.error||'HTTP '+r.status);return d;
 }
-$('loginBtn').onclick=async()=>{token=$('token').value.trim();try{const d=await api('ping');if(d.environment!=='staging')throw Error('Not staging');$('token').value='';$('login').hidden=true;$('app').hidden=false;await categories();await load()}catch(e){token='';alert(e.message)}};
+$('loginBtn').onclick=async()=>{token=$('token').value.trim();try{const d=await api('ping');if(d.environment!=='staging')throw Error('Not staging');$('token').value='';$('login').hidden=true;$('app').hidden=false;await categories();await load();setupTabs()}catch(e){token='';alert(e.message)}};
+let rulesManager=null;
+function setupTabs(){
+  $('questionsTab').onclick=()=>{$('questionsView').hidden=false;$('rulesView').hidden=true;$('questionsTab').classList.add('selected');$('rulesTab').classList.remove('selected')};
+  $('rulesTab').onclick=async()=>{$('questionsView').hidden=true;$('rulesView').hidden=false;$('questionsTab').classList.remove('selected');$('rulesTab').classList.add('selected');if(!rulesManager)rulesManager=window.mountQuizRules(api);await rulesManager.init()};
+}
 async function categories(){const d=await api('categories');$('category').innerHTML='<option value="">Tất cả chủ đề</option>'+d.rows.map(x=>'<option value="'+esc(x.category_en)+'">'+esc(x.category_en)+' ('+x.n+')</option>').join('')}
 async function load(){message('Đang tải câu hỏi...');try{const d=await api('questions?q='+encodeURIComponent($('query').value)+'&category='+encodeURIComponent($('category').value)+'&page='+page);rows=d.rows;total=d.total;$('count').textContent=total+' câu';$('page').textContent='Trang '+page+' / '+Math.max(1,Math.ceil(total/40));$('prev').disabled=page<=1;$('next').disabled=page*40>=total;$('results').innerHTML=rows.map((r,i)=>'<tr><td>'+esc(r.id)+'</td><td>'+esc(r.category_en)+'</td><td>'+esc(r.question_en)+'</td><td>'+esc(r.correct)+'</td><td><button data-row="'+i+'" class="secondary">Sửa</button></td></tr>').join('');document.querySelectorAll('[data-row]').forEach(b=>b.onclick=()=>edit(rows[Number(b.dataset.row)],false));message('Đã tải '+rows.length+' / '+total+' câu.')}catch(e){message('Lỗi: '+e.message)}}
 $('searchBtn').onclick=()=>{page=1;load()};$('query').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();page=1;load()}};
@@ -70,4 +107,4 @@ async function read(file){const ext=file.name.split('.').pop().toLowerCase();if(
 $('preview').onclick=async()=>{const file=$('file').files[0];if(!file)return alert('Chọn file trước');try{let input=await read(file);if(input.length>20000)throw Error('Một lần tối đa 20.000 câu');const seen=new Set();pending=input.map(row=>{const n={};for(const k of FIELDS)n[k]=String(row[k]??'').trim();validate(n);if(seen.has(n.id))throw Error('ID trùng trong file: '+n.id);seen.add(n.id);return n});$('importPreview').hidden=false;$('importInfo').textContent=pending.length+' câu được kiểm tra. Chế độ: '+$('mode').selectedOptions[0].textContent;$('previewRows').innerHTML=pending.slice(0,25).map(x=>'<tr><td>'+esc(x.id)+'</td><td>'+esc(x.category_en)+'</td><td>'+esc(x.question_en)+'</td><td>'+esc(x.correct)+'</td></tr>').join('');message('Preview thành công. Chưa ghi dữ liệu.')}catch(e){pending=[];$('importPreview').hidden=true;alert(e.message)}};
 $('importBtn').onclick=async()=>{if(!pending.length)return;const mode=$('mode').value;if(!confirm('Xác nhận ghi '+pending.length+' câu vào D1 STAGING? Mỗi lô tối đa 40 câu.'))return;$('importBtn').disabled=true;let updated=0,created=0;try{for(let i=0;i<pending.length;i+=40){const result=await api('import',{method:'POST',body:JSON.stringify({mode,rows:pending.slice(i,i+40)})});updated+=result.updated;created+=result.created;message('Đã xử lý '+Math.min(i+40,pending.length)+'/'+pending.length+' • Updated '+updated+' • New '+created)}message('HOÀN THÀNH: Cập nhật '+updated+', tạo mới '+created);pending=[];$('importPreview').hidden=true;await categories();await load()}catch(e){message('Import dừng: '+e.message+'; các lô trước đã lưu. Có thể chạy lại theo ID.')}finally{$('importBtn').disabled=false}};
 })();
-</script></body></html>
+</script><script src="./rules-ui.js"></script></body></html>
