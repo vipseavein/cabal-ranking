@@ -1,4 +1,5 @@
 import {handleAdmin} from './admin.js';
+import {pickQuestions} from './rules.js';
 const ALLOWED_SIZES=[15,30,50];
 const LETTERS=['A','B','C','D'];
 const BANK_SIZE=15000;
@@ -85,37 +86,12 @@ async function startQuiz(request,env){
   let body={};try{body=await request.json();}catch(_){}
   const count=Number(body.count||50);
   if(!ALLOWED_SIZES.includes(count))return fail('Quiz size must be 15, 30, or 50.');
-  // ONE combined quota for Skill, Myth, Merit, Stellar Force, OLV and Wing:
-  // High (15) = 1 total, Highest (30) = 2 total, Ultimate (50) = 3 total.
-  // Recognize the existing English category names, including Wing variants.
-  const specialFilter=`(
-    LOWER(TRIM(category_en)) IN
-      ('skill','skills','myth','merit','stellar force','stellar','overload mastery','olv',
-       'wing','wings','wing system','wing mastery')
-    OR LOWER(TRIM(category_en)) LIKE 'wing %'
-  )`;
-  const specialCount=count===15?1:count===30?2:3;
+  // Read D1 rules for every NEW session; no Worker redeploy needed after edits.
   const selectFields='id,category_vi,category_en,subtopic_vi,subtopic_en,difficulty_vi,difficulty_en,question_vi,question_en,option_a,option_b,option_c,option_d,correct';
-
-  const special=await env.QUIZ_DB.prepare(
-    `SELECT ${selectFields} FROM quiz_questions WHERE ${specialFilter} ORDER BY RANDOM() LIMIT ?`
-  ).bind(specialCount).all();
-  if(!special.success||special.results.length!==specialCount)
-    return fail('Not enough special-topic questions in the bank.',503);
-
-  const generalCount=count-specialCount;
-  const general=await env.QUIZ_DB.prepare(
-    `SELECT ${selectFields} FROM quiz_questions WHERE NOT ${specialFilter} ORDER BY RANDOM() LIMIT ?`
-  ).bind(generalCount).all();
-  if(!general.success||general.results.length!==generalCount)
-    return fail('Not enough general-topic questions in the bank.',503);
-
-  const selected=[...special.results,...general.results];
-  // Randomize question order without altering the fixed combined quota.
-  for(let i=selected.length-1;i>0;i--){
-    const j=randomInt(i+1);
-    [selected[i],selected[j]]=[selected[j],selected[i]];
-  }
+  let selected;
+  try{selected=await pickQuestions(env.QUIZ_DB,count,selectFields)}
+  catch(e){console.error('Quiz selection rules:',e);return fail('Question bank or quiz rules invalid.',503)}
+  for(let i=selected.length-1;i>0;i--){const j=randomInt(i+1);[selected[i],selected[j]]=[selected[j],selected[i]];}
   const shuffled=selected.map(shuffleQuestion);
   const now=Date.now(),sessionId=crypto.randomUUID();
   await env.QUIZ_DB.prepare(`
