@@ -1,3 +1,4 @@
+import {handleRulesAdmin} from './admin-rules.js';
 // Protected Quiz Question Manager API. Secrets are never returned to frontend.
 const FIELDS=['category_vi','category_en','subtopic_vi','subtopic_en','difficulty_vi','difficulty_en','question_vi','question_en','option_a','option_b','option_c','option_d','correct'];
 const REQUIRED=['category_vi','category_en','question_vi','question_en','option_a','option_b','option_c','option_d','correct'];
@@ -38,6 +39,7 @@ export async function handleAdmin(request,env,url){
   const db=env.QUIZ_DB;if(!db)return reply({error:'Database binding missing'},500);
   const action=url.pathname.slice('/api/quiz/admin/'.length);
   try{
+    if(action==='rules'||action.startsWith('rules/'))return await handleRulesAdmin(request,db,action);
     if(request.method==='GET'&&action==='ping')return reply({ok:true,environment:'staging',writeEnabled:true});
     if(request.method==='GET'&&action==='questions'){
       const query=(url.searchParams.get('q')||'').trim().slice(0,120);
