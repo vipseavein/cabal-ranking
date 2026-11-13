@@ -144,3 +144,5 @@ jobs:
 # V8 gameplay-first QA: full-bank protected review scanner (read-only) on staging.
 
 # V8 backup: read-only authenticated full D1 bank export, CSV / JSON / XLSX.
+
+# V5.12: prevent ordinary question text selection and copying; not a full AI-prevention mechanism.
