@@ -71,6 +71,19 @@ export async function handleAdmin(request,env,url){
       const records=await db.prepare(core+'SELECT session_id,player_name,score,total,duration_ms,completed_at,email FROM filtered ORDER BY score DESC,duration_ms ASC,completed_at ASC LIMIT 50 OFFSET ?').bind(...bind,...qbind,(page-1)*50).all();
       return reply({size,period,page,total:Number(total?.n||0),rows:(records.results||[]).map((x,i)=>({rank:(page-1)*50+i+1,sessionId:x.session_id,playerName:x.player_name,score:x.score,total:x.total,durationMs:x.duration_ms,completedAt:x.completed_at,email:x.email||null}))});
     }
+    if(request.method==='GET'&&action==='questions/export-page'){
+      // Authenticated cursor pagination for complete, lossless backups.
+      // Each page is small to avoid Worker memory and D1 response limits.
+      const after=(url.searchParams.get('after')||'').trim();
+      if(after&&!/^Q\d{5,8}$/.test(after))return reply({error:'Invalid pagination cursor'},400);
+      const limit=Math.max(1,Math.min(250,Number(url.searchParams.get('limit'))||200));
+      const rows=await db.prepare('SELECT '+SELECT+' FROM quiz_questions WHERE id>? ORDER BY id ASC LIMIT ?').bind(after,limit).all();
+      if(!rows.success)return reply({error:'D1 export page failed'},503);
+      const result=rows.results||[];
+      const nextCursor=result.length?result[result.length-1].id:after;
+      const count=after?null:Number((await db.prepare('SELECT COUNT(*) AS n FROM quiz_questions').first())?.n||0);
+      return reply({rows:result,nextCursor,hasMore:result.length===limit,total:count,fields:['id',...FIELDS]});
+    }
     if(request.method==='GET'&&action==='questions'){
       const query=(url.searchParams.get('q')||'').trim().slice(0,120);
       const cat=(url.searchParams.get('category')||'').trim().slice(0,100);
