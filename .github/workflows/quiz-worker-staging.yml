@@ -72,6 +72,7 @@ jobs:
       - name: Validate Worker JavaScript
         run: |
           node --check src/index.js
+          node --check ../quiz/play.js
           node --check src/admin.js
           node --check src/rules.js
           node --check src/admin-rules.js
@@ -90,6 +91,8 @@ jobs:
         run: npx wrangler d1 execute cabal-ranking-quiz-v5-staging --config wrangler.staging.toml --remote --file ./rules-schema.sql --yes
       - name: Initialize private email storage in STAGING D1
         run: npx wrangler d1 execute cabal-ranking-quiz-v5-staging --config wrangler.staging.toml --remote --file ./private-email-schema.sql --yes
+      - name: Initialize STAGING per-question timer tracking
+        run: npx wrangler d1 execute cabal-ranking-quiz-v5-staging --config wrangler.staging.toml --remote --file ./timer-schema.sql --yes
       - name: Deploy staging Worker only
         run: npx wrangler deploy --config wrangler.staging.toml
       - name: Show staging health URL
@@ -110,3 +113,5 @@ jobs:
 # V1.2 Quiz Rules Manager: read/save/preview/rollback protected, staging database only.
 
 # V5.7 optional player email stored privately, admin-only ranking tab, rotating tier glow.
+
+# V5.6: 15-second server-authoritative countdown for every Quiz question.
