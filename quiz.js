@@ -4,13 +4,13 @@ const API=(window.CABAL_QUIZ_API_BASE||'')+'/api/quiz';
 const LANGKEY='cabalRankingQuizLang';
 const PLAY_BASE=window.CABAL_QUIZ_PLAY_BASE||'/quiz/';
 let lang=localStorage.getItem(LANGKEY)||'en';
-let size=50, period='all', rows=null, loading=false, error='';
+let size=15, period='all', rows=null, loading=false, error='';
 const t=(vi,en)=>lang==='vi'?vi:en;
 const h=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const fmt=ms=>{const sec=Math.max(0,Math.floor(ms/1000)),m=Math.floor(sec/60),s=sec%60;return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`};
 const rerender=()=>window.CABAL_RANKING_RENDER?.();
 const tier=n=>n===15?'High':n===30?'Highest':'Ultimate';
-async function api(path){const r=await fetch(API+path,{headers:{'cache-control':'no-cache'}});let d={};try{d=await r.json()}catch(_){ }if(!r.ok)throw new Error(d.error||`HTTP ${r.status}`);return d}
+async function api(path){const r=await fetch(API+path,{cache:'no-store'});let d={};try{d=await r.json()}catch(_){ }if(!r.ok)throw new Error(d.error||`HTTP ${r.status}`);return d}
 async function load(){
   loading=true;error='';rerender();
   try{const d=await api(`/leaderboard?period=${encodeURIComponent(period)}&size=${size}`);rows=d.rows||[]}
