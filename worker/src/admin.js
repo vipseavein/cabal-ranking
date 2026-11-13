@@ -1,3 +1,4 @@
+import {handleQualityAdmin} from './admin-quality.js';
 import {handleRankingDelete} from './admin-records.js';
 import {handleAdminTimers} from './admin-timers.js';
 import {handleRulesAdmin} from './admin-rules.js';
@@ -43,6 +44,7 @@ export async function handleAdmin(request,env,url){
   try{
     if(action==='rules'||action.startsWith('rules/'))return await handleRulesAdmin(request,db,action);
     if(action==='timers'||action.startsWith('timers/'))return await handleAdminTimers(request,db,action);
+    if(action.startsWith('quality/'))return await handleQualityAdmin(request,db,action,url);
     if(action.startsWith('rankings/delete-'))return await handleRankingDelete(request,db,action);
     if(request.method==='GET'&&action==='ping')return reply({ok:true,environment:'staging',writeEnabled:true});
     if(request.method==='GET'&&action==='rankings'){
