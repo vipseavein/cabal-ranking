@@ -45,12 +45,58 @@ export async function measureRules(db,rules){
   });
   return {total:totalRows,availableSpecial:specials,availableGeneral:normal,tiers,valid:tiers.every(x=>x.valid)};
 }
+// The old ORDER BY RANDOM() scanned ~30k-40k D1 rows PER SELECT.
+// Pool + (pool_type,random_key,question_id) index seeks return only the requested rows.
+// Small independent blocks improve question variety without scanning the bank.
+const POOL_INDEX='idx_quiz_question_pool_type_random';
+const RANDOM_SPACE=2147483647;
+function randomCursor(){
+  const b=new Uint32Array(1);crypto.getRandomValues(b);
+  return b[0]%RANDOM_SPACE;
+}
+async function indexedBlock(db,poolType,columns,limit){
+  const cursor=randomCursor();
+  // columns is a developer-owned field list, never user input.
+  const selected=columns.split(',').map(x=>'q.'+x.trim()).join(',');
+  const prefix='SELECT '+selected+' FROM quiz_question_pool p INDEXED BY '+POOL_INDEX+
+    ' JOIN quiz_questions q ON q.id=p.question_id WHERE p.pool_type=? AND p.random_key ';
+  const first=await db.prepare(prefix+'>=? ORDER BY p.random_key,p.question_id LIMIT ?')
+    .bind(poolType,cursor,limit).all();
+  if(!first.success)throw Error('Indexed question pool lookup failed');
+  const result=[...(first.results||[])];
+  if(result.length<limit){
+    const second=await db.prepare(prefix+'<? ORDER BY p.random_key,p.question_id LIMIT ?')
+      .bind(poolType,cursor,limit-result.length).all();
+    if(!second.success)throw Error('Indexed question pool wraparound lookup failed');
+    result.push(...(second.results||[]));
+  }
+  return result;
+}
+async function samplePool(db,poolType,count,columns){
+  if(count===0)return [];
+  const chosen=new Map();
+  // A maximum of 8 questions per index seek gives independently sampled sections.
+  for(let attempt=0;chosen.size<count&&attempt<12;attempt++){
+    const missing=count-chosen.size;
+    const blocks=[],groups=Math.min(10,Math.ceil(missing/8));
+    for(let j=0;j<groups;j++){
+      const limit=Math.min(8,missing-j*8);
+      blocks.push(indexedBlock(db,poolType,columns,limit));
+    }
+    const batch=await Promise.all(blocks);
+    for(const rows of batch)for(const q of rows)if(!chosen.has(q.id))chosen.set(q.id,q);
+  }
+  if(chosen.size<count)throw Error('Not enough eligible questions in indexed pool. Check Rules and pool synchronization.');
+  const result=[...chosen.values()];
+  for(let i=result.length-1;i>0;i--){const j=randomCursor()%(i+1);[result[i],result[j]]=[result[j],result[i]];}
+  return result.slice(0,count);
+}
 export async function pickQuestions(db,count,columns){
-  const {rules}=await getRules(db),{sql,params}=topicClause(rules),quota=rules.quotas[count];
-  if(!Number.isInteger(quota))throw Error('Rule not configured for this quiz size');
-  const special=quota?await db.prepare('SELECT '+columns+' FROM quiz_questions WHERE '+sql+' ORDER BY RANDOM() LIMIT ?').bind(...params,quota).all():{success:true,results:[]};
-  const generalCount=count-quota;
-  const general=generalCount?await db.prepare('SELECT '+columns+' FROM quiz_questions WHERE NOT ('+sql+') ORDER BY RANDOM() LIMIT ?').bind(...params,generalCount).all():{success:true,results:[]};
-  if(!special.success||!general.success||special.results.length!==quota||general.results.length!==generalCount)throw Error('Question bank does not have enough questions for current quiz rules');
-  return [...special.results,...general.results];
+  const {rules}=await getRules(db),quota=rules.quotas[count];
+  if(!Number.isInteger(quota)||quota<0||quota>count)throw Error('Rule not configured for this tier');
+  const [special,general]=await Promise.all([
+    samplePool(db,1,quota,columns),
+    samplePool(db,0,count-quota,columns)
+  ]);
+  return [...special,...general];
 }
