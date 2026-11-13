@@ -26,7 +26,7 @@ table{border-collapse:collapse;width:100%}th,td{text-align:left;white-space:nowr
 <div class="row"><input id="token" type="password" autocomplete="off" placeholder="Nhập Admin Token" style="max-width:540px"><button id="loginBtn">Kết nối STAGING</button></div>
 </section>
 <div id="app" hidden>
-<nav class="tabbar"><button type="button" id="questionsTab" class="selected">Questions • Ngân hàng câu hỏi</button><button type="button" id="rulesTab">Quiz Rules • Phân bổ chủ đề</button></nav>
+<nav class="tabbar"><button type="button" id="questionsTab" class="selected">Questions • Ngân hàng câu hỏi</button><button type="button" id="rulesTab">Quiz Rules • Phân bổ chủ đề</button><button type="button" id="rankingTab">Player Ranking • Emails</button></nav>
 <div id="questionsView">
 <section class="panel"><h2>Tìm kiếm câu hỏi <span id="count" class="pill">—</span></h2>
 <div class="search"><input id="query" placeholder="ID Q00001 hoặc nội dung VI / EN..."><select id="category"><option value="">Tất cả chủ đề</option></select><button id="searchBtn">Tìm kiếm</button></div>
@@ -70,6 +70,22 @@ table{border-collapse:collapse;width:100%}th,td{text-align:left;white-space:nowr
 </section>
 </div>
 </div>
+<section id="rankingView" hidden>
+<div class="panel">
+  <div class="sub">CABAL QUIZ • PRIVATE PLAYER CONTACTS</div>
+  <h2 style="margin-top:8px">Player Ranking &amp; Email</h2>
+  <p class="muted">Chỉ Admin Token mới được truy cập email. Email không được hiển thị trên bảng xếp hạng công khai. Người chơi không bắt buộc nhập email.</p>
+  <div class="row">
+    <select id="adminRankSize" style="max-width:170px"><option value="15">High • 15</option><option value="30">Highest • 30</option><option value="50">Ultimate • 50</option></select>
+    <select id="adminRankPeriod" style="max-width:190px"><option value="all">Overall</option><option value="day">Daily</option><option value="week">Weekly</option><option value="month">Monthly</option><option value="year">Yearly</option></select>
+    <input id="adminRankSearch" placeholder="Tìm Name / IGN hoặc email..." style="flex:1;min-width:220px">
+    <button id="adminRankRefresh" class="secondary">Tìm / Tải lại</button>
+  </div>
+  <div id="adminRankingStatus" role="status" style="padding:12px;background:#0b2232;border:1px solid #286180;border-radius:8px;margin:14px 0">Chọn tab để tải ranking</div>
+  <div class="tablewrap"><table><thead><tr><th>#</th><th>Name / IGN</th><th>Email (Admin only)</th><th>Score</th><th>Time</th><th>Completed GMT+7</th></tr></thead><tbody id="adminRankingRows"></tbody></table></div>
+  <div class="row" style="margin-top:13px"><button class="secondary" id="adminRankPrev">← Trước</button><span id="adminRankingPage">Trang 1</span><button class="secondary" id="adminRankNext">Tiếp →</button></div>
+</div>
+</section>
 <footer>Question Manager V1.2 • STAGING • ID cố định • Import 40 bản ghi/lô • Worker-side authentication</footer>
 </main>
 <script>
@@ -87,9 +103,17 @@ async function api(url,opt={}){
 }
 $('loginBtn').onclick=async()=>{token=$('token').value.trim();try{const d=await api('ping');if(d.environment!=='staging')throw Error('Not staging');$('token').value='';$('login').hidden=true;$('app').hidden=false;await categories();await load();setupTabs()}catch(e){token='';alert(e.message)}};
 let rulesManager=null;
+let privateRanking=null;
 function setupTabs(){
-  $('questionsTab').onclick=()=>{$('questionsView').hidden=false;$('rulesView').hidden=true;$('questionsTab').classList.add('selected');$('rulesTab').classList.remove('selected')};
-  $('rulesTab').onclick=async()=>{$('questionsView').hidden=true;$('rulesView').hidden=false;$('questionsTab').classList.remove('selected');$('rulesTab').classList.add('selected');if(!rulesManager)rulesManager=window.mountQuizRules(api);await rulesManager.init()};
+  const show=id=>{
+    $('questionsView').hidden=id!=='questions';
+    $('rulesView').hidden=id!=='rules';
+    $('rankingView').hidden=id!=='ranking';
+    for(const [tab,key] of [['questionsTab','questions'],['rulesTab','rules'],['rankingTab','ranking']])$(''+tab).classList.toggle('selected',id===key);
+  };
+  $('questionsTab').onclick=()=>show('questions');
+  $('rulesTab').onclick=async()=>{show('rules');if(!rulesManager)rulesManager=window.mountQuizRules(api);await rulesManager.init()};
+  $('rankingTab').onclick=async()=>{show('ranking');if(!privateRanking)privateRanking=window.mountPrivateRankings(api);await privateRanking.load()};
 }
 async function categories(){const d=await api('categories');$('category').innerHTML='<option value="">Tất cả chủ đề</option>'+d.rows.map(x=>'<option value="'+esc(x.category_en)+'">'+esc(x.category_en)+' ('+x.n+')</option>').join('')}
 async function load(){message('Đang tải câu hỏi...');try{const d=await api('questions?q='+encodeURIComponent($('query').value)+'&category='+encodeURIComponent($('category').value)+'&page='+page);rows=d.rows;total=d.total;$('count').textContent=total+' câu';$('page').textContent='Trang '+page+' / '+Math.max(1,Math.ceil(total/40));$('prev').disabled=page<=1;$('next').disabled=page*40>=total;$('results').innerHTML=rows.map((r,i)=>'<tr><td>'+esc(r.id)+'</td><td>'+esc(r.category_en)+'</td><td>'+esc(r.question_en)+'</td><td>'+esc(r.correct)+'</td><td><button data-row="'+i+'" class="secondary">Sửa</button></td></tr>').join('');document.querySelectorAll('[data-row]').forEach(b=>b.onclick=()=>edit(rows[Number(b.dataset.row)],false));message('Đã tải '+rows.length+' / '+total+' câu.')}catch(e){message('Lỗi: '+e.message)}}
@@ -107,4 +131,4 @@ async function read(file){const ext=file.name.split('.').pop().toLowerCase();if(
 $('preview').onclick=async()=>{const file=$('file').files[0];if(!file)return alert('Chọn file trước');try{let input=await read(file);if(input.length>20000)throw Error('Một lần tối đa 20.000 câu');const seen=new Set();pending=input.map(row=>{const n={};for(const k of FIELDS)n[k]=String(row[k]??'').trim();validate(n);if(seen.has(n.id))throw Error('ID trùng trong file: '+n.id);seen.add(n.id);return n});$('importPreview').hidden=false;$('importInfo').textContent=pending.length+' câu được kiểm tra. Chế độ: '+$('mode').selectedOptions[0].textContent;$('previewRows').innerHTML=pending.slice(0,25).map(x=>'<tr><td>'+esc(x.id)+'</td><td>'+esc(x.category_en)+'</td><td>'+esc(x.question_en)+'</td><td>'+esc(x.correct)+'</td></tr>').join('');message('Preview thành công. Chưa ghi dữ liệu.')}catch(e){pending=[];$('importPreview').hidden=true;alert(e.message)}};
 $('importBtn').onclick=async()=>{if(!pending.length)return;const mode=$('mode').value;if(!confirm('Xác nhận ghi '+pending.length+' câu vào D1 STAGING? Mỗi lô tối đa 40 câu.'))return;$('importBtn').disabled=true;let updated=0,created=0;try{for(let i=0;i<pending.length;i+=40){const result=await api('import',{method:'POST',body:JSON.stringify({mode,rows:pending.slice(i,i+40)})});updated+=result.updated;created+=result.created;message('Đã xử lý '+Math.min(i+40,pending.length)+'/'+pending.length+' • Updated '+updated+' • New '+created)}message('HOÀN THÀNH: Cập nhật '+updated+', tạo mới '+created);pending=[];$('importPreview').hidden=true;await categories();await load()}catch(e){message('Import dừng: '+e.message+'; các lô trước đã lưu. Có thể chạy lại theo ID.')}finally{$('importBtn').disabled=false}};
 })();
-</script><script src="./rules-ui.js"></script></body></html>
+</script><script src="./rules-ui.js"></script><script src="./ranking-ui.js"></script></body></html>
