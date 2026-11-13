@@ -67,3 +67,14 @@
 .quiz-tier-card.tier-30 button.quiz-tier-start{background:#F1F7FF!important;color:#081521!important;border-color:#FFFFFF!important}
 .quiz-board-controls button[data-board-size="30"]{background:#EDF5FF!important;color:#0A1929!important;border:1px solid #FFFFFF!important}
 .quiz-board-controls button[data-board-size="30"] small{color:#34475B!important}
+
+/* Highest must be true WHITE, not blue-gray, across every view */
+.quiz-ranking-shell .quiz-tier-quick.tier-color-30 > a.quiz-quick-play,
+.quiz-ranking-shell .quiz-tier-quick.tier-color-30 > button[data-quiz-size="30"],
+.quiz-tier-card.tier-30 button.quiz-tier-start,
+.quiz-board-controls button[data-board-size="30"]{
+  background:#FFFFFF!important;
+  color:#071423!important;
+  border-color:#FFFFFF!important;
+}
+.quiz-tier-card.tier-30 .quiz-tier-badge{color:#FFFFFF!important;border-color:#FFFFFF!important}
