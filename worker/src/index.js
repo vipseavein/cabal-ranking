@@ -149,7 +149,7 @@ async function recordQuiz(request,env){
   const body=await request.json(),sessionId=String(body.sessionId||'').trim(),playerName=cleanName(body.playerName);
   const rawEmail=String(body.email??'').trim();
   // Optional contact email for private admin event verification only. Never part of public leaderboard.
-  if(rawEmail.length>254||rawEmail&&(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(rawEmail)||/[<>\\r\\n]/.test(rawEmail)))return fail('Invalid email address.',400);
+  if(rawEmail.length>254||rawEmail&&(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(rawEmail)||/[<>\r\n]/.test(rawEmail)))return fail('Invalid email address.',400);
   const email=rawEmail.toLowerCase();
   const s=await env.QUIZ_DB.prepare('SELECT completed,recorded,score,total,duration_ms,completed_at FROM quiz_sessions WHERE id=?').bind(sessionId).first();
   if(!s)return fail('Quiz session not found.',404);
