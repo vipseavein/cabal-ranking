@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CABAL Quiz • Question Manager STAGING</title>
+<style>
+:root{color-scheme:dark;--bg:#070d15;--panel:#111e2b;--line:#2b445a;--txt:#e3f3ff;--muted:#90aabc;--cyan:#44cfff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top left,#132c43,#070d15 60%);color:var(--txt);font:14px Segoe UI,Arial,sans-serif}
+main{max-width:1480px;padding:25px;margin:auto}header{display:flex;align-items:center;gap:20px;justify-content:space-between;flex-wrap:wrap;margin-bottom:17px}
+h1{font-size:26px;margin:5px 0}h2{font-size:17px;margin:0 0 14px}.sub{letter-spacing:2px;color:var(--cyan);font-size:11px;font-weight:800}
+.panel{background:rgba(15,28,41,.92);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+label{display:block;color:#a5bbcc;font-size:12px;margin-bottom:5px}
+input,select,textarea{width:100%;background:#08121e;color:var(--txt);border:1px solid #34506a;border-radius:7px;padding:11px;font:inherit}
+textarea{min-height:90px;resize:vertical}button,.button{font:700 13px Segoe UI,Arial;border-radius:7px;background:#136e95;border:1px solid #36bad9;color:#fff;padding:11px 16px;cursor:pointer}
+button.secondary{background:#142336;border-color:#39556a}.danger{color:#ff9fac}.muted{color:var(--muted)}button:disabled{opacity:.5;cursor:not-allowed}
+.search{display:grid;grid-template-columns:2fr 1fr auto;gap:10px}.tablewrap{overflow:auto;max-height:480px;border:1px solid #284154;border-radius:8px}
+table{border-collapse:collapse;width:100%}th,td{text-align:left;white-space:nowrap;padding:10px;border-bottom:1px solid #243b50}th{color:#85aacc;background:#101f2d;position:sticky;top:0}td{max-width:550px;overflow:hidden;text-overflow:ellipsis}
+.pill{padding:4px 9px;border-radius:25px;border:1px solid #2d86aa;color:#8fe2ff;font-size:11px;font-weight:800}
+#status{padding:12px 14px;background:#0b2232;border:1px solid #286180;border-radius:8px;margin:12px 0;white-space:pre-wrap}
+[hidden]{display:none!important}a{color:#8adfff}footer{color:#8ea7bb;text-align:center;margin:30px 0}
+@media(max-width:760px){.grid,.search{grid-template-columns:1fr}main{padding:12px}}
+</style></head><body><main>
+<header><div><div class="sub">CABAL QUIZ • PRIVATE CONTROL PANEL</div><h1>Question Manager <span class="pill">STAGING ONLY</span></h1><div class="muted">Quản lý ngân hàng câu hỏi D1 • không công khai đáp án • không chỉnh production</div></div><a href="/quiz/">← Trang Quiz</a></header>
+<section class="panel" id="login">
+<h2>Đăng nhập quản trị</h2>
+<p class="muted">Sử dụng khóa <code>QUIZ_ADMIN_TOKEN</code> lưu trong Cloudflare Worker Secrets. Khóa không được lưu vào GitHub, Local Storage hay URL.</p>
+<div class="row"><input id="token" type="password" autocomplete="off" placeholder="Nhập Admin Token" style="max-width:540px"><button id="loginBtn">Kết nối STAGING</button></div>
+</section>
+<div id="app" hidden>
+<section class="panel"><h2>Tìm kiếm câu hỏi <span id="count" class="pill">—</span></h2>
+<div class="search"><input id="query" placeholder="ID Q00001 hoặc nội dung VI / EN..."><select id="category"><option value="">Tất cả chủ đề</option></select><button id="searchBtn">Tìm kiếm</button></div>
+<div id="status" role="status">Đã kết nối với staging.</div>
+<div class="tablewrap"><table><thead><tr><th>ID</th><th>Category</th><th>English question</th><th>Đáp án</th><th></th></tr></thead><tbody id="results"></tbody></table></div>
+<div class="row" style="margin-top:12px"><button class="secondary" id="prev">← Trang trước</button><span id="page">1</span><button class="secondary" id="next">Trang tiếp →</button><button class="secondary" id="newQuestion">Tạo câu mới</button><button class="secondary" id="downloadTemplate">Tải mẫu CSV</button></div></section>
+<section class="panel" id="editorPanel" hidden><h2>Chỉnh sửa câu hỏi <span id="editId"></span></h2>
+<form id="editForm"><div class="grid" id="fields"></div><div class="row" style="margin-top:16px"><button type="submit" id="save">Lưu vào STAGING</button><button class="secondary" type="button" id="cancel">Đóng</button><button class="secondary" type="button" id="historyBtn">Lịch sử thay đổi</button></div></form><pre id="history" hidden></pre></section>
+<section class="panel"><h2>Import hàng loạt CSV / JSON / XLSX</h2><p class="muted">Hỗ trợ thêm mới / cập nhật theo ID. Chọn file, xem trước và xác nhận. XLSX được đọc tại trình duyệt bằng thư viện SheetJS, không tải tệp lên bên thứ ba. Có thể dùng CSV nếu thư viện không tải được.</p>
+<div class="row"><input id="file" type="file" accept=".csv,.json,.xlsx,.xls" style="max-width:550px"><select id="mode" style="max-width:220px"><option value="update">Chỉ sửa ID đã có (an toàn)</option><option value="upsert">Thêm mới + sửa ID</option></select><button id="preview" class="secondary">Kiểm tra file</button></div>
+<div id="importPreview" hidden><p id="importInfo"></p><div class="tablewrap"><table><thead><tr><th>ID</th><th>Category</th><th>Question EN</th><th>Correct</th></tr></thead><tbody id="previewRows"></tbody></table></div><p class="danger">Chỉ import sau khi đã kiểm tra câu hỏi, đáp án và ID. Để khôi phục, dùng lịch sử hoặc bản sao D1.</p><button id="importBtn">Xác nhận import vào STAGING</button></div>
+</section>
+</div>
+<footer>Question Manager V1 • STAGING • ID cố định • Import 40 bản ghi/lô • Worker-side authentication</footer>
+</main>
+<script>
+(()=>{'use strict';
+const FIELDS=['id','category_vi','category_en','subtopic_vi','subtopic_en','difficulty_vi','difficulty_en','question_vi','question_en','option_a','option_b','option_c','option_d','correct'];
+const REQUIRED=['id','category_vi','category_en','question_vi','question_en','option_a','option_b','option_c','option_d','correct'];
+const $=x=>document.getElementById(x),esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let token='',rows=[],pending=[],page=1,total=0,active=null;
+const fieldNames={id:'ID (Q00001)',category_vi:'Category VI',category_en:'Category EN',subtopic_vi:'Subtopic VI',subtopic_en:'Subtopic EN',difficulty_vi:'Difficulty VI',difficulty_en:'Difficulty EN',question_vi:'Question VI',question_en:'Question EN',option_a:'Option A',option_b:'Option B',option_c:'Option C',option_d:'Option D',correct:'Correct (A/B/C/D)'};
+function message(s){$('status').textContent=s}
+async function api(url,opt={}){
+ const r=await fetch('/api/quiz/admin/'+url,{...opt,headers:{authorization:'Bearer '+token,'content-type':'application/json',...(opt.headers||{})},cache:'no-store'});
+ let d;try{d=await r.json()}catch{throw Error('Response invalid: HTTP '+r.status)}
+ if(!r.ok)throw Error(d.error||'HTTP '+r.status);return d;
+}
+$('loginBtn').onclick=async()=>{token=$('token').value.trim();try{const d=await api('ping');if(d.environment!=='staging')throw Error('Not staging');$('token').value='';$('login').hidden=true;$('app').hidden=false;await categories();await load()}catch(e){token='';alert(e.message)}};
+async function categories(){const d=await api('categories');$('category').innerHTML='<option value="">Tất cả chủ đề</option>'+d.rows.map(x=>'<option value="'+esc(x.category_en)+'">'+esc(x.category_en)+' ('+x.n+')</option>').join('')}
+async function load(){message('Đang tải câu hỏi...');try{const d=await api('questions?q='+encodeURIComponent($('query').value)+'&category='+encodeURIComponent($('category').value)+'&page='+page);rows=d.rows;total=d.total;$('count').textContent=total+' câu';$('page').textContent='Trang '+page+' / '+Math.max(1,Math.ceil(total/40));$('prev').disabled=page<=1;$('next').disabled=page*40>=total;$('results').innerHTML=rows.map((r,i)=>'<tr><td>'+esc(r.id)+'</td><td>'+esc(r.category_en)+'</td><td>'+esc(r.question_en)+'</td><td>'+esc(r.correct)+'</td><td><button data-row="'+i+'" class="secondary">Sửa</button></td></tr>').join('');document.querySelectorAll('[data-row]').forEach(b=>b.onclick=()=>edit(rows[Number(b.dataset.row)],false));message('Đã tải '+rows.length+' / '+total+' câu.')}catch(e){message('Lỗi: '+e.message)}}
+$('searchBtn').onclick=()=>{page=1;load()};$('query').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();page=1;load()}};
+$('category').onchange=()=>{page=1;load()};$('prev').onclick=()=>{page--;load()};$('next').onclick=()=>{page++;load()};
+function edit(row,isNew){active={row:{...row},isNew};$('editorPanel').hidden=false;$('editId').textContent=row.id||'(new)';$('fields').innerHTML=FIELDS.map(k=>'<div><label for="f_'+k+'">'+fieldNames[k]+'</label>'+(k.includes('question')?'<textarea id="f_'+k+'">'+esc(row[k])+'</textarea>':'<input id="f_'+k+'" value="'+esc(row[k])+'" '+(k==='id'&&!isNew?'readonly':'')+'>')+'</div>').join('');$('history').hidden=true;$('editorPanel').scrollIntoView({behavior:'smooth'})}
+$('newQuestion').onclick=()=>edit(Object.fromEntries(FIELDS.map(k=>[k,''])),true);
+$('cancel').onclick=()=>$('editorPanel').hidden=true;
+function validate(r){if(REQUIRED.some(k=>!String(r[k]||'').trim()))throw Error(r.id+': thiếu trường bắt buộc');if(!/^Q\d{5,8}$/.test(r.id))throw Error('ID không hợp lệ: '+r.id);if(!['A','B','C','D'].includes(String(r.correct).toUpperCase()))throw Error(r.id+': correct phải là A/B/C/D');r.correct=r.correct.toUpperCase();return r}
+$('editForm').onsubmit=async e=>{e.preventDefault();const row=Object.fromEntries(FIELDS.map(k=>[k,$('f_'+k).value.trim()]));try{validate(row);if(!confirm('Ghi '+row.id+' vào D1 STAGING?'))return;const d=active.isNew?await api('import',{method:'POST',body:JSON.stringify({mode:'upsert',rows:[row]})}):await api('question',{method:'PUT',body:JSON.stringify(row)});message('Đã cập nhật '+row.id);$('editorPanel').hidden=true;await categories();await load()}catch(err){alert(err.message)}};
+$('historyBtn').onclick=async()=>{if(active?.isNew)return;try{const d=await api('history?id='+encodeURIComponent(active.row.id));$('history').hidden=false;$('history').textContent=JSON.stringify(d.rows,null,2)}catch(e){alert(e.message)}};
+$('downloadTemplate').onclick=()=>{const example=Object.fromEntries(FIELDS.map(k=>[k,k==='id'?'Q15001':k==='correct'?'A':'Sample '+k]));const csv=FIELDS.join(',')+'\r\n'+FIELDS.map(k=>JSON.stringify(example[k])).join(',')+'\r\n';const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.download='cabal_quiz_questions_template.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),3000)};
+function parseCSV(t){t=t.replace(/^\uFEFF/,'');let a=[],row=[],field='',quoted=false;for(let i=0;i<t.length;i++){let c=t[i];if(quoted){if(c==='"'&&t[i+1]==='"'){field+='"';i++}else if(c==='"')quoted=false;else field+=c}else if(c==='"')quoted=true;else if(c===','){row.push(field);field=''}else if(c==='\r'||c==='\n'){if(c==='\r'&&t[i+1]==='\n')i++;row.push(field);if(row.some(v=>v!==''))a.push(row);row=[];field=''}else field+=c}row.push(field);if(row.some(v=>v!==''))a.push(row);const header=(a.shift()||[]).map(x=>x.trim().toLowerCase());return a.map(cols=>Object.fromEntries(header.map((k,i)=>[k,cols[i]||''])));}
+async function read(file){const ext=file.name.split('.').pop().toLowerCase();if(ext==='json'){const d=JSON.parse(await file.text());return Array.isArray(d)?d:d.rows||[]}if(ext==='csv')return parseCSV(await file.text());if(['xlsx','xls'].includes(ext)){if(typeof XLSX==='undefined'){await new Promise((resolve,reject)=>{const sc=document.createElement('script');sc.src='https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js';sc.onload=resolve;sc.onerror=()=>reject(Error('Cannot load XLSX reader; export Excel as CSV instead'));document.head.appendChild(sc)})}const buf=await file.arrayBuffer();const wb=XLSX.read(buf,{type:'array'});return XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''})}throw Error('File phải là CSV, JSON hoặc XLSX')}
+$('preview').onclick=async()=>{const file=$('file').files[0];if(!file)return alert('Chọn file trước');try{let input=await read(file);if(input.length>20000)throw Error('Một lần tối đa 20.000 câu');const seen=new Set();pending=input.map(row=>{const n={};for(const k of FIELDS)n[k]=String(row[k]??'').trim();validate(n);if(seen.has(n.id))throw Error('ID trùng trong file: '+n.id);seen.add(n.id);return n});$('importPreview').hidden=false;$('importInfo').textContent=pending.length+' câu được kiểm tra. Chế độ: '+$('mode').selectedOptions[0].textContent;$('previewRows').innerHTML=pending.slice(0,25).map(x=>'<tr><td>'+esc(x.id)+'</td><td>'+esc(x.category_en)+'</td><td>'+esc(x.question_en)+'</td><td>'+esc(x.correct)+'</td></tr>').join('');message('Preview thành công. Chưa ghi dữ liệu.')}catch(e){pending=[];$('importPreview').hidden=true;alert(e.message)}};
+$('importBtn').onclick=async()=>{if(!pending.length)return;const mode=$('mode').value;if(!confirm('Xác nhận ghi '+pending.length+' câu vào D1 STAGING? Mỗi lô tối đa 40 câu.'))return;$('importBtn').disabled=true;let updated=0,created=0;try{for(let i=0;i<pending.length;i+=40){const result=await api('import',{method:'POST',body:JSON.stringify({mode,rows:pending.slice(i,i+40)})});updated+=result.updated;created+=result.created;message('Đã xử lý '+Math.min(i+40,pending.length)+'/'+pending.length+' • Updated '+updated+' • New '+created)}message('HOÀN THÀNH: Cập nhật '+updated+', tạo mới '+created);pending=[];$('importPreview').hidden=true;await categories();await load()}catch(e){message('Import dừng: '+e.message+'; các lô trước đã lưu. Có thể chạy lại theo ID.')}finally{$('importBtn').disabled=false}};
+})();
+</script></body></html>
