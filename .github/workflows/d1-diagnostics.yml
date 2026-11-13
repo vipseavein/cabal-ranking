@@ -27,7 +27,7 @@ jobs:
           node-version: '22'
       - name: Install Wrangler (no deployment)
         run: npm install --no-audit --no-fund
-      - name: Query account-wide D1 insights without database reads
+      - name: Query account, staging, production D1 insights (analytics only)
         shell: bash
         run: |
           if [[ -z "$CLOUDFLARE_API_TOKEN" || -z "$CLOUDFLARE_ACCOUNT_ID" ]]; then
@@ -39,9 +39,11 @@ jobs:
           account_code=$?
           npx wrangler d1 insights cabal-ranking-quiz-v5-staging --sort-type=sum --sort-by=reads --limit=20 --time-period=1d --json > staging-insights.json 2> staging-insights.err
           staging_code=$?
+          npx wrangler d1 insights cabal-ranking-quiz-v5 --sort-type=sum --sort-by=reads --limit=20 --time-period=1d --json > production-insights.json 2> production-insights.err
+          production_code=$?
           set -e
-          for mode in account staging; do
-            if [[ "$mode" == "account" ]]; then code="$account_code"; else code="$staging_code"; fi
+          for mode in account staging production; do
+            if [[ "$mode" == "account" ]]; then code="$account_code"; elif [[ "$mode" == "staging" ]]; then code="$staging_code"; else code="$production_code"; fi
             echo "DIAGNOSTIC $mode exit_code=$code"
             if [[ "$code" == 0 ]]; then
               node scripts/print-d1-diagnostics.mjs "$mode-insights.json" "$mode"
