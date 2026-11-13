@@ -82,3 +82,5 @@ jobs:
 # V5.3 staging verification: category quotas + localized units + tier colors.
 
 # V5.3 follow-up: ensure correct English singular/plural time units in latest staging preview.
+
+# V5.4: combined special-topic quota (Myth/Merit/Stellar/OLV/Wing) = 1/2/3.
