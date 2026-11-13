@@ -1,3 +1,4 @@
+import {handleAdmin} from './admin.js';
 const ALLOWED_SIZES=[15,30,50];
 const LETTERS=['A','B','C','D'];
 const BANK_SIZE=15000;
@@ -84,12 +85,12 @@ async function startQuiz(request,env){
   let body={};try{body=await request.json();}catch(_){}
   const count=Number(body.count||50);
   if(!ALLOWED_SIZES.includes(count))return fail('Quiz size must be 15, 30, or 50.');
-  // ONE combined quota for Myth, Merit, Stellar Force, OLV and Wing:
+  // ONE combined quota for Skill, Myth, Merit, Stellar Force, OLV and Wing:
   // High (15) = 1 total, Highest (30) = 2 total, Ultimate (50) = 3 total.
   // Recognize the existing English category names, including Wing variants.
   const specialFilter=`(
     LOWER(TRIM(category_en)) IN
-      ('myth','merit','stellar force','stellar','overload mastery','olv',
+      ('skill','skills','myth','merit','stellar force','stellar','overload mastery','olv',
        'wing','wings','wing system','wing mastery')
     OR LOWER(TRIM(category_en)) LIKE 'wing %'
   )`;
@@ -216,8 +217,9 @@ async function health(env){
 export default {
   async fetch(request,env){
     try{
-      if(request.method==='OPTIONS')return new Response(null,{status:204,headers:corsHeaders()});
       const url=new URL(request.url),path=url.pathname.replace(/\/+$/,'');
+      if(path.startsWith('/api/quiz/admin/'))return await handleAdmin(request,env,url);
+      if(request.method==='OPTIONS')return new Response(null,{status:204,headers:corsHeaders()});
       if(request.method==='POST'&&path==='/api/quiz/start')return await startQuiz(request,env);
       if(request.method==='POST'&&path==='/api/quiz/answer')return await answerQuiz(request,env);
       if(request.method==='POST'&&path==='/api/quiz/finish')return await finishQuiz(request,env);
