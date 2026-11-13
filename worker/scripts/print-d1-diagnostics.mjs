@@ -10,7 +10,11 @@ for(let i=0;i<Math.min(20,rows.length);i++){
  const x=rows[i],q=String(x.query||'').toLowerCase();
  const tables=known.filter(t=>q.includes(t)).join('+')||'other';
  const op=q.trim().match(/^(with|select|insert|delete|update|create|pragma)/)?.[1]||'other';
+ const randomSort=/order\s+by\s+random\s*\(/i.test(q);
+ const group=/(?:where|and)\s+not\s*\(/i.test(q)?'general':q.includes('category_en')?'special':'other';
+ const hasWindow=/row_number\s*\(/i.test(q);
+
  const numbers=['totalRowsRead','avgRowsRead','numberOfTimesRun','queryEfficiency','totalDurationMs'].map(k=>k+'='+Number(x[k]||0).toFixed(k==='queryEfficiency'?3:0)).join(' ');
- console.log('rank='+(i+1)+' type='+op+' tables='+tables+' '+numbers);
+ console.log('rank='+(i+1)+' type='+op+' tables='+tables+' random_sort='+randomSort+' group='+group+' window='+hasWindow+' '+numbers);
 }
 if(!rows.length)console.log('NO_QUERY_GROUPS_OR_UNRECOGNIZED_SHAPE keys='+Object.keys(v||{}).filter(k=>/^[a-zA-Z]{1,30}$/.test(k)).join(','));
