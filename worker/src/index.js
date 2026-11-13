@@ -176,28 +176,45 @@ async function finishQuiz(request,env){
     .bind(now,score,total,durationMs,sessionId).run();
   return json({score,total,durationMs,completedAt:now,rank:await rankFor(env,total,score,durationMs),tier:tier(total),review:Object.values(answers)});
 }
+// Best records use normalized IGN and separate tiers; IGN itself is not identity verification.
+async function bestForName(env,name,size){
+ const rec=await env.QUIZ_DB.prepare('SELECT player_name,score,total,duration_ms,completed_at FROM quiz_results WHERE player_name_key=? AND total=? ORDER BY score DESC,duration_ms ASC,completed_at ASC LIMIT 1').bind(keyName(name),size).first();
+ if(!rec)return null;
+ return {playerName:rec.player_name,score:Number(rec.score),total:size,durationMs:Number(rec.duration_ms),completedAt:Number(rec.completed_at),rank:await rankFor(env,size,Number(rec.score),Number(rec.duration_ms))};
+}
+function beats(score,durationMs,old){return !old||score>old.score||(score===old.score&&durationMs<old.durationMs)}
+async function playerStatus(request,env){
+ if(!env.QUIZ_DB)return fail('QUIZ_DB binding is not configured.',500);
+ const u=new URL(request.url),name=cleanName(u.searchParams.get('name')),size=Number(u.searchParams.get('size'));
+ if(!ALLOWED_SIZES.includes(size))return fail('Invalid tier.',400);
+ const sid=String(u.searchParams.get('sessionId')||'').trim();
+ if(!sid||sid.length>128)return fail('Valid sessionId required.',400);
+ const attempt=await env.QUIZ_DB.prepare('SELECT score,total,duration_ms,completed FROM quiz_sessions WHERE id=?').bind(sid).first();
+ if(!attempt||!attempt.completed||Number(attempt.total)!==size)return fail('Completed session not found.',404);
+ const score=Number(attempt.score),durationMs=Number(attempt.duration_ms);
+ const best=await bestForName(env,name,size);
+ return json({exists:!!best,tier:tier(size),best,comparison:!best?'new':beats(score,durationMs,best)?'improved':'not_improved',current:{score,total:size,durationMs}});
+}
 async function recordQuiz(request,env){
-  if(!env.QUIZ_DB)return fail('QUIZ_DB binding is not configured.',500);
-  const body=await request.json(),sessionId=String(body.sessionId||'').trim(),playerName=cleanName(body.playerName);
-  const rawEmail=String(body.email??'').trim();
-  // Optional contact email for private admin event verification only. Never part of public leaderboard.
-  if(rawEmail.length>254||rawEmail&&(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(rawEmail)||/[<>\r\n]/.test(rawEmail)))return fail('Invalid email address.',400);
-  const email=rawEmail.toLowerCase();
-  const s=await env.QUIZ_DB.prepare('SELECT completed,recorded,score,total,duration_ms,completed_at FROM quiz_sessions WHERE id=?').bind(sessionId).first();
-  if(!s)return fail('Quiz session not found.',404);
-  if(!s.completed)return fail('Finish the quiz before saving a record.',409);
-  if(s.recorded)return fail('This result was already saved.',409);
-  const total=Number(s.total),score=Number(s.score),durationMs=Number(s.duration_ms),completedAt=Number(s.completed_at),p=periodKeys(completedAt);
-  const insert=env.QUIZ_DB.prepare(`
-    INSERT INTO quiz_results
-    (session_id,player_name,player_name_key,score,total,duration_ms,completed_at,day_key,week_key,month_key,year_key)
-    VALUES (?,?,?,?,?,?,?,?,?,?,?)
-  `).bind(sessionId,playerName,keyName(playerName),score,total,durationMs,completedAt,p.dayKey,p.weekKey,p.monthKey,p.yearKey);
-  const update=env.QUIZ_DB.prepare('UPDATE quiz_sessions SET recorded=1 WHERE id=? AND recorded=0').bind(sessionId);
-  const statements=[insert,update];
-  if(email)statements.push(env.QUIZ_DB.prepare('INSERT INTO quiz_player_contacts(session_id,email,supplied_at) VALUES(?,?,?)').bind(sessionId,email,Date.now()));
-  await env.QUIZ_DB.batch(statements);
-  return json({saved:true,playerName,score,total,durationMs,rank:await rankFor(env,total,score,durationMs),tier:tier(total)});
+ if(!env.QUIZ_DB)return fail('QUIZ_DB binding is not configured.',500);
+ const body=await request.json(),sessionId=String(body.sessionId||'').trim(),playerName=cleanName(body.playerName);
+ const rawEmail=String(body.email??'').trim();
+ if(rawEmail.length>254||rawEmail&&(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(rawEmail)||/[<>\r\n]/.test(rawEmail)))return fail('Invalid email address.',400);
+ const email=rawEmail.toLowerCase();
+ const s=await env.QUIZ_DB.prepare('SELECT completed,recorded,score,total,duration_ms,completed_at FROM quiz_sessions WHERE id=?').bind(sessionId).first();
+ if(!s)return fail('Quiz session not found.',404);
+ if(!s.completed)return fail('Finish the quiz before saving a record.',409);
+ if(s.recorded)return fail('This result was already saved.',409);
+ const total=Number(s.total),score=Number(s.score),durationMs=Number(s.duration_ms),completedAt=Number(s.completed_at),p=periodKeys(completedAt);
+ const oldBest=await bestForName(env,playerName,total);
+ const improved=beats(score,durationMs,oldBest);
+ const statements=[];
+ if(improved)statements.push(env.QUIZ_DB.prepare('INSERT INTO quiz_results (session_id,player_name,player_name_key,score,total,duration_ms,completed_at,day_key,week_key,month_key,year_key) VALUES (?,?,?,?,?,?,?,?,?,?,?)').bind(sessionId,playerName,keyName(playerName),score,total,durationMs,completedAt,p.dayKey,p.weekKey,p.monthKey,p.yearKey));
+ statements.push(env.QUIZ_DB.prepare('UPDATE quiz_sessions SET recorded=1 WHERE id=? AND recorded=0').bind(sessionId));
+ if(email)statements.push(env.QUIZ_DB.prepare('INSERT INTO quiz_player_contacts(session_id,email,supplied_at) VALUES(?,?,?)').bind(sessionId,email,Date.now()));
+ await env.QUIZ_DB.batch(statements);
+ const best=improved?{playerName,score,total,durationMs,completedAt,rank:await rankFor(env,total,score,durationMs)}:oldBest;
+ return json({saved:true,updatedBest:improved,comparison:!oldBest?'new':improved?'improved':'not_improved',playerName,tier:tier(total),score,total,durationMs,best,oldBest,rank:best.rank});
 }
 async function leaderboard(request,env){
   if(!env.QUIZ_DB)return fail('QUIZ_DB binding is not configured.',500);
@@ -239,6 +256,7 @@ export default {
       if(request.method==='POST'&&path==='/api/quiz/advance')return await advanceQuiz(request,env);
       if(request.method==='POST'&&path==='/api/quiz/finish')return await finishQuiz(request,env);
       if(request.method==='POST'&&path==='/api/quiz/record')return await recordQuiz(request,env);
+      if(request.method==='GET'&&path==='/api/quiz/player-status')return await playerStatus(request,env);
       if(request.method==='GET'&&path==='/api/quiz/leaderboard')return await leaderboard(request,env);
       if(request.method==='GET'&&path==='/api/quiz/health')return await health(env);
       return fail('Not found.',404);
