@@ -180,3 +180,18 @@
 .quiz-record-status.improved{background:rgba(163,112,20,.19);border-color:#e6b747;color:#ffe09c}
 .quiz-record-status.existing{background:rgba(146,34,49,.17);border-color:#d9576b;color:#ffacba}
 @media(max-width:780px){.quiz-peer-insights{grid-template-columns:1fr}.quiz-peer-card{padding:15px}}
+
+/* V5.12 - stop ordinary text highlighting/copy from LIVE questions only.
+   The leaderboard, admin screens, results, and Name/IGN input remain selectable. */
+#quizApp .quiz-question-card .quiz-no-select,
+#quizApp .quiz-question-card .quiz-no-select *{
+  -webkit-user-select:none!important;
+  -moz-user-select:none!important;
+  user-select:none!important;
+  -webkit-touch-callout:none;
+}
+#quizApp .quiz-question-card .quiz-no-select::selection,
+#quizApp .quiz-question-card .quiz-no-select *::selection{
+  background:transparent;
+  color:inherit;
+}
