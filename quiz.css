@@ -55,3 +55,15 @@
 .quiz-board-controls [data-board-size="15"]{border-color:#a43d4c;background:#3b1721;color:#ff8793}.quiz-board-controls [data-board-size="15"].active{background:#902a3c;border-color:#ff7381;color:#fff}
 .quiz-board-controls [data-board-size="30"]{border-color:#9bafc4;background:#26313e;color:#ecf5ff}.quiz-board-controls [data-board-size="30"].active{background:#7c8fa2;border-color:#fff;color:#fff}
 .quiz-board-controls [data-board-size="50"]{border-color:#2789ae;background:#082838;color:#60cefc}.quiz-board-controls [data-board-size="50"].active{background:#096d96;border-color:#3bd1ff;color:white}
+
+/* V5.3 visual lock: force distinct tier identity even against legacy primary styles */
+.quiz-ranking-shell .quiz-tier-quick.tier-color-15 > a.quiz-quick-play{background:#B72C41!important;color:#FFFFFF!important;border:1px solid #FF7B8B!important}
+.quiz-ranking-shell .quiz-tier-quick.tier-color-30 > a.quiz-quick-play{background:#F0F6FF!important;color:#06111D!important;border:1px solid #FFFFFF!important}
+.quiz-ranking-shell .quiz-tier-quick.tier-color-50 > a.quiz-quick-play{background:#087FBC!important;color:#FFFFFF!important;border:1px solid #42D8FF!important}
+.quiz-ranking-shell .quiz-tier-quick.tier-color-15 > button[data-quiz-size="15"]{background:#4B1A25!important;border-color:#ED6176!important;color:#FF9BA8!important}
+.quiz-ranking-shell .quiz-tier-quick.tier-color-30 > button[data-quiz-size="30"]{background:#E7F0FB!important;border-color:#FFFFFF!important;color:#0B1725!important}
+.quiz-ranking-shell .quiz-tier-quick.tier-color-50 > button[data-quiz-size="50"]{background:#0A4C71!important;border-color:#49D3FF!important;color:#9FE8FF!important}
+.quiz-ranking-shell .quiz-tier-quick.tier-color-30 > button[data-quiz-size="30"] span{color:#32485B!important}
+.quiz-tier-card.tier-30 button.quiz-tier-start{background:#F1F7FF!important;color:#081521!important;border-color:#FFFFFF!important}
+.quiz-board-controls button[data-board-size="30"]{background:#EDF5FF!important;color:#0A1929!important;border:1px solid #FFFFFF!important}
+.quiz-board-controls button[data-board-size="30"] small{color:#34475B!important}
