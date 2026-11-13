@@ -16,7 +16,7 @@ button.secondary{background:#142336;border-color:#39556a}.danger{color:#ff9fac}.
 table{border-collapse:collapse;width:100%}th,td{text-align:left;white-space:nowrap;padding:10px;border-bottom:1px solid #243b50}th{color:#85aacc;background:#101f2d;position:sticky;top:0}td{max-width:550px;overflow:hidden;text-overflow:ellipsis}
 .pill{padding:4px 9px;border-radius:25px;border:1px solid #2d86aa;color:#8fe2ff;font-size:11px;font-weight:800}
 #status{padding:12px 14px;background:#0b2232;border:1px solid #286180;border-radius:8px;margin:12px 0;white-space:pre-wrap}
-[hidden]{display:none!important}.tabbar{display:flex;gap:9px;margin:16px 0}.tabbar button{background:#142336}.tabbar button.selected{background:#13729a;border-color:#57d6f7}.topic-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.topic-option{display:flex;gap:9px;align-items:center;padding:11px;border:1px solid #304a60;border-radius:8px;color:#deefff;background:#0c1a29}.topic-option input{width:auto}.topic-option small{margin-left:auto;color:#88acbf}.rules-tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.rules-tiers input{font-size:24px;font-weight:800;text-align:center}#rulesStatus{white-space:pre-wrap;padding:12px;border:1px solid #286180;border-radius:8px;background:#0b2232}a{color:#8adfff}footer{color:#8ea7bb;text-align:center;margin:30px 0}
+[hidden]{display:none!important}.tabbar{display:flex;gap:9px;margin:16px 0}.tabbar button{background:#142336}.tabbar button.selected{background:#13729a;border-color:#57d6f7}.topic-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.topic-option{display:flex;gap:9px;align-items:center;padding:11px;border:1px solid #304a60;border-radius:8px;color:#deefff;background:#0c1a29}.topic-option input{width:auto}.topic-option small{margin-left:auto;color:#88acbf}.rules-tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.rules-tiers input{font-size:24px;font-weight:800;text-align:center}#rulesStatus{white-space:pre-wrap;padding:12px;border:1px solid #286180;border-radius:8px;background:#0b2232}button.danger-btn{background:#68202c;border:1px solid #e25e71;color:#ffe7ea;font-weight:800;padding:9px 13px;border-radius:7px;cursor:pointer}button.danger-btn:hover{background:#b13b4e}button.danger-btn:disabled{opacity:.5;cursor:not-allowed}.tabbar{flex-wrap:wrap}a{color:#8adfff}footer{color:#8ea7bb;text-align:center;margin:30px 0}
 @media(max-width:760px){.grid,.search,.topic-grid,.rules-tiers{grid-template-columns:1fr}main{padding:12px}}
 </style></head><body><main>
 <header><div><div class="sub">CABAL QUIZ • PRIVATE CONTROL PANEL</div><h1>Question Manager <span class="pill">STAGING ONLY</span></h1><div class="muted">Quản lý ngân hàng câu hỏi D1 • không công khai đáp án • không chỉnh production</div></div><a href="/quiz/">← Trang Quiz</a></header>
@@ -26,7 +26,7 @@ table{border-collapse:collapse;width:100%}th,td{text-align:left;white-space:nowr
 <div class="row"><input id="token" type="password" autocomplete="off" placeholder="Nhập Admin Token" style="max-width:540px"><button id="loginBtn">Kết nối STAGING</button></div>
 </section>
 <div id="app" hidden>
-<nav class="tabbar"><button type="button" id="questionsTab" class="selected">Questions • Ngân hàng câu hỏi</button><button type="button" id="rulesTab">Quiz Rules • Phân bổ chủ đề</button><button type="button" id="rankingTab">Player Ranking • Emails</button></nav>
+<nav class="tabbar"><button type="button" id="questionsTab" class="selected">Questions • Ngân hàng câu hỏi</button><button type="button" id="rulesTab">Quiz Rules • Phân bổ chủ đề</button><button type="button" id="rankingTab">Player Ranking • Emails</button><button type="button" id="timerTab">Tier Timer</button></nav>
 <div id="questionsView">
 <section class="panel"><h2>Tìm kiếm câu hỏi <span id="count" class="pill">—</span></h2>
 <div class="search"><input id="query" placeholder="ID Q00001 hoặc nội dung VI / EN..."><select id="category"><option value="">Tất cả chủ đề</option></select><button id="searchBtn">Tìm kiếm</button></div>
@@ -70,6 +70,24 @@ table{border-collapse:collapse;width:100%}th,td{text-align:left;white-space:nowr
 </section>
 </div>
 </div>
+<section id="timersView" hidden>
+<div class="panel">
+<div class="sub">CABAL QUIZ • STAGING TIMER CONTROL</div>
+<h2 style="margin-top:9px">Thời gian trả lời mỗi câu theo Tier</h2>
+<p class="muted">Thay đổi ngay trong D1 (5–120 giây/câu). High, Highest và Ultimate có thời gian riêng. Lượt chơi đã bắt đầu giữ thời hạn cũ.</p>
+<div class="rules-tiers" style="margin:20px 0">
+<div><label for="tierTimer15" style="color:#ff8497;font-weight:800">HIGH • 15 câu</label><input type="number" id="tierTimer15" min="5" max="120" step="1" value="15"><small class="muted">giây/câu • <span id="tierTimerVersion15">—</span></small></div>
+<div><label for="tierTimer30" style="color:#f4f9ff;font-weight:800">HIGHEST • 30 câu</label><input type="number" id="tierTimer30" min="5" max="120" step="1" value="15"><small class="muted">giây/câu • <span id="tierTimerVersion30">—</span></small></div>
+<div><label for="tierTimer50" style="color:#6dd9ff;font-weight:800">ULTIMATE • 50 câu</label><input type="number" id="tierTimer50" min="5" max="120" step="1" value="15"><small class="muted">giây/câu • <span id="tierTimerVersion50">—</span></small></div>
+</div>
+<div class="row"><button type="button" id="tierTimerSave">Lưu thời gian STAGING</button><button type="button" id="tierTimerReload" class="secondary">↻ Tải lại</button><button type="button" id="tierTimerHistoryBtn" class="secondary">Lịch sử thay đổi</button></div>
+<div id="tierTimerStatus" role="status" style="background:#102336;border:1px solid #3d7f9b;padding:13px;border-radius:9px;margin-top:16px">Chọn tab để tải cấu hình.</div>
+</div>
+<div id="tierTimerHistory" class="panel" hidden>
+<h2>Lịch sử thay đổi thời gian</h2>
+<div class="tablewrap"><table><thead><tr><th>Ngày GMT+7</th><th>Trước</th><th>Sau</th></tr></thead><tbody id="tierTimerHistoryRows"></tbody></table></div>
+</div>
+</section>
 <section id="rankingView" hidden>
 <div class="panel">
   <div class="sub">CABAL QUIZ • PRIVATE PLAYER CONTACTS</div>
@@ -82,11 +100,32 @@ table{border-collapse:collapse;width:100%}th,td{text-align:left;white-space:nowr
     <button id="adminRankRefresh" class="secondary">Tìm / Tải lại</button>
   </div>
   <div id="adminRankingStatus" role="status" style="padding:12px;background:#0b2232;border:1px solid #286180;border-radius:8px;margin:14px 0">Chọn tab để tải ranking</div>
-  <div class="tablewrap"><table><thead><tr><th>#</th><th>Name / IGN</th><th>Email (Admin only)</th><th>Score</th><th>Time</th><th>Completed GMT+7</th></tr></thead><tbody id="adminRankingRows"></tbody></table></div>
+  <div class="tablewrap"><table><thead><tr><th>#</th><th>Name / IGN</th><th>Email (Admin only)</th><th>Score</th><th>Time</th><th>Completed GMT+7</th><th>Quản lý</th></tr></thead><tbody id="adminRankingRows"</tbody></table></div>
   <div class="row" style="margin-top:13px"><button class="secondary" id="adminRankPrev">← Trước</button><span id="adminRankingPage">Trang 1</span><button class="secondary" id="adminRankNext">Tiếp →</button></div>
 </div>
+<div class="panel" id="adminRankingManage">
+<div class="sub">RANKING MANAGEMENT • STAGING ONLY</div>
+<h2 style="margin-top:9px">Xóa record Ranking</h2>
+<p class="muted">Xóa từng dòng bằng nút bên phải bảng trên, hoặc chọn <b>ngày</b> hay <b>tháng</b> bất kỳ (GMT+7). Xóa trong Tier đang chọn. Xóa theo ngày/tháng sẽ xóa tất cả kết quả khớp, kể cả những lần không hiển thị trong Top 100. Các record được lưu bản sao trong lịch sử xóa trước khi gỡ khỏi Ranking.</p>
+<div class="row">
+<select id="adminDeleteMode" style="max-width:200px"><option value="day">Xóa theo ngày</option><option value="month">Xóa theo tháng</option></select>
+<input id="adminDeletePeriodKey" placeholder="YYYY-MM-DD" style="max-width:230px">
+<button id="adminDeletePreviewBtn" type="button" class="secondary">Xem trước số record</button>
+<button id="adminDeleteHistoryBtn" type="button" class="secondary">Lịch sử xóa</button>
+</div>
+<div id="adminDeletePreview" hidden style="margin-top:16px;border:1px solid #ab6675;border-radius:10px;padding:16px;background:#231923">
+<h2>Kiểm tra trước khi xóa</h2>
+<p id="adminDeleteSummary"></p>
+<div class="tablewrap"><table><thead><tr><th>Name</th><th>Score</th><th>Time</th><th>Completed GMT+7</th></tr></thead><tbody id="adminDeleteExamples"></tbody></table></div>
+<div class="row" style="margin-top:13px"><label for="adminDeleteConfirmText" id="adminDeleteConfirmLabel">Nhập DELETE N để xác nhận</label><input id="adminDeleteConfirmText" placeholder="DELETE N" autocomplete="off" style="max-width:230px"><button id="adminDeleteExecute" type="button" class="danger-btn">Xóa record đã chọn</button><button id="adminDeleteCancel" type="button" class="secondary">Hủy</button></div>
+</div>
+</div>
+<div id="adminDeleteHistory" class="panel" hidden>
+<h2>Lịch sử xóa (lưu bản sao record)</h2>
+<div class="tablewrap"><table><thead><tr><th>Ngày xóa GMT+7</th><th>Phạm vi</th><th>Số record</th><th>Archive batch ID</th></tr></thead><tbody id="adminDeleteHistoryRows"></tbody></table></div>
+</div>
 </section>
-<footer>Question Manager V1.2 • STAGING • ID cố định • Import 40 bản ghi/lô • Worker-side authentication</footer>
+<footer>Question Manager V1.3 • STAGING • ID cố định • Import 40 bản ghi/lô • Worker-side authentication</footer>
 </main>
 <script>
 (()=>{'use strict';
@@ -104,16 +143,19 @@ async function api(url,opt={}){
 $('loginBtn').onclick=async()=>{token=$('token').value.trim();try{const d=await api('ping');if(d.environment!=='staging')throw Error('Not staging');$('token').value='';$('login').hidden=true;$('app').hidden=false;await categories();await load();setupTabs()}catch(e){token='';alert(e.message)}};
 let rulesManager=null;
 let privateRanking=null;
+let tierTimerManager=null;
 function setupTabs(){
   const show=id=>{
     $('questionsView').hidden=id!=='questions';
     $('rulesView').hidden=id!=='rules';
     $('rankingView').hidden=id!=='ranking';
-    for(const [tab,key] of [['questionsTab','questions'],['rulesTab','rules'],['rankingTab','ranking']])$(''+tab).classList.toggle('selected',id===key);
+    $('timersView').hidden=id!=='timers';
+    for(const [tab,key] of [['questionsTab','questions'],['rulesTab','rules'],['rankingTab','ranking'],['timerTab','timers']])$(''+tab).classList.toggle('selected',id===key);
   };
   $('questionsTab').onclick=()=>show('questions');
   $('rulesTab').onclick=async()=>{show('rules');if(!rulesManager)rulesManager=window.mountQuizRules(api);await rulesManager.init()};
   $('rankingTab').onclick=async()=>{show('ranking');if(!privateRanking)privateRanking=window.mountPrivateRankings(api);await privateRanking.load()};
+  $('timerTab').onclick=async()=>{show('timers');if(!tierTimerManager)tierTimerManager=window.mountTierTimers(api);await tierTimerManager.load()};
 }
 async function categories(){const d=await api('categories');$('category').innerHTML='<option value="">Tất cả chủ đề</option>'+d.rows.map(x=>'<option value="'+esc(x.category_en)+'">'+esc(x.category_en)+' ('+x.n+')</option>').join('')}
 async function load(){message('Đang tải câu hỏi...');try{const d=await api('questions?q='+encodeURIComponent($('query').value)+'&category='+encodeURIComponent($('category').value)+'&page='+page);rows=d.rows;total=d.total;$('count').textContent=total+' câu';$('page').textContent='Trang '+page+' / '+Math.max(1,Math.ceil(total/40));$('prev').disabled=page<=1;$('next').disabled=page*40>=total;$('results').innerHTML=rows.map((r,i)=>'<tr><td>'+esc(r.id)+'</td><td>'+esc(r.category_en)+'</td><td>'+esc(r.question_en)+'</td><td>'+esc(r.correct)+'</td><td><button data-row="'+i+'" class="secondary">Sửa</button></td></tr>').join('');document.querySelectorAll('[data-row]').forEach(b=>b.onclick=()=>edit(rows[Number(b.dataset.row)],false));message('Đã tải '+rows.length+' / '+total+' câu.')}catch(e){message('Lỗi: '+e.message)}}
@@ -131,4 +173,4 @@ async function read(file){const ext=file.name.split('.').pop().toLowerCase();if(
 $('preview').onclick=async()=>{const file=$('file').files[0];if(!file)return alert('Chọn file trước');try{let input=await read(file);if(input.length>20000)throw Error('Một lần tối đa 20.000 câu');const seen=new Set();pending=input.map(row=>{const n={};for(const k of FIELDS)n[k]=String(row[k]??'').trim();validate(n);if(seen.has(n.id))throw Error('ID trùng trong file: '+n.id);seen.add(n.id);return n});$('importPreview').hidden=false;$('importInfo').textContent=pending.length+' câu được kiểm tra. Chế độ: '+$('mode').selectedOptions[0].textContent;$('previewRows').innerHTML=pending.slice(0,25).map(x=>'<tr><td>'+esc(x.id)+'</td><td>'+esc(x.category_en)+'</td><td>'+esc(x.question_en)+'</td><td>'+esc(x.correct)+'</td></tr>').join('');message('Preview thành công. Chưa ghi dữ liệu.')}catch(e){pending=[];$('importPreview').hidden=true;alert(e.message)}};
 $('importBtn').onclick=async()=>{if(!pending.length)return;const mode=$('mode').value;if(!confirm('Xác nhận ghi '+pending.length+' câu vào D1 STAGING? Mỗi lô tối đa 40 câu.'))return;$('importBtn').disabled=true;let updated=0,created=0;try{for(let i=0;i<pending.length;i+=40){const result=await api('import',{method:'POST',body:JSON.stringify({mode,rows:pending.slice(i,i+40)})});updated+=result.updated;created+=result.created;message('Đã xử lý '+Math.min(i+40,pending.length)+'/'+pending.length+' • Updated '+updated+' • New '+created)}message('HOÀN THÀNH: Cập nhật '+updated+', tạo mới '+created);pending=[];$('importPreview').hidden=true;await categories();await load()}catch(e){message('Import dừng: '+e.message+'; các lô trước đã lưu. Có thể chạy lại theo ID.')}finally{$('importBtn').disabled=false}};
 })();
-</script><script src="./rules-ui.js"></script><script src="./ranking-ui.js"></script></body></html>
+</script><script src="./rules-ui.js"></script><script src="./ranking-ui.js"></script><script src="./timers-ui.js"></script></body></html>
