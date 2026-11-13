@@ -270,6 +270,11 @@ async function leaderboard(request,env){
   const res=await env.QUIZ_DB.prepare(sql).bind(...bind).all();
   return json({period,size,tier:tier(size),key:period==='all'?null:keyMap[period],rows:(res.results||[]).map((x,i)=>({rank:i+1,playerName:x.player_name,score:x.score,total:x.total,durationMs:x.duration_ms,completedAt:x.completed_at}))});
 }
+async function publicTierTimers(env){
+  if(!env.QUIZ_DB)return fail('QUIZ_DB binding missing.',500);
+  const r=await env.QUIZ_DB.prepare('SELECT tier_size,seconds FROM quiz_tier_timers WHERE tier_size IN (15,30,50) ORDER BY tier_size').all();
+  return json({tiers:(r.results||[]).map(x=>({size:Number(x.tier_size),seconds:Number(x.seconds)}))});
+}
 async function health(env){
   if(!env.QUIZ_DB)return fail('QUIZ_DB binding is not configured.',500);
   const q=await env.QUIZ_DB.prepare('SELECT COUNT(*) AS n FROM quiz_questions').first();
@@ -291,6 +296,7 @@ export default {
       if(request.method==='GET'&&path==='/api/quiz/player-status')return await playerStatus(request,env);
       if(request.method==='GET'&&path==='/api/quiz/leaderboard')return await leaderboard(request,env);
       if(request.method==='GET'&&path==='/api/quiz/health')return await health(env);
+      if(request.method==='GET'&&path==='/api/quiz/timers')return await publicTierTimers(env);
       return fail('Not found.',404);
     }catch(e){
       console.error(e);
