@@ -62,6 +62,7 @@ jobs:
           cp ../quiz-manager/ranking-ui.js public-staging/quiz-manager/ranking-ui.js
           cp ../quiz-manager/timers-ui.js public-staging/quiz-manager/timers-ui.js
           cp ../quiz-manager/quality-ui.js public-staging/quiz-manager/quality-ui.js
+          cp ../quiz-manager/export-ui.js public-staging/quiz-manager/export-ui.js
           cp ../quiz.css public-staging/quiz.css
           cp ../quiz.js public-staging/quiz.js
           cp ../ranking_data.js public-staging/ranking_data.js
@@ -80,6 +81,7 @@ jobs:
           node --check src/admin-timers.js
           node --check src/admin-quality.js
           node --check ../quiz-manager/quality-ui.js
+          node --check ../quiz-manager/export-ui.js
           node --check ../quiz-manager/timers-ui.js
           node --check src/rules.js
           node --check src/admin-rules.js
@@ -140,3 +142,5 @@ jobs:
 # V1.4 verify public tier-specific timer settings and configurable session smoke test.
 
 # V8 gameplay-first QA: full-bank protected review scanner (read-only) on staging.
+
+# V8 backup: read-only authenticated full D1 bank export, CSV / JSON / XLSX.
