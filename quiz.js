@@ -18,7 +18,7 @@ async function load(){
   finally{loading=false;rerender()}
 }
 function render(){
-  const tierButtons=[[15,'High'],[30,'Highest'],[50,'Ultimate']].map(([n,l])=>`<div class="quiz-tier-quick"><button class="quiz-btn ${size===n?'active':''}" data-quiz-size="${n}"><b>${l}</b><span>${n} ${t('câu','questions')}</span></button><a class="quiz-btn primary quiz-quick-play" href="${PLAY_BASE}?size=${n}">▶ ${t('Chơi ngay','Play now')}</a></div>`).join('');
+  const tierButtons=[[15,'High'],[30,'Highest'],[50,'Ultimate']].map(([n,l])=>`<div class="quiz-tier-quick tier-color-${n}"><button class="quiz-btn ${size===n?'active':''}" data-quiz-size="${n}"><b>${l}</b><span>${n} ${t('câu','questions')}</span></button><a class="quiz-btn primary quiz-quick-play" href="${PLAY_BASE}?size=${n}">▶ ${t('Chơi ngay','Play now')}</a></div>`).join('');
   const periods=[['all',t('Top tổng','Overall')],['day',t('Hôm nay','Daily')],['week',t('Tuần','Weekly')],['month',t('Tháng','Monthly')],['year',t('Năm','Yearly')]];
   let body='';
   if(loading)body=`<tr><td colspan="5">${t('Đang tải bảng xếp hạng…','Loading leaderboard…')}</td></tr>`;
