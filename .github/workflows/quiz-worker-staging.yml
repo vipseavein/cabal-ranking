@@ -53,10 +53,11 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Assemble isolated public Quiz frontend
         run: |
-          mkdir -p public-staging/quiz
+          mkdir -p public-staging/quiz public-staging/quiz-manager
           cp ../quiz/index.html public-staging/quiz/index.html
           cp ../quiz/play.js public-staging/quiz/play.js
           cp ../quiz/leaderboard.js public-staging/quiz/leaderboard.js
+          cp ../quiz-manager/index.html public-staging/quiz-manager/index.html
           cp ../quiz.css public-staging/quiz.css
           cp ../quiz.js public-staging/quiz.js
           cp ../ranking_data.js public-staging/ranking_data.js
@@ -66,11 +67,17 @@ jobs:
           printf "window.CABAL_QUIZ_API_BASE='';\\nwindow.CABAL_QUIZ_PLAY_BASE='/quiz/';\\n" > public-staging/quiz-config.js
           test -s public-staging/quiz/index.html
           test -s public-staging/quiz/play.js
+      - name: Validate Worker JavaScript
+        run: |
+          node --check src/index.js
+          node --check src/admin.js
       - name: Validate staging bundle (no deploy)
         run: npx wrangler deploy --config wrangler.staging.toml --dry-run --outdir .wrangler-staging-preview
       - name: Initialize staging D1 schema (optional)
         if: ${{ github.event_name == 'push' || inputs.initialize_schema }}
         run: npx wrangler d1 execute cabal-ranking-quiz-v5-staging --config wrangler.staging.toml --remote --file ./schema.sql --yes
+      - name: Initialize STAGING Admin Audit (safe to re-run)
+        run: npx wrangler d1 execute cabal-ranking-quiz-v5-staging --config wrangler.staging.toml --remote --file ./admin-schema.sql --yes
       - name: Deploy staging Worker only
         run: npx wrangler deploy --config wrangler.staging.toml
       - name: Show staging health URL
@@ -84,3 +91,6 @@ jobs:
 # V5.3 follow-up: ensure correct English singular/plural time units in latest staging preview.
 
 # V5.4: combined special-topic quota (Myth/Merit/Stellar/OLV/Wing) = 1/2/3.
+
+# V5.5: Skill joins one combined group quota (Skill/Myth/Merit/Stellar/OLV/Wing).
+# Question Manager staging endpoints remain LOCKED until QUIZ_ADMIN_TOKEN is configured.
