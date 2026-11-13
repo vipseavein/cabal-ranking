@@ -117,3 +117,5 @@ jobs:
 # V5.6: 15-second server-authoritative countdown for every Quiz question.
 
 # V5.6 verification: health endpoint advertises questionLimitSeconds:15.
+
+# V5.9: polished tier-specific Save Ranking and best-only IGN record checks.
