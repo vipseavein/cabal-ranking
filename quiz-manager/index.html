@@ -28,6 +28,13 @@ table{border-collapse:collapse;width:100%}th,td{text-align:left;white-space:nowr
 <div id="app" hidden>
 <nav class="tabbar"><button type="button" id="questionsTab" class="selected">Questions • Ngân hàng câu hỏi</button><button type="button" id="rulesTab">Quiz Rules • Phân bổ chủ đề</button><button type="button" id="rankingTab">Player Ranking • Emails</button><button type="button" id="timerTab">Tier Timer</button><button type="button" id="qualityTab">Question Quality</button></nav>
 <div id="questionsView">
+<section class="panel" id="backupPanel" style="border-color:#3287a6;background:linear-gradient(120deg,#11263a,#0d1a2a)">
+<div class="sub">QUESTION BANK • FULL OFFLINE BACKUP</div>
+<h2 style="margin-top:8px">Export ngân hàng câu hỏi D1</h2>
+<p class="muted">Tải đầy đủ câu hỏi, bản dịch VI/ENG, các đáp án và đáp án đúng. Không chỉ 40 câu đang hiển thị. Chỉ người có Admin Token mới truy cập; file xuất chứa đáp án nên cần lưu kín.</p>
+<div class="row"><button type="button" class="secondary" data-bank-export="xlsx">Export Excel (.xlsx)</button><button type="button" class="secondary" data-bank-export="csv">Export CSV</button><button type="button" class="secondary" data-bank-export="json">Export JSON</button></div>
+<p id="bankExportStatus" role="status" style="color:#a8e2ff;font-size:12px">Sẵn sàng xuất bản sao toàn bộ ngân hàng staging.</p>
+</section>
 <section class="panel"><h2>Tìm kiếm câu hỏi <span id="count" class="pill">—</span></h2>
 <div class="search"><input id="query" placeholder="ID Q00001 hoặc nội dung VI / EN..."><select id="category"><option value="">Tất cả chủ đề</option></select><button id="searchBtn">Tìm kiếm</button></div>
 <div id="status" role="status">Đã kết nối với staging.</div>
@@ -156,11 +163,12 @@ async function api(url,opt={}){
  let d;try{d=await r.json()}catch{throw Error('Response invalid: HTTP '+r.status)}
  if(!r.ok)throw Error(d.error||'HTTP '+r.status);return d;
 }
-$('loginBtn').onclick=async()=>{token=$('token').value.trim();try{const d=await api('ping');if(d.environment!=='staging')throw Error('Not staging');$('token').value='';$('login').hidden=true;$('app').hidden=false;await categories();await load();setupTabs()}catch(e){token='';alert(e.message)}};
+$('loginBtn').onclick=async()=>{token=$('token').value.trim();try{const d=await api('ping');if(d.environment!=='staging')throw Error('Not staging');$('token').value='';$('login').hidden=true;$('app').hidden=false;await categories();await load();setupTabs();if(!questionExporter)questionExporter=window.mountQuestionExport(api)}catch(e){token='';alert(e.message)}};
 let rulesManager=null;
 let privateRanking=null;
 let tierTimerManager=null;
 let qualityManager=null;
+let questionExporter=null;
 function setupTabs(){
   const show=id=>{
     $('questionsView').hidden=id!=='questions';
@@ -192,4 +200,4 @@ async function read(file){const ext=file.name.split('.').pop().toLowerCase();if(
 $('preview').onclick=async()=>{const file=$('file').files[0];if(!file)return alert('Chọn file trước');try{let input=await read(file);if(input.length>20000)throw Error('Một lần tối đa 20.000 câu');const seen=new Set();pending=input.map(row=>{const n={};for(const k of FIELDS)n[k]=String(row[k]??'').trim();validate(n);if(seen.has(n.id))throw Error('ID trùng trong file: '+n.id);seen.add(n.id);return n});$('importPreview').hidden=false;$('importInfo').textContent=pending.length+' câu được kiểm tra. Chế độ: '+$('mode').selectedOptions[0].textContent;$('previewRows').innerHTML=pending.slice(0,25).map(x=>'<tr><td>'+esc(x.id)+'</td><td>'+esc(x.category_en)+'</td><td>'+esc(x.question_en)+'</td><td>'+esc(x.correct)+'</td></tr>').join('');message('Preview thành công. Chưa ghi dữ liệu.')}catch(e){pending=[];$('importPreview').hidden=true;alert(e.message)}};
 $('importBtn').onclick=async()=>{if(!pending.length)return;const mode=$('mode').value;if(!confirm('Xác nhận ghi '+pending.length+' câu vào D1 STAGING? Mỗi lô tối đa 40 câu.'))return;$('importBtn').disabled=true;let updated=0,created=0;try{for(let i=0;i<pending.length;i+=40){const result=await api('import',{method:'POST',body:JSON.stringify({mode,rows:pending.slice(i,i+40)})});updated+=result.updated;created+=result.created;message('Đã xử lý '+Math.min(i+40,pending.length)+'/'+pending.length+' • Updated '+updated+' • New '+created)}message('HOÀN THÀNH: Cập nhật '+updated+', tạo mới '+created);pending=[];$('importPreview').hidden=true;await categories();await load()}catch(e){message('Import dừng: '+e.message+'; các lô trước đã lưu. Có thể chạy lại theo ID.')}finally{$('importBtn').disabled=false}};
 })();
-</script><script src="./rules-ui.js"></script><script src="./ranking-ui.js"></script><script src="./timers-ui.js"></script><script src="./quality-ui.js"></script></body></html>
+</script><script src="./rules-ui.js"></script><script src="./ranking-ui.js"></script><script src="./timers-ui.js"></script><script src="./quality-ui.js"></script><script src="./export-ui.js"></script></body></html>
