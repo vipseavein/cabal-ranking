@@ -225,7 +225,7 @@ async function health(env){
   if(!env.QUIZ_DB)return fail('QUIZ_DB binding is not configured.',500);
   const q=await env.QUIZ_DB.prepare('SELECT COUNT(*) AS n FROM quiz_questions').first();
   const r=await env.QUIZ_DB.prepare('SELECT COUNT(*) AS n FROM quiz_results').first();
-  return json({ok:true,questionCount:Number(q?.n||0),resultCount:Number(r?.n||0),expectedQuestions:15000,quizSizes:ALLOWED_SIZES,tiers:{15:'High',30:'Highest',50:'Ultimate'}});
+  return json({ok:true,questionCount:Number(q?.n||0),resultCount:Number(r?.n||0),expectedQuestions:15000,questionLimitSeconds:15,quizSizes:ALLOWED_SIZES,tiers:{15:'High',30:'Highest',50:'Ultimate'}});
 }
 
 export default {
