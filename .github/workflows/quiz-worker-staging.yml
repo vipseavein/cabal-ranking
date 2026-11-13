@@ -59,6 +59,7 @@ jobs:
           cp ../quiz/leaderboard.js public-staging/quiz/leaderboard.js
           cp ../quiz-manager/index.html public-staging/quiz-manager/index.html
           cp ../quiz-manager/rules-ui.js public-staging/quiz-manager/rules-ui.js
+          cp ../quiz-manager/ranking-ui.js public-staging/quiz-manager/ranking-ui.js
           cp ../quiz.css public-staging/quiz.css
           cp ../quiz.js public-staging/quiz.js
           cp ../ranking_data.js public-staging/ranking_data.js
@@ -75,6 +76,9 @@ jobs:
           node --check src/rules.js
           node --check src/admin-rules.js
           node --check ../quiz-manager/rules-ui.js
+          node --check ../quiz-manager/ranking-ui.js
+          node --check ../quiz/play.js
+          node --check ../quiz.js
       - name: Validate staging bundle (no deploy)
         run: npx wrangler deploy --config wrangler.staging.toml --dry-run --outdir .wrangler-staging-preview
       - name: Initialize staging D1 schema (optional)
@@ -84,6 +88,8 @@ jobs:
         run: npx wrangler d1 execute cabal-ranking-quiz-v5-staging --config wrangler.staging.toml --remote --file ./admin-schema.sql --yes
       - name: Initialize STAGING Rules Config and History
         run: npx wrangler d1 execute cabal-ranking-quiz-v5-staging --config wrangler.staging.toml --remote --file ./rules-schema.sql --yes
+      - name: Initialize private email storage in STAGING D1
+        run: npx wrangler d1 execute cabal-ranking-quiz-v5-staging --config wrangler.staging.toml --remote --file ./private-email-schema.sql --yes
       - name: Deploy staging Worker only
         run: npx wrangler deploy --config wrangler.staging.toml
       - name: Show staging health URL
@@ -102,3 +108,5 @@ jobs:
 # Question Manager staging endpoints remain LOCKED until QUIZ_ADMIN_TOKEN is configured.
 
 # V1.2 Quiz Rules Manager: read/save/preview/rollback protected, staging database only.
+
+# V5.7 optional player email stored privately, admin-only ranking tab, rotating tier glow.
