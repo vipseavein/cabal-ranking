@@ -119,3 +119,10 @@
   .quiz-tier-card.tier-15::before,.quiz-tier-card.tier-30::before,.quiz-tier-card.tier-50::before,
   .quiz-tier-quick.tier-color-15>.quiz-btn::before,.quiz-tier-quick.tier-color-30>.quiz-btn::before,.quiz-tier-quick.tier-color-50>.quiz-btn::before{animation:none}
 }
+
+/* Per-question 15-second countdown; synced with server deadline. */
+.quiz-countdown-stat{min-width:100px}
+.quiz-countdown{display:inline-block;min-width:66px;color:#68e9b6!important;font-variant-numeric:tabular-nums;transition:color .2s,transform .2s}
+.quiz-countdown.urgent{color:#ff6378!important;animation:quiz-timer-pulse .72s ease-in-out infinite alternate;text-shadow:0 0 14px rgba(255,70,100,.55)}
+@keyframes quiz-timer-pulse{from{transform:scale(1)}to{transform:scale(1.10)}}
+@media(prefers-reduced-motion:reduce){.quiz-countdown.urgent{animation:none}}
