@@ -60,6 +60,7 @@ jobs:
           cp ../quiz-manager/index.html public-staging/quiz-manager/index.html
           cp ../quiz-manager/rules-ui.js public-staging/quiz-manager/rules-ui.js
           cp ../quiz-manager/ranking-ui.js public-staging/quiz-manager/ranking-ui.js
+          cp ../quiz-manager/timers-ui.js public-staging/quiz-manager/timers-ui.js
           cp ../quiz.css public-staging/quiz.css
           cp ../quiz.js public-staging/quiz.js
           cp ../ranking_data.js public-staging/ranking_data.js
@@ -74,6 +75,9 @@ jobs:
           node --check src/index.js
           node --check ../quiz/play.js
           node --check src/admin.js
+          node --check src/admin-records.js
+          node --check src/admin-timers.js
+          node --check ../quiz-manager/timers-ui.js
           node --check src/rules.js
           node --check src/admin-rules.js
           node --check ../quiz-manager/rules-ui.js
@@ -93,6 +97,8 @@ jobs:
         run: npx wrangler d1 execute cabal-ranking-quiz-v5-staging --config wrangler.staging.toml --remote --file ./private-email-schema.sql --yes
       - name: Initialize STAGING per-question timer tracking
         run: npx wrangler d1 execute cabal-ranking-quiz-v5-staging --config wrangler.staging.toml --remote --file ./timer-schema.sql --yes
+      - name: Initialize STAGING timer settings and ranking archive
+        run: npx wrangler d1 execute cabal-ranking-quiz-v5-staging --config wrangler.staging.toml --remote --file ./manager-controls-schema.sql --yes
       - name: Deploy staging Worker only
         run: npx wrangler deploy --config wrangler.staging.toml
       - name: Smoke test timed quiz and IGN lookup without ranking writes
@@ -125,3 +131,5 @@ jobs:
 # Tests new IGN checks without writing leaderboard records.
 
 # V5.10: server-computed comparison of score and speed among tier best records; IGN state colors.
+
+# V1.4: dedicated Tier Timer tab and embedded Player Ranking record management (individual, day, month) with audit archive.
