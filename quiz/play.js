@@ -4,7 +4,7 @@ const API=(window.CABAL_QUIZ_API_BASE||'')+'/api/quiz';
 const LANGKEY='cabalRankingQuizLang';
 const STORE='cabalQuizTieredActiveV2';
 const LETTERS=['A','B','C','D'];
-const localizedOption=value=>{const text=String(value??'');return lang==='en'?text.replace(/\bgiây\b/gi,'seconds').replace(/\bphút\b/gi,'minutes'):text;};
+const localizedOption=value=>{const text=String(value??'');return lang==='en'?text.replace(/(\d+(?:[.,]\d+)?)\s+giây\b/gi,(_,n)=>n+' '+(Number(n)===1?'second':'seconds')).replace(/(\d+(?:[.,]\d+)?)\s+phút\b/gi,(_,n)=>n+' '+(Number(n)===1?'minute':'minutes')).replace(/\bgiây\b/gi,'seconds').replace(/\bphút\b/gi,'minutes'):text;};
 let lang=localStorage.getItem(LANGKEY)||'en';
 let phase='home',sessionId=null,questions=[],current=0,feedback={},startedClientAt=0,finishResult=null,savedResult=null,answering=false,finishing=false,saving=false,reviewOpen=false,reviewFilter='wrong',error='';
 
