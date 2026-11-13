@@ -36,3 +36,22 @@
 .quiz-cancel{border-color:#98505a;color:#ffb2bc;background:#2d151d}
 .quiz-cancel:hover{border-color:#ff8792;background:#49212b}
 @media(max-width:760px){.quiz-board-controls{grid-template-columns:1fr}.quiz-board-header{flex-wrap:wrap}.quiz-tier-quick .quiz-btn{width:100%}}
+
+/* V5.3 tier identities: High red • Highest white • Ultimate blue */
+.quiz-tier-quick.tier-color-15>.quiz-btn{border-color:#a43c49;background:#36151e;color:#ff8995}
+.quiz-tier-quick.tier-color-15>.quiz-btn.active{background:#702633;color:#fff;border-color:#ff6979}
+.quiz-tier-quick.tier-color-15 .quiz-quick-play{background:linear-gradient(120deg,#bc3445,#74212d);border-color:#f16a78;color:#fff}
+.quiz-tier-quick.tier-color-15 .quiz-quick-play:hover{background:#e1495d}
+.quiz-tier-quick.tier-color-30>.quiz-btn{border-color:#8296a8;background:#1b2836;color:#f5f8ff}
+.quiz-tier-quick.tier-color-30>.quiz-btn.active{border-color:#e8f3ff;background:#536578;color:white}
+.quiz-tier-quick.tier-color-30 .quiz-quick-play{background:linear-gradient(120deg,#b7c9dc,#758ba2);border-color:#edf5ff;color:#071320}
+.quiz-tier-quick.tier-color-30 .quiz-quick-play:hover{background:#e5f1ff}
+.quiz-tier-quick.tier-color-50>.quiz-btn{border-color:#2d8caf;background:#092838;color:#68d5ff}
+.quiz-tier-quick.tier-color-50>.quiz-btn.active{border-color:#4ddcff;background:#075e82;color:#fff}
+.quiz-tier-quick.tier-color-50 .quiz-quick-play{background:linear-gradient(120deg,#087ca7,#075579);border-color:#37d8ff;color:#fff}
+.quiz-tier-card.tier-15{border-color:#883b4a}.quiz-tier-card.tier-15 .quiz-tier-badge{border-color:#fc7785;background:#491925;color:#ff9ca6}.quiz-tier-card.tier-15 .quiz-tier-count{color:#ff6978}.quiz-tier-card.tier-15 .quiz-tier-start{background:#a82e41;border-color:#ea6577;color:white}
+.quiz-tier-card.tier-30{border-color:#9aafc1}.quiz-tier-card.tier-30 .quiz-tier-badge{border-color:#d8e8f4;background:#263544;color:#f5faff}.quiz-tier-card.tier-30 .quiz-tier-count{color:#f6f9ff}.quiz-tier-card.tier-30 .quiz-tier-start{background:#c1d1df;border-color:#ecf5ff;color:#07121f}
+.quiz-tier-card.tier-50{border-color:#298bb2}.quiz-tier-card.tier-50 .quiz-tier-badge{border-color:#36c5fa;background:#073248;color:#73ddff}.quiz-tier-card.tier-50 .quiz-tier-count{color:#44d3ff}.quiz-tier-card.tier-50 .quiz-tier-start{background:#086c99;border-color:#39c8f0;color:#fff}
+.quiz-board-controls [data-board-size="15"]{border-color:#a43d4c;background:#3b1721;color:#ff8793}.quiz-board-controls [data-board-size="15"].active{background:#902a3c;border-color:#ff7381;color:#fff}
+.quiz-board-controls [data-board-size="30"]{border-color:#9bafc4;background:#26313e;color:#ecf5ff}.quiz-board-controls [data-board-size="30"].active{background:#7c8fa2;border-color:#fff;color:#fff}
+.quiz-board-controls [data-board-size="50"]{border-color:#2789ae;background:#082838;color:#60cefc}.quiz-board-controls [data-board-size="50"].active{background:#096d96;border-color:#3bd1ff;color:white}
